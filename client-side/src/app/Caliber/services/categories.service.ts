@@ -18,7 +18,7 @@ export class CategoriesService {
   }
 
   fetch(): void {
-    this.http.get('http://api.icndb.com/jokes/random/')
+    this.http.get(environment.getAllCategories)
     .map(
       resp => resp.json(), // map the resp so all subscribers just get the body of the request as a js object
       // err => // can have the error mapped for all subscribers if you want also
@@ -46,5 +46,4 @@ export class CategoriesService {
           }
         );
   }
-
 }

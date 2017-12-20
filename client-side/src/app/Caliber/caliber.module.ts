@@ -15,9 +15,8 @@ import { ReportsComponent } from './reports/reports.component';
 import { CommonModule } from '@angular/common';
 import { WeeklyLineChartComponent } from './weekly-line-chart/weekly-line-chart.component';
 import { TrainerService } from './services/trainer.service';
-import { TrainersComponent } from './home/trainers/trainers/trainers.component';
-import { FlexLayoutModule } from "@angular/flex-layout";
-import { ViewcategoriesComponent } from './viewcategories/viewcategories.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { CategoriesService } from './services/categories.service';
 import { SettingsComponent } from './settings/settings.component';
 import { CategoriesComponent } from './settings/categories/categories.component';
 import { TrainersComponent } from './settings/trainers/trainers.component';
@@ -30,7 +29,7 @@ import { LocationsComponent } from './settings/locations/locations.component';
     NgbModule.forRoot(),
     RouterModule.forChild(routes),
     FormsModule,
-    FlexLayoutModule,
+    AngularFontAwesomeModule
   ],
   declarations: [
     CaliberComponent,
@@ -39,13 +38,14 @@ import { LocationsComponent } from './settings/locations/locations.component';
     ManageComponent,
     ReportsComponent,
     WeeklyLineChartComponent,
-    TrainersComponent
-    ViewcategoriesComponent,
     SettingsComponent,
     CategoriesComponent,
     TrainersComponent,
     LocationsComponent
   ],
-  providers: [TrainerService]
+  providers: [
+    TrainerService,
+    CategoriesService,
+  ]
 })
 export class CaliberModule { }

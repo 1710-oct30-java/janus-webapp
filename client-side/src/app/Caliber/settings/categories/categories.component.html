@@ -1,3 +1,97 @@
+<!-- Create Assessment Categories and Edit assessment Categories including making it active or inactive -->
+    <div class="container">
+        <div class="row">
+        <div class="col-md-12 col-lg-12 tab-panes">
+            <br>
+            <ul class="nav nav-tabs justify-content-end">
+                <li class="nav-item tab-pane fade show" role="button" (click)="open(addCategory)" style="color:#F26925">
+                    <a id="addButton">Create Category
+                        <span class="fa fa-plus" aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    <br>
+<!-- Display all assessment categories -->
+<div class="container" id="trainer-assess-table" ng-if="categories[0]">
+    <div class="row">
+        <div class="col-md-3 col-lg-3 top5">
+        <!-- Accordian table -->
+        <table class="table table-responsive" style="border-collapse: collapse;">
+            <thead class='text-center'>
+            <tr>
+                <th>Category</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let category of categories; let i=index">
+                <td *ngIf='(i < categories.length / 3)'>
+                {{category.skillCategory}}
+                </td>
+                <td *ngIf='category.active === false && (i < categories.length / 3)'>
+                <span style="color: #ff7575" class="fa fa-times fa-2x" aria-hidden="true"></span>
+                </td>
+                <td *ngIf='category.active === true && (i < categories.length / 3)'>
+                <span style="color: #81f575" class="fa fa-check fa-2x" aria-hidden="true"></span>
+                </td>
+            </tr>
+            <!-- </div> -->
+            </tbody>
+        </table>
+        </div>
+        <div class="col-md-3 col-lg-3 top5">
+        <table class="table table-responsive" style="border-collapse: collapse;">
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let category of categories; let i=index">
+                <td *ngIf=' (((i > categories.length / 3) && (i < ((categories.length / 3) * 2))))'>
+                    {{category.skillCategory}}
+                </td>
+                <td *ngIf="category.active === false && (((i > categories.length / 3) && (i < ((categories.length / 3) * 2))))">
+                    <span style="color: #ff7575" class="fa fa-times fa-2x align-right" aria-hidden="true"></span>
+                </td>
+                <td *ngIf="category.active === true && (((i > categories.length / 3) && (i < ((categories.length / 3) * 2))))">
+                    <span style="color: #81f575" class="fa fa-check fa-2x align-right" aria-hidden="true"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="col-md-3 col-lg-3 top5">
+        <table class="table table-responsive" style="border-collapse: collapse;">
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let category of categories; let i=index">
+                <td *ngIf="(i > ((categories.length / 3) * 2))">
+                    {{category.skillCategory}}
+                </td>
+                <td *ngIf="category.active === false && (i > ((categories.length / 3) * 2))">
+                    <span style="color: #ff7575" class="fa fa-times fa-2x" aria-hidden="true"></span>
+                </td>
+                <td *ngIf="category.active === true && (i > ((categories.length / 3) * 2))">
+                    <span style="color: #81f575" class="fa fa-check fa-2x" aria-hidden="true"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+
 <ng-template #addCategory let-c="close" let-d="dismiss">
     <form #myForm = "ngForm" class="form-control">
     <div class="modal-header">
@@ -16,10 +110,9 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" ng-value="Save" class="btn btn-primary"
-            data-dismiss="modal" (click) = "addCategory()">Submit</button>
+        <button (click) = "addNewCategory()" type="button" class="btn btn-primary"
+            data-dismiss="modal">Submit</button>
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
     </div>
     </form>
-</ng-template>  
-<button class="btn btn-lg btn-outline-primary" (click)="open(addCategory)">Add Category</button>
+</ng-template>

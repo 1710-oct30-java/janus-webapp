@@ -51,7 +51,6 @@ const routes: Routes = [
   ],
   providers: [
     ChuckNorrisService,
-    CategoriesService
   ],
   bootstrap: [AppComponent]
 })

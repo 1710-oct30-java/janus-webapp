@@ -4,7 +4,6 @@ import { HomeComponent } from './home/home.component';
 import { AssessComponent } from './assess/assess.component';
 import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
-import { TrainersComponent } from './home/trainers/trainers/trainers.component';
 import { SettingsComponent } from './settings/settings.component';
 import { CategoriesComponent } from './settings/categories/categories.component';
 import { LocationsComponent } from './settings/locations/locations.component';
@@ -18,10 +17,6 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
-      },
-      {
-        path: 'assess',
-        component: TrainersComponent
       },
       {
         path: 'manage',

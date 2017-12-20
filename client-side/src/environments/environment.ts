@@ -9,4 +9,5 @@ export const environment = {
   bootContext: 'http://localhost/',
 
   addNewCategory: 'http://localhost:8080/vp/category',
+  getAllCategories: 'http://localhost:8080/vp/category',
 };

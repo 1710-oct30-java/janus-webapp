@@ -1,8 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from '../../services/categories.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Category } from '../../beans/Category';
+import { Http } from '@angular/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-categories',
@@ -12,18 +14,33 @@ import { Category } from '../../beans/Category';
 export class CategoriesComponent implements OnInit {
 
     model = new Category();
-    @ViewChild('categoryName') category: ElementRef;
+    newCategory: Category = new Category();
+    categories: Category[];
 
-  constructor(private categoriesService: CategoriesService, private modalService: NgbModal) { }
+  constructor(private categoriesService: CategoriesService, private modalService: NgbModal, private http: Http) { }
 
   ngOnInit() {
+
+    this.http.get(environment.getAllCategories, { withCredentials: true })
+    .subscribe((succResp) => {
+      this.categories = succResp.json();
+      console.log(this.categories);
+    });
   }
 
-  addCategory() {
-      this.categoriesService.newCategory.skillCategory = this.model.skillCategory;
-      console.log(this.categoriesService.newCategory.skillCategory);
-      this.categoriesService.newCategory.active = true;
-      this.categoriesService.addNewCategory();
+  addNewCategory() {
+      this.newCategory.skillCategory = this.model.skillCategory;
+      this.newCategory.active = true;
+      this.http.post(environment.addNewCategory, this.newCategory, {withCredentials: true})
+        .subscribe(
+          resp => {
+            console.log(resp.json());
+            this.categories.push(resp.json());
+          },
+          err => {
+            console.log(err);
+          }
+        );
   }
 
   open(content) {
