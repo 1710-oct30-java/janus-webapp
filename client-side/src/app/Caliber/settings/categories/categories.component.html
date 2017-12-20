@@ -1,0 +1,127 @@
+<!-- Create Assessment Categories and Edit assessment Categories including making it active or inactive -->
+<div>
+    <div class="container">
+        <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <ul class="nav nav-tabs">
+            <li role="button" class="pull-right" (click)="open(addCategory)">
+                <a>Create Category
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    </div>
+      
+    <!-- Display all assessment categories -->
+    <div class="container" id="trainer-assess-table" ng-if="categories[0]">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 top5">
+            <!-- Accordian table -->
+            <table class="table table-responsive" style="border-collapse: collapse;">
+                <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Active</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let category of categories; let i=index">
+                    <div *ngIf='(i < categories.length / 3)'>
+                    <td>
+                        {{category.skillCategory}}
+                    </td>
+                    <td *ngIf='category.active === false'>
+                        <span style="color: #ff7575" class="glyphicon glyphicon-remove fa-2x" aria-hidden="true"></span>
+                    </td>
+                    <td *ngIf='category.active === true'>
+                        <span style="color: #81f575" class="fa fa-check fa-2x" aria-hidden="true"></span>
+                    </td>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="col-md-3 col-lg-3 top5">
+                    <table class="table table-responsive"
+                        style="border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let category of categories; let i=index">
+                                <div *ngIf="((i > categories.length / 3) && (i < ((categories.length / 3) * 2)))">
+                                <td role="button" data-toggle="modal"
+                                    ng-click="populateCategory($index)"
+                                    data-target="#editCategoryModal">{{category.skillCategory}}
+                                </td>
+                                <td *ngIf="category.active === false"><span
+                                    style="color: #ff7575" class="glyphicon glyphicon-remove fa-2x"
+                                    aria-hidden="true"></span></td>
+                                <td *ngIf="category.active === true"><span
+                                    style="color: #81f575" class="fa fa-check fa-2x"
+                    aria-hidden="true"></span></td>
+                    </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-3 col-lg-3 top5">
+                    <table class="table table-responsive"
+                        style="border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let category of categories; let i=index">
+                                <div *ngIf ="(i > ((categories.length / 3) * 2))">
+                                <td role="button" data-toggle="modal"
+                                    data-target="#editCategoryModal">{{category.skillCategory}}
+                                </td>
+                                <td *ngIf="category.active === false"><span
+                                    style="color: #ff7575" class="glyphicon glyphicon-remove fa-2x"
+                                    aria-hidden="true"></span></td>
+                                <td *ngIf="category.active === true"><span
+                                    style="color: #81f575" class="fa fa-check fa-2x"
+                    aria-hidden="true"></span></td>
+                    </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+
+
+<ng-template #addCategory let-c="close" let-d="dismiss">
+    <form #myForm = "ngForm" class="form-control">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Category</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="form-group col-md-6 col-sm-6">
+                <label for="categoryName">Category:</label> 
+                <input  [(ngModel)] = "model.skillCategory" name = "category" type="text" class="form-control" 
+                    id="categoryName" placeholder="Category" required>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" ng-value="Save" class="btn btn-primary"
+            data-dismiss="modal" (click) = "addCategory()">Submit</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+    </div>
+    </form>
+</ng-template>

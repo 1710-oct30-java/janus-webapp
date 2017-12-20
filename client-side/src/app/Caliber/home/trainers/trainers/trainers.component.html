@@ -1,0 +1,42 @@
+<i class="fa fa-pencil" style="color:#ff8e4d;" (click)="open(content)"></i>
+
+
+
+
+
+<!--Model for updating trainer-->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Trainer</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="updateTrainer(updateTrainer)" #updateTrainer="ngForm">
+      <div class="form-group">
+        <label class="col-sm-2 control-label text-nowrap" for="name">Trainer Name:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="name" name="name" [(ngModel)]="name" placeholder="Trainer Name" />
+        </div>
+        <label class="col-sm-2 control-label text-nowrap" for="email">Email:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" ngModel id="email" name="email" placeholder="Email" />
+        </div>
+
+      </div>
+      <label class="col-sm-2 control-label text-nowrap" for="title">Enter Title</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ngModel id="title" name="title" placeholder="Title" />
+      </div>
+      <label class="col-sm-2 control-label text-nowrap" for="title">Tier</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" ngModel id="tier" name="tier" placeholder="Title" />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-update">Update</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
