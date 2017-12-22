@@ -120,7 +120,7 @@ export class BatchService {
 
     /**
      * transmits a Batch object to be updated and
-     * pushes the updated object on th savedSubject
+     * pushes the updated object on the savedSubject
      *
      * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'PANEL')")
      *

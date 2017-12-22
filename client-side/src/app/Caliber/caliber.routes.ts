@@ -5,6 +5,7 @@ import { AssessComponent } from './assess/assess.component';
 import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
 import { TestComponent } from './components/test/test.component';
+import { QualityComponent } from './quality/quality.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,10 @@ export const routes: Routes = [
       {
         path: 'assess',
         component: AssessComponent
+      },
+      {
+        path: 'quality',
+        component: QualityComponent
       },
       {
         path: 'manage',

@@ -77,7 +77,7 @@ export class AssessmentService {
   */
 
   /**
-     * retrieves all assessments by batch ID by week number and pushes them 
+     * retrieves all assessments by batch ID by week number and pushes them
      * on the list subject
      *
      * @param batchId: number
