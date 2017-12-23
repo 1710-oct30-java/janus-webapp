@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NoteService } from '../services/note.service';
+import { Note } from '../entities/Note';
+import { Batch } from '../entities/Batch';
 
 @Component({
   selector: 'app-quality',
@@ -6,10 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./quality.component.css']
 })
 export class QualityComponent implements OnInit {
+  
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
+
+
+
+
 
 }

@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+
+// components
 import { CaliberComponent } from './caliber.component';
 import { HomeComponent } from './home/home.component';
 import { AssessComponent } from './assess/assess.component';
@@ -15,10 +17,18 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
+        data: {
+          title: 'Home',
+          position: 'top',
+        },
       },
       {
         path: 'assess',
-        component: AssessComponent
+        component: AssessComponent,
+        data: {
+          title: 'Assess Batch',
+          position: 'top',
+        },
       },
       {
         path: 'quality',
@@ -26,11 +36,19 @@ export const routes: Routes = [
       },
       {
         path: 'manage',
-        component: ManageComponent
+        component: ManageComponent,
+        data: {
+          title: 'Manage Batch',
+          position: 'top',
+        },
       },
       {
         path: 'reports',
-        component: ReportsComponent
+        component: ReportsComponent,
+        data: {
+          title: 'Reports',
+          position: 'top',
+        },
       },
       {
         path: 'test',
