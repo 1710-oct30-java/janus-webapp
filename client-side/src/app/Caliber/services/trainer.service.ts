@@ -17,16 +17,18 @@ export class TrainerService {
   tiers$: Observable<any> = this.tiersSubject.asObservable();
 
   constructor( @Inject(Http) public http: Http) {
+  }
+
+  populateOnStart() {
     this.getAll();
     this.getTitles();
     this.getTiers();
   }
 
-
   // Get All Trainers
   getAll(): void {
-    this.http.get(environment.context + '/all/trainer/all', {withCredentials: true})
-    .map(
+    this.http.get(environment.context + '/all/trainer/all', { withCredentials: true })
+      .map(
       resp => resp.json(), // map the resp so all subscribers just get the body of the request as a js object
       // err => // can have the error mapped for all subscribers if you want also
     )
@@ -89,14 +91,14 @@ export class TrainerService {
 
   createTrainer(name, title, email, tier) {
     const json = {
-        'name': name,
-        'title': title,
-        'email': email,
-        'tier': tier
+      'name': name,
+      'title': title,
+      'email': email,
+      'tier': tier
     };
 
-    this.http.post(environment.addNewTrainer, json, {withCredentials: true})
-    .subscribe(
+    this.http.post(environment.addNewTrainer, json, { withCredentials: true })
+      .subscribe(
       resp => {
         console.log('created a new trainer');
         this.getAll();
@@ -104,20 +106,20 @@ export class TrainerService {
       err => {
         console.log('err');
       }
-    );
+      );
   }
 
   deleteTrainer(trainer: Trainer) {
     this.http.delete(environment.context + '/vp/trainer/delete',
-    {withCredentials: true, body: trainer}).map(
-        resp => resp.json(),
+      { withCredentials: true, body: trainer }).map(
+      resp => resp.json(),
     )
-    .subscribe(
-        resp => {
-          },
-          err => {
-            // handle the error however you want
-          }
-    );
+      .subscribe(
+      resp => {
+      },
+      err => {
+        // handle the error however you want
+      }
+      );
   }
 }

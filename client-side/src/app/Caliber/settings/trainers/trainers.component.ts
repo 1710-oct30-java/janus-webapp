@@ -28,6 +28,7 @@ export class TrainersComponent implements OnInit, OnDestroy {
     private modalService: NgbModal) { }
 
   ngOnInit() {
+    this.trainerService.populateOnStart();
     this.trainerSubscription = this.trainerService.trainers$.subscribe((resp) => {
       this.trainers = resp;
     });
@@ -44,7 +45,7 @@ export class TrainersComponent implements OnInit, OnDestroy {
   }
 
   addTrainer(form) {
-    console.log(this.model.name + ' '  + this.model.email + ' ' + this.model.title + ' ' + this.model.tier);
+    console.log(this.model.name + ' ' + this.model.email + ' ' + this.model.title + ' ' + this.model.tier);
     // alert(this.model.name + ' '  + this.model.email + ' ' + this.model.title + ' ' + this.model.tier);
     this.trainerService.createTrainer(this.model.name, this.model.title, this.model.email, this.model.tier);
   }
@@ -74,7 +75,7 @@ export class TrainersComponent implements OnInit, OnDestroy {
     this.currEditTrainer = modalTrainer;
     this.newTier = modalTrainer.tier;
     this.newTitle = modalTrainer.title;
-    this.modalService.open(content);
+    this.modalService.open(content, { size: 'lg' });
   }
 
   // When tier was changed

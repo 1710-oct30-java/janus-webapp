@@ -87,7 +87,7 @@
           <!-- Dropdown for Trainer tier/role -->
           <label class="col-sm-2 control-label text-nowrap" for="tier">Tier</label>
           <select class="form-control" [ngModel]="currEditTrainer.tier" (ngModelChange)="tierChange($event)" name="tier">
-            <option [value]="tier" *ngFor="let tier of tiers">{{tier}}</option>
+            <option [value]="tier" *ngFor="let tier of tiers">{{tier | slice:5}}</option>
           </select>
 
         </div>
