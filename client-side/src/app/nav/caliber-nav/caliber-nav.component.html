@@ -1,14 +1,5 @@
 <ul class="navbar-nav ml-auto">
-  <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/home">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/manage">Manage Batch</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/assess">Assess Batch</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/reports">Reports</a>
+  <li class="nav-item" *ngFor="let route of routes">
+    <a class="nav-link" [routerLink]="route.path">{{ route.data.title }}</a>
   </li>
 </ul>

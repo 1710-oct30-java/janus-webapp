@@ -8,10 +8,11 @@ import { ChuckNorrisService } from '../../services/chuck-norris.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private jokeSubscription: Subscription;
-  joke;
+    private jokeSubscription: Subscription;
+    public joke: any;
 
-  constructor(private chuckNorrisService: ChuckNorrisService) { }
+  constructor(private chuckNorrisService: ChuckNorrisService) {
+  }
 
   ngOnInit() {
     this.jokeSubscription = this.chuckNorrisService.joke$.subscribe( (resp) => {

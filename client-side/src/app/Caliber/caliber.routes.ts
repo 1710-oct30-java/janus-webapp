@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
+
+// components
 import { CaliberComponent } from './caliber.component';
 import { HomeComponent } from './home/home.component';
 import { AssessComponent } from './assess/assess.component';
 import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
 import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
+import { TestComponent } from './components/test/test.component';
 
 export const routes: Routes = [
   {
@@ -14,18 +17,38 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
+        data: {
+          title: 'Home',
+          position: 'top',
+        },
       },
       {
         path: 'assess',
-        component: AssessComponent
+        component: AssessComponent,
+        data: {
+          title: 'Assess Batch',
+          position: 'top',
+        },
       },
       {
         path: 'manage',
-        component: ManageComponent
+        component: ManageComponent,
+        data: {
+          title: 'Manage Batch',
+          position: 'top',
+        },
       },
       {
         path: 'reports',
-        component: ReportsComponent
+        component: ReportsComponent,
+        data: {
+          title: 'Reports',
+          position: 'top',
+        },
+      },
+      {
+        path: 'test',
+        component: TestComponent,
       },
       {
         path: 'trainer-profile',
