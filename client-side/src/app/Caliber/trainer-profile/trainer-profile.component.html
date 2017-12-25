@@ -1,0 +1,31 @@
+
+<div>
+  <table class='table table-striped'>
+    <th>name</th>
+    <th>email</th>
+    <th>phone number</th>
+    <th>bio:</th>
+    <tr>
+        <td>{{currentTrainer.name}}</td>
+        <td>{{currentTrainer.email}}</td>
+        <td>{{currentTrainer.phoneNumber}}</td>
+        <td>{{currentTrainer.bio}}</td>
+    </tr>
+  </table>
+  <button (click)='fetch()'>Get Current Trainer Info</button>
+</div>
+
+<form class="form-signin" #updateForm="ngForm">
+  <hr class="colorgraph">
+  <div class="row">
+    <div class="col-4">
+      Name:
+    </div>
+    <div class="col-8">
+      <div type="text" [(ngModel)]="ct.name" name="name" size="10"></div>
+      <div>
+        <button type="submit" name="Update" (click)="updateInfo()" value="Update">Update</button>
+      </div>
+    </div>
+  </div>
+</form>

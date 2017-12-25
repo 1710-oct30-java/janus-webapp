@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { AssessComponent } from './assess/assess.component';
 import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
+import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
       {
         path: 'reports',
         component: ReportsComponent
+      },
+      {
+        path: 'trainer-profile',
+        component: TrainerProfileComponent
       },
       {
         path: '**',

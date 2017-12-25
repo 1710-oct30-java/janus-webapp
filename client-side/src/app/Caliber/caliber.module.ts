@@ -14,6 +14,8 @@ import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
 import { CommonModule } from '@angular/common';
 import { WeeklyLineChartComponent } from './weekly-line-chart/weekly-line-chart.component';
+import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
+import { TrainerService } from './services/trainer-service/trainer-service.service';
 
 
 @NgModule({
@@ -31,7 +33,10 @@ import { WeeklyLineChartComponent } from './weekly-line-chart/weekly-line-chart.
     ManageComponent,
     ReportsComponent,
     WeeklyLineChartComponent,
+    TrainerProfileComponent,
   ],
-  providers: []
+  providers: [
+    TrainerService
+  ]
 })
 export class CaliberModule { }
