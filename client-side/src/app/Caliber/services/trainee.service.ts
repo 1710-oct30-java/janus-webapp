@@ -78,14 +78,15 @@ export class TraineeService {
      * list subject
      *
      * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING', 'PANEL')")
+     *
+     * @param batchId: number
      */
    public fetchAllByBatch(batchId: number): void {
      const url = this.envService.buildUrl('all/trainee', { batch: batchId });
 
      this.listSubject.next([]);
 
-     this.http.get<Trainee[]>(url, { withCredentials: this.sendCredentials } )
-      .subscribe( (trainees) => {
+     this.http.get<Trainee[]>(url).subscribe( (trainees) => {
         this.listSubject.next(trainees);
       });
    }
@@ -96,14 +97,13 @@ export class TraineeService {
    *
    * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'PANEL')")
    *
-   * @param trainee
+   * @param trainee: Trainee
    */
    public create(trainee: Trainee): void {
      const url = this.envService.buildUrl('all/trainee/create');
      const data = JSON.stringify(trainee);
 
-     this.http.post<Trainee>(url, data, { withCredentials: this.sendCredentials })
-      .subscribe( (savedTrainee) => {
+     this.http.post<Trainee>(url, data).subscribe( (savedTrainee) => {
         this.savedSubject.next(savedTrainee);
       });
    }
@@ -114,14 +114,13 @@ export class TraineeService {
    *
    * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER','PANEL')")
    *
-   * @param trainer
+   * @param trainee: Trainee
    */
    public update(trainee: Trainee): void {
      const url = this.envService.buildUrl('all/trainee/update');
      const data = JSON.stringify(trainee);
 
-     this.http.put<Trainee>(url, data, { withCredentials: this.sendCredentials })
-      .subscribe( (savedTrainee) => {
+     this.http.put<Trainee>(url, data).subscribe( (savedTrainee) => {
         this.savedSubject.next(savedTrainee);
       });
    }
@@ -132,13 +131,12 @@ export class TraineeService {
    *
    * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER','PANEL')")
    *
-   * @param trainee
+   * @param trainee: Trainee
    */
    public delete(trainee: Trainee): void {
      const url = this.envService.buildUrl(`all/trainee/delete/${trainee.traineeId}`);
 
-     this.http.delete(url, { withCredentials: this.sendCredentials })
-      .subscribe( () => {
+     this.http.delete(url).subscribe( () => {
         this.deletedSubject.next(trainee);
       });
    }

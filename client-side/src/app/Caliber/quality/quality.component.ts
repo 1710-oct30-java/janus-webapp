@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NoteService } from '../services/note.service';
 import { Note } from '../entities/Note';
 import { Batch } from '../entities/Batch';
+import { QCNoteService } from '../services/qc-note.service';
 
 @Component({
   selector: 'app-quality',
@@ -9,16 +9,12 @@ import { Batch } from '../entities/Batch';
   styleUrls: ['./quality.component.css']
 })
 export class QualityComponent implements OnInit {
-  
 
-  constructor() {
+
+  constructor(private qcNoteService: QCNoteService) {
   }
 
   ngOnInit() {
   }
-
-
-
-
 
 }

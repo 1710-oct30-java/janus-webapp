@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { NavModule } from '../nav/nav.module';
 
 // routing
 import { routes } from './caliber.routes';
+import { SpringInterceptor } from './interceptors/spring.interceptor';
 
 // services
 import { BatchService } from './services/batch.service';
@@ -18,12 +19,11 @@ import { TrainerService } from './services/trainer.service';
 import { TraineeService } from './services/trainee.service';
 import { EnvironmentService } from './services/environment.service';
 import { AssessmentService } from './services/assessment.service';
-<<<<<<< HEAD
-import { NoteService } from './services/note.service';
-=======
 import { RouteService } from './services/route.service';
 import { PanelService } from './services/panel.service';
->>>>>>> 1b4eea8c03f56f32d390918d8d3d4e40a943055a
+import { GradeService } from './services/grade.service';
+import { QCNoteService } from './services/qc-note.service';
+
 
 // components
 import { CaliberComponent } from './caliber.component';
@@ -35,6 +35,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { WeeklyLineChartComponent } from './weekly-line-chart/weekly-line-chart.component';
 import { TestComponent } from './components/test/test.component';
 import { QualityComponent } from './quality/quality.component';
+import { from } from 'rxjs/observable/from';
 
 
 @NgModule({
@@ -57,18 +58,19 @@ import { QualityComponent } from './quality/quality.component';
     QualityComponent
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests
     BatchService,
     EnvironmentService,
     TrainerService,
     TraineeService,
     AssessmentService,
-<<<<<<< HEAD
-    NoteService
-=======
     RouteService,
     PanelService,
     RouteService,
->>>>>>> 1b4eea8c03f56f32d390918d8d3d4e40a943055a
+    GradeService,
+    QCNoteService
+
+
   ],
 })
 export class CaliberModule { }

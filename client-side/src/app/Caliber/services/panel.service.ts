@@ -22,7 +22,6 @@ export class PanelService {
   private listSubject: BehaviorSubject<Panel[]>;
   private savedSubject: Subject<Panel>;
   private deletedSubject: Subject<Panel>;
-  private sendCredentials: boolean;
 
   constructor(envService: EnvironmentService, httpClient: HttpClient) {
     this.envService = envService;
@@ -31,8 +30,6 @@ export class PanelService {
     this.listSubject = new BehaviorSubject([]);
     this.savedSubject = new Subject();
     this.deletedSubject = new Subject();
-
-    this.sendCredentials = true;
   }
 
   /**
@@ -71,17 +68,33 @@ export class PanelService {
    =====================
  */
 
+ /**
+  * retrievs all panels and pushed them on the listSubject
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
+  */
+  public fetchAll(): void {
+    const url = this.envService.buildUrl('panel/all');
+
+    this.http.get<Panel[]>(url).subscribe( (panels) => {
+      this.listSubject.next(panels);
+    });
+  }
+
   /**
    * retrieves all panels by trainee ID and pushes them on the
    * list subject
+   *
+   * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
+   *
+   * @param trainee: Trainee
    */
   public fetchAllByTrainee(trainee: Trainee): void {
     const url = this.envService.buildUrl(`panel/trainee/${trainee.traineeId}`);
 
     this.listSubject.next([]);
 
-    this.http.get<Panel[]>(url, { withCredentials: this.sendCredentials })
-      .subscribe((panels) => {
+    this.http.get<Panel[]>(url).subscribe((panels) => {
         this.listSubject.next(panels);
       });
   }
@@ -92,14 +105,13 @@ export class PanelService {
   *
   * spring-security: @PreAuthorize("hasAnyRole('VP' , 'PANEL')")
   *
-  * @param panel
+  * @param panel: Panel
   */
   public create(panel: Panel): void {
     const url = this.envService.buildUrl('panel/create');
     const data = JSON.stringify(panel);
 
-    this.http.post<Panel>(url, data, { withCredentials: this.sendCredentials })
-      .subscribe((savedPanel) => {
+    this.http.post<Panel>(url, data).subscribe((savedPanel) => {
         this.savedSubject.next(savedPanel);
       });
   }
@@ -110,14 +122,13 @@ export class PanelService {
   *
   * spring-security: @PreAuthorize("hasAnyRole('VP', 'PANEL')")
   *
-  * @param panel
+  * @param panel: Panel
   */
   public update(panel: Panel): void {
     const url = this.envService.buildUrl('panel/update');
     const data = JSON.stringify(panel);
 
-    this.http.put<Panel>(url, data, { withCredentials: this.sendCredentials })
-      .subscribe((savedPanel) => {
+    this.http.put<Panel>(url, data).subscribe((savedPanel) => {
         this.savedSubject.next(savedPanel);
       });
   }
@@ -126,15 +137,14 @@ export class PanelService {
   * deletes a panel and pushes the deleted panel on the
   * deletedSubject
   *
-  * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER','PANEL')")
+  * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'PANEL')")
   *
-  * @param trainee
+  * @param panel: Panel
   */
   public delete(panel: Panel): void {
     const url = this.envService.buildUrl(`panel/delete/${panel.panelId}`);
 
-    this.http.delete(url, { withCredentials: this.sendCredentials })
-      .subscribe(() => {
+    this.http.delete(url).subscribe(() => {
         this.deletedSubject.next(panel);
       });
   }

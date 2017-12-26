@@ -46,8 +46,7 @@ export class AuthenticationService {
     public fetchCurrentUser(): void {
       const url = '[unknown]';
 
-      this.http.get<User>(url, { withCredentials: true })
-        .subscribe( (user) => {
+      this.http.get<User>(url).subscribe( (user) => {
           this.userSubject.next(user);
         }, (error) => {
           this.userSubject.next(null);

@@ -36,8 +36,6 @@ export class AssessmentService {
     this.listSubject = new BehaviorSubject([]);
     this.savedSubject = new Subject();
     this.deletedSubject = new Subject();
-
-    this.sendCredentials = true;
   }
 
    /**
@@ -88,8 +86,7 @@ export class AssessmentService {
 
     this.listSubject.next([]);
 
-    this.http.get<Assessment[]>(url, { withCredentials: this.sendCredentials })
-      .subscribe( (assessments) => {
+    this.http.get<Assessment[]>(url).subscribe( (assessments) => {
         this.listSubject.next(assessments);
       });
   }
@@ -106,8 +103,7 @@ export class AssessmentService {
     const url = this.envService.buildUrl('trainer/assessment/create');
     const data = JSON.stringify(assessment);
 
-    this.http.post<Assessment>(url, data, { withCredentials: this.sendCredentials })
-      .subscribe( (saved) => {
+    this.http.post<Assessment>(url, data).subscribe( (saved) => {
         this.savedSubject.next(saved);
       });
   }
@@ -124,8 +120,7 @@ export class AssessmentService {
     const url = this.envService.buildUrl('trainer/assessment/update');
     const data = JSON.stringify(assessment);
 
-    this.http.put<Assessment>(url, data, { withCredentials: this.sendCredentials })
-      .subscribe( (updated) => {
+    this.http.put<Assessment>(url, data).subscribe( (updated) => {
         this.savedSubject.next(updated);
       });
   }
@@ -141,8 +136,7 @@ export class AssessmentService {
   public delete(assessment: Assessment): void {
     const url = this.envService.buildUrl(`trainer/assessment/delete/${assessment.assessmentId}`);
 
-    this.http.delete(url, { withCredentials: this.sendCredentials })
-      .subscribe( () => {
+    this.http.delete(url).subscribe( () => {
         this.deletedSubject.next(assessment);
       });
   }

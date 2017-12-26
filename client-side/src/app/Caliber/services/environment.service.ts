@@ -12,8 +12,8 @@ export class EnvironmentService {
 
   /**
    * takes a root URL and an object to build
-   * an URL that included the prefix set for the
-   * current environment and assmebles the object
+   * an URL that includs the prefix set for the
+   * current environment and assembles the object
    * passed as the second argument as get parameters
    *
    * @param url: string
