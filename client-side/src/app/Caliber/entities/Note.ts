@@ -14,4 +14,5 @@ export class Note {
     noteType: NoteType;
     qcFeedback: boolean;
     qcStatus: QCStatus;
+    type: string;
 }

@@ -19,7 +19,7 @@ export class CaliberNavComponent implements OnInit, OnDestroy {
   private routeService: RouteService;
   private routeSubscription: Subscription;
 
-  private routes: Routes;
+  routes: Routes;
 
   constructor(routeSrv: RouteService) {
     this.routeService = routeSrv;

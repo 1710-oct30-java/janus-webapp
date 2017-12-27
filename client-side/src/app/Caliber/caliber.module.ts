@@ -24,6 +24,10 @@ import { PanelService } from './services/panel.service';
 import { GradeService } from './services/grade.service';
 import { QCNoteService } from './services/qc-note.service';
 
+import { NoteService } from './services/note.service';
+
+// pipes
+import { TraineeSearchPipePipe } from './pipes/trainee-search-pipe.pipe';
 
 // components
 import { CaliberComponent } from './caliber.component';
@@ -37,6 +41,8 @@ import { TestComponent } from './components/test/test.component';
 import { QualityComponent } from './quality/quality.component';
 import { from } from 'rxjs/observable/from';
 
+import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
+import { PanelComponent } from './panel/panel.component';
 
 @NgModule({
   imports: [
@@ -48,6 +54,7 @@ import { from } from 'rxjs/observable/from';
     FormsModule,
   ],
   declarations: [
+    // components
     CaliberComponent,
     HomeComponent,
     AssessComponent,
@@ -55,7 +62,12 @@ import { from } from 'rxjs/observable/from';
     ReportsComponent,
     WeeklyLineChartComponent,
     TestComponent,
-    QualityComponent
+    QualityComponent,
+    TrainerProfileComponent,
+    PanelComponent,
+
+    // pipes
+    TraineeSearchPipePipe,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests
@@ -68,9 +80,8 @@ import { from } from 'rxjs/observable/from';
     PanelService,
     RouteService,
     GradeService,
-    QCNoteService
-
-
+    QCNoteService,
+    NoteService
   ],
 })
 export class CaliberModule { }

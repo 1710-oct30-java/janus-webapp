@@ -1,4 +1,3 @@
-<p>
-  hi
-  {{batches[0].batchId}}
+<p *ngFor="let batch of batches">
+  {{batch.startDate}}
 </p>
