@@ -109,7 +109,7 @@ export class QCNoteService {
    * @param note: Note
   */
   public getAllQCTraineeNotes(batch: Batch, note: Note): void {
-      const url = this.envService.buildUrl(`/qc/note/trainee/${batch.batchId}/${note.noteId}`);
+      const url = this.envService.buildUrl(`/qc/note/trainee/${batch.batchId}/${note.week}`);
 
       this.listSubject.next([]);
 
@@ -118,4 +118,20 @@ export class QCNoteService {
       });
   }
 
+   /**
+   * Find the weekly QC batch note for the week
+   *
+   * @param batch: Batch
+   * @param note: Note
+  */
+
+  public findQCBatchNotes(batch: Batch, note: Note): void {
+    const url = this.envService.buildUrl(`/qc/note/batch/${batch.batchId}/${note.week}`);
+
+    this.listSubject.next([]);
+
+      this.http.get<Note[]>(url).subscribe((notes) => {
+        this.listSubject.next(notes);
+      });
+  }
 }
