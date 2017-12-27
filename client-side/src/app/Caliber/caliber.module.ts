@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { routes } from './caliber.routes';
 import { CaliberComponent } from './caliber.component';
 import { HomeComponent } from './home/home.component';
@@ -42,6 +42,7 @@ import { TierPipe } from './pipes/tier-pipe';
     RouterModule.forChild(routes),
     FormsModule,
     ChartsModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     CaliberComponent,

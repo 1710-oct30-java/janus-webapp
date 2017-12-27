@@ -4,6 +4,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TrainerService } from '../../services/trainer.service';
 import { Trainer } from '../../entities/Trainer';
 import { NgForm } from '@angular/forms/src/directives/ng_form';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-trainers',
@@ -23,9 +24,10 @@ export class TrainersComponent implements OnInit, OnDestroy {
   newTier: String;
   newTitle: String;
 
+  rForm: FormGroup;
 
   constructor(private trainerService: TrainerService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.trainerService.populateOnStart();
@@ -75,6 +77,12 @@ export class TrainersComponent implements OnInit, OnDestroy {
     this.currEditTrainer = modalTrainer;
     this.newTier = modalTrainer.tier;
     this.newTitle = modalTrainer.title;
+    this.rForm = this.fb.group({
+      'name': [this.currEditTrainer.name, Validators.required],
+      'email': [this.currEditTrainer.email, Validators.required],
+      'title': [this.newTitle],
+      'tier': [this.newTier],
+    });
     this.modalService.open(content, { size: 'lg' });
   }
 

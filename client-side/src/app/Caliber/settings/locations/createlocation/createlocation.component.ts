@@ -6,18 +6,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 
 @Component({
-  selector: 'app-editlocation',
-  templateUrl: './editlocation.component.html',
-  styleUrls: ['./editlocation.component.css']
+  selector: 'app-createlocation',
+  templateUrl: './createlocation.component.html',
+  styleUrls: ['./createlocation.component.css']
 })
-export class EditlocationComponent implements OnInit {
+export class CreatelocationComponent implements OnInit {
 
-  @Input()
-  currEditLocation: Location;
-  newCompanyName: String;
-  newStreet: String;
-  newCity: String;
-  newZip: String;
+  currNewLocation = new Location();
   newState: String;
 
   rForm: FormGroup;
@@ -29,32 +24,23 @@ export class EditlocationComponent implements OnInit {
     private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.popTemp();
-
     this.initFormControl();
+
   }
 
-  // create form control with original values
   initFormControl() {
     this.rForm = this.fb.group({
-      'company': [this.newCompanyName, Validators.required],
-      'street': [this.newStreet, Validators.required],
-      'city': [this.newCity, Validators.required],
-      'zipcode': [this.newZip, Validators.required],
+      'company': [null, Validators.required],
+      'street': [null, Validators.required],
+      'city': [null, Validators.required],
+      'zipcode': [null, Validators.required],
+      'state': [false, Validators.requiredTrue],
     });
-  }
-
-  // populate all temp variables
-  popTemp() {
-    this.newCompanyName = this.currEditLocation.company;
-    this.newStreet = this.currEditLocation.street;
-    this.newCity = this.currEditLocation.city;
-    this.newZip = this.currEditLocation.zipcode;
+    this.currNewLocation.state = 'holder';
   }
 
 
-  editLocation(content) {
-    this.newState = this.currEditLocation.state;
+  newLocation(content) {
     this.modalRef = this.modalService.open(content, { size: 'lg' });
     this.modalRef.result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -63,21 +49,23 @@ export class EditlocationComponent implements OnInit {
     });
   }
 
-  // When company was changed
+  // When state was changed, set form validator to true
   stateChange(newState) {
+    this.rForm.get('state').setValue(true);
     this.newState = newState;
   }
 
-  updateLocation(modal) {
-    this.currEditLocation.state = this.newState;
-    this.currEditLocation.company = modal.company;
-    this.currEditLocation.city = modal.city;
-    this.currEditLocation.street = modal.street;
-    this.currEditLocation.zipcode = modal.zipcode;
-    this.locationService.updateLocation(this.currEditLocation);
+  addLocation(modal) {
+    this.currNewLocation.state = this.newState;
+    this.currNewLocation.company = modal.company;
+    this.currNewLocation.city = modal.city;
+    this.currNewLocation.street = modal.street;
+    this.currNewLocation.zipcode = modal.zipcode;
+    this.currNewLocation.active = true;
+    this.locationService.addLocation(this.currNewLocation);
   }
 
-  // close funciton, reset form
+
   close(content) {
     this.initFormControl();
     this.modalRef.close();

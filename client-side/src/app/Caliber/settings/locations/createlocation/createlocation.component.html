@@ -1,6 +1,5 @@
-<i class="fa fa-pencil" style="color:#fa7427;" (click)="editLocation(content)"></i>
-
-<!--Model for updating location-->
+<button type="button" class="btn btn-secondary" (click)="newLocation(content)" >Create Location  <i class="fa fa-plus"></i></button>
+<!--Model for adding location-->
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Edit Location</h4>
@@ -30,8 +29,7 @@
           <div class="col-md-6">
             <!-- Field for City -->
             <label class="col-sm-2 control-label text-nowrap" for="city">City:</label>
-            <input type="text" class="form-control" formControlName="city" id="city" name="city" placeholder="Enter City"
-              required/>
+            <input type="text" class="form-control" formControlName="city" id="city" name="city" placeholder="Enter City" required/>
           </div>
           <div class="col-md-6">
             <span *ngTemplateOutlet="stateOptions"></span>
@@ -51,7 +49,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="submit" data-dismiss="modal" class="btn btn-update" [disabled]="!rForm.valid" (click)="updateLocation(editForm.value); close(content)">Update</button>
+    <button type="submit" data-dismiss="modal" class="btn btn-update" [disabled]="!rForm.valid" (click)="addLocation(editForm.value); close(content)">Save</button>
 
     <button type="button" class="btn btn-outline-dark" (click)="close(content)">Close</button>
   </div>
@@ -61,7 +59,8 @@
 <!-- State Dropdown -->
 <ng-template #stateOptions>
   <label class="col-sm-2 control-label text-nowrap" for="state">State:</label>
-  <select class="form-control" [ngModel]="currEditLocation.state" (ngModelChange)="stateChange($event)" name="state">
+  <select class="form-control" [ngModel]="currNewLocation.state" (ngModelChange)="stateChange($event)" name="state">
+    <option selected disabled value="holder">Select State</option>
     <option value="AL">Alabama</option>
     <option value="AK">Alaska</option>
     <option value="AZ">Arizona</option>

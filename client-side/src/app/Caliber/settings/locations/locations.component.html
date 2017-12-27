@@ -1,47 +1,62 @@
 <div class="container">
-<div id="locations-table">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Active Status</th>
-                <th>Company</th>
-                <th>Address</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let location of locations">
-                <td *ngIf="location.active == true;then activated else deactivated">
-                </td>
-                <td>
-                    {{location.company}}
-                </td>
-                <td>
-                    {{location.street}} {{location.city}}, {{location.state}} {{location.zipcode}}
-                </td>
-                <td>
-                    <app-editlocation [currEditLocation] = "location"></app-editlocation>
-                </td>
-                <td *ngIf="location.active == true;then deactivateButton else activateButton">
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 tab-panes">
+            <br>
+            <ul class="nav nav-tabs justify-content-end">
+                <li class="nav-item tab-pane fade show">
+                    <app-createlocation></app-createlocation>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="locations-table">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Active Status</th>
+                    <th>Company</th>
+                    <th>Address</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let location of locations">
+                    <td *ngIf="location.active == true;then activated else deactivated">
+                    </td>
+                    <td>
+                        {{location.company}}
+                    </td>
+                    <td>
+                        {{location.street}} {{location.city}}, {{location.state}} {{location.zipcode}}
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col-sm-6 text-right">
+                                <app-editlocation [currEditLocation]="location"></app-editlocation>
+                            </div>
+                            <div class="col-sm-6 text-left">
+                                <span *ngIf="location.active == true;then deactivateButton else activateButton"></span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- <td *ngIf="location.active == true;then deactivateButton else activateButton">
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
 
-</div>
+    </div>
 </div>
 
 <!-- Green check for DEACTIVATED locations to REACTIVATE-->
 <ng-template #activateButton>
-    <td>
-        <i class="fa fa-check" id="reactivate" style="color:#81f575;"></i>
-    </td>
+    <i class="fa fa-check" id="reactivate" style="color:#81f575;"></i>
 </ng-template>
 
 <!-- Red cross for ACTIVATED locations to DEACTIVATE-->
 <ng-template #deactivateButton>
-    <td>
-        <app-deactivatelocation [location]="location"></app-deactivatelocation>
-    </td>
+    <app-deactivatelocation [location]="location"></app-deactivatelocation>
 </ng-template>
 
 <!-- Green check for activated locations -->
@@ -57,4 +72,3 @@
         <i class="fa fa-times fa-2x" style="color:#ff0000;"></i>
     </td>
 </ng-template>
-
