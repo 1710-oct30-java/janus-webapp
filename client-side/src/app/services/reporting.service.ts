@@ -32,6 +32,9 @@ export class ReportingService {
   private panelBatchAllTrainees = new BehaviorSubject<CacheData>(null);
   public panelBatchAllTrainees$ = this.panelBatchAllTrainees.asObservable();
 
+  private batchOverallLineChart = new BehaviorSubject<CacheData>(null);
+  public batchOverallLineChart$ = this.batchOverallLineChart.asObservable();
+
   constructor(private httpClient: HttpClient) { }
 
   refresh() {
@@ -148,8 +151,14 @@ export class ReportingService {
   fetchBatchOverallLineChart(batchId: Number) {
     const endpoint = environment.apiBatchOverallLineChart(batchId);
 
-    // TODO: Implement API call and subject push logic
+    const params = {
+      batchId: batchId
+    };
 
+    if (this.needsRefresh(this.batchOverallLineChart, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.batchOverallLineChart.next({params: params, data: success}));
+    }
   }
 
   fetchCurrentBatchesLineChart() {

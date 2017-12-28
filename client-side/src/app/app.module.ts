@@ -15,6 +15,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavModule } from './nav/nav.module';
 import { JanusComponent } from './Janus/janus.component';
 import { ChuckNorrisService } from './services/chuck-norris.service';
+import { CategoriesService } from './Caliber/services/categories.service';
+import { Trainer } from './entities/Trainer';
+
 
 import { ReportingService } from './services/reporting.service';
 import { PDFService } from './services/pdf.service';
