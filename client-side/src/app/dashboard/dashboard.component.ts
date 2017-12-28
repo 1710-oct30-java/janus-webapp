@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { App } from '../entities/app';
+import { App } from '../entities/App';
 import { environment } from '../../environments/environment';
 import { janusGlobal } from '../../environments/janusGlobal';
 

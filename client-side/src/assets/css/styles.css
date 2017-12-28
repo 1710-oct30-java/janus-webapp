@@ -1,0 +1,634 @@
+/************************
+	Revature Fonts
+************************/
+@font-face {
+	font-family: 'Futura-Std-Medium';
+	src: url('/assets/fonts/Futura-Std-Medium.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'Futura-Std-Book';
+	src: url('/assets/fonts/Futura-Std-Book.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'Futura-Std-Heavy';
+	src: url('/assets/fonts/Futura-Std-Heavy.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'Futura-Std-Bold';
+	src: url('/assets/fonts/Futura-Std-Bold.otf') format('opentype');
+}
+
+body {
+	font-family: 'Futura-Std-Book';
+}
+
+th {
+	font-family: 'Futura-Std-Bold';
+}
+
+li {
+	font-family: 'Futura-Std-Heavy';
+}
+
+/************************
+	Revature Colors
+************************/
+:root {
+	/*** Primary Colors ***/ -
+	-orange: #F26925; -
+	-white: #FFFFF; -
+	-dark-grey: #474C55;
+	/*** Secondary Colors ***/ -
+	-blue: #72A4C2; -
+	-yellow: #FCB414; -
+	-light-grey: #B9B9BA;
+}
+
+.warning {
+	color: red;
+}
+
+/**********************
+	Header
+**********************/
+.navbar-right {
+	margin-top: .75em;
+	margin-right: 5em;
+}
+
+.header-styles {
+	background-color: white;
+}
+
+a {
+	color: #F26925;
+}
+
+.sticky-header {
+    padding: 10px;
+    padding-right: 55px;
+    font-size: 15px;
+	width: 1000px;
+} 
+
+/**********************
+	Chart Containers
+**********************/
+.nav>li>a, .nav>li>a {
+	transition: background-color 1s ease;
+}
+
+.data-container {
+	padding: .5em 1em 1em 1em;
+	border-radius: .5em;
+}
+
+.chart-container {
+	padding: .5em;
+	background-color: #ffffff;
+	border-radius: .3em;
+}
+
+@media ( max-width : 400px) {
+	.chart-container {
+		min-height: 8.8em;
+	}
+}
+
+@media ( min-width : 401px) and (max-width: 600px) {
+	.chart-container {
+		min-height: 11.8em;
+	}
+}
+
+@media ( min-width : 601px) {
+	.chart-container {
+		min-height: 25.8em;
+	}
+}
+
+.panel>.panel-heading {
+	background-image: none;
+	background-color: #F26925;
+	color: white;
+}
+#panelReportDisplay{
+	background-color: #72A4C2;
+	color: white;
+}
+
+/************************
+	Manage Batch
+************************/
+.modal-header {
+	background-color: #f1f2f4;
+	border-radius: 6px;
+}
+
+.scrollable-div {
+	width: 550px;
+	height: 200px;
+	overflow-y: scroll;
+}
+
+.glyphicon {
+	top: 0px;
+}
+
+.glyphicon-plus {
+	padding-left: .5em;
+}
+
+.glyphicon-user {
+	padding-left: .5em;
+}
+
+.glyphicon-download {
+	padding-left: .2em;
+}
+
+.glyphicon-question-sign, .fa-question-circle {
+	padding-left: .25em;
+	color: #F26925 !important;
+	border-color: white !important;
+	background-color: white !important;
+}
+
+.glyph-top-margin {
+	padding-top: 2em;
+}
+
+.btn-primary, .fa .fa-file-code-o {
+	color: white !important;
+	border-color: white !important;
+	background-color: #F26925 !important;
+	background-image: none;
+}
+
+/************************
+***Manage Batch Modal****
+*************************/
+.batchModal {
+	margin: 1.3em;
+}
+
+/************************
+	Manage Trainee Modal
+************************/
+.modal-body {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.modal-widest{
+	width: 100%;
+}
+.no-padding{
+	padding: 0px;
+}
+.only-top-padding{
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 20px;
+}
+/* .scoll-tree {
+    width:1000px;
+} */
+
+/************************
+	QC Assess
+************************/
+.fa-smile-o, .fa-meh-o, .fa-frown-o, .fa-star {
+	color: #B9B9BA;
+}
+
+.fa-smile-o:hover {
+	color: #81f575;
+}
+
+.fa-meh-o:hover {
+	color: #fdff9e;
+}
+
+.fa-frown-o:hover {
+	color: #ff7575;
+}
+
+.fa-star:hover {
+	color: #7972ff;
+}
+
+.fa-smile-o.pick {
+	color: #18ad18 !important;
+}
+
+.fa-meh-o.pick {
+	color: #f9e900 !important;
+}
+
+.fa-frown-o.pick {
+	color: #ea2825 !important;
+}
+
+.fa-star.pick {
+	color: #393fef !important;
+}
+
+.fa-file-pdf-o {
+	color: #d00a0a;
+}
+
+.fa-filter {
+	color: #F26925;
+}
+
+#qcTrainees {
+	border-bottom-style: solid;
+	border-bottom-width: 2px;
+	border-bottom-color: #474C55;
+}
+
+.hiddenButton {
+	border: none;
+	outline: none;
+	background-color: Transparent;
+}
+.centered{
+	display: block;
+	left: auto;
+	right: auto;
+}
+/************************
+	Margins
+************************/
+.top5 {
+	margin-top: .5em;
+}
+
+.top10 {
+	margin-top: 1em;
+}
+
+.top15 {
+	margin-top: 1.5em;
+}
+
+.top20 {
+	margin-top: 2em;
+}
+
+.top25 {
+	margin-top: 2.5em;
+}
+
+.top30 {
+	margin-top: 3em;
+}
+
+.top35 {
+	margin-top: 35em;
+}
+
+.top40 {
+	margin-top: 40em;
+}
+
+.top45 {
+	margin-top: 45em;
+}
+
+/* Accordion style tables*/
+.hiddenRow td {
+	padding: 0 !important;
+}
+
+/**********************
+ 	Input styles
+**********************/
+.overall-feedback {
+	margin: 2em;
+}
+
+textarea {
+	resize: none;
+}
+/************************
+	Footer
+************************/
+.footer-margin {
+	margin-top: .85em;
+}
+
+.footer-img {
+	margin-top: 1.5em;
+}
+
+/* Footer, set footer height to actual height of footer*/
+html, body {
+	height: 100%;
+}
+
+.img-responsive {
+	padding-bottom: 1em;
+}
+
+.wrapper {
+	min-height: 100%;
+	margin-bottom: -103px;
+	padding-bottom: 103px;
+}
+
+footer {
+	min-height: 103px;
+	background-color: #474C55;
+	font-size: .75em;
+}
+
+.center {
+	text-align: center;
+}
+
+.contact-info {
+	color: #B9B9BA;
+}
+
+.fa-copyright {
+	padding-right: .5em;
+}
+
+footer a, footer a:hover {
+	color: #B9B9BA;
+}
+/**********************
+	Table styles
+**********************/
+.vcenter {
+	vertical-align: middle !important;
+}
+
+.table-responsive {
+	display: block !important;
+}
+
+.table>tbody>tr {
+	border-top: 1px solid #ddd;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th {
+	border-top: 0;
+}
+
+.wrap {
+	text-align: center;
+}
+
+.outer-bar-data {
+	display: inline-block;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.table-view {
+	max-width: 400px;
+}
+
+.table, .table-responsive, thead {
+	position: relative !important;
+}
+
+.fixed-style-table-header {
+	position: fixed !important;
+	background: #fff;
+	z-index: 100;
+	top: 0;
+	width: 90%;
+}
+
+.note-mw {
+	min-width: 300px;
+}
+.removeSpaces{
+	            border-collapse: collapse;
+            border-spacing: 0;
+            display: inline-table !important;
+	margin: 0 !important;
+}
+.move-glyphicon{
+	top: 2.5px;
+}
+.glyphicon-ok{
+	color: #81f575; 
+	width: 100%;
+}
+.glyphicon-remove{
+	color: #ff7575; 
+	width: 100%;
+}
+.pBody{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.add-margin{
+	margin-bottom: 10px;
+}
+.add-space{
+	margin-bottom: 5px;
+}
+.fa-check{
+	color: #81f575;
+}
+.fa-minus{
+	color: rgb(252,221,115);
+}
+/********************************************************
+	Panels table
+*********************************************************/
+.panel-glyph {
+	width: 100%;
+	text-align: center;
+}
+
+.centered-panels{
+	text-align: center;
+}
+.no-wrap{
+	white-space:nowrap;
+}
+/********************************************************
+	Overall Batch Status column in vp-home and qc-home
+*********************************************************/
+.color-green {
+	font-weight: bold;
+  	color: green;
+}
+
+.color-yellow {
+	font-weight: bold;
+  	color: orange;
+}
+
+.color-red {
+	font-weight: bold;
+  	color: red;
+}
+
+/**********************
+	save button
+**********************/
+.save-button-wrapper {
+	width: 100%;
+	height: 76px;
+}
+
+.save-button {
+	float: right;
+	margin-top: 10px;
+	border: solid 1px;
+	padding: 6px;
+	box-shadow: 1px 3px 4px #888888;
+	color: #F26925;
+	background: white;
+	border-radius: 5px;
+	transition: all ease 0.3s;
+	top: 0px;
+	margin-right: 6px;
+}
+
+.save-button:hover {
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.save-button:active {
+	box-shadow: 0 3px 0px #888888;
+	margin-top: 13px;
+}
+
+a.save-button .fa-floppy-o {
+	margin-right: 6px;
+}
+
+.spinner {
+	float: right;
+	margin-top: 10px;
+	top: 0px;
+}
+
+#checkMark {
+	color: #72A4C2;
+}
+
+.fa-style {
+	margin-right: 11px;
+	margin-top: 15px;
+}
+
+.fade.ng-hide-remove {
+	-webkit-transition: 1s ease-in opacity;
+	-moz-transition: 1s ease-in opacity;
+	-ms-transition: 1s ease-out opacity;
+	-o-transition: 1s ease-out opacity;
+	transition: 1s ease-out opacity;
+	opacity: 1;
+}
+
+/* .fade-in.ng-hide-remove {
+  transition: all ease-out 3000ms;
+} */
+/************************
+***Trainer Assess ***
+************************/
+#trainer-assess-table input[type=number]::-webkit-inner-spin-button,
+	#trainer-assess-table input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	margin: 0;
+}
+
+#trainer-assess-table input[type=number] {
+	min-width: 65px;
+	text-align: center;
+}
+
+/* .has-error input{
+	border:solid red;
+} */
+.has-error {
+	border: solid red 1px;
+}
+
+/************************
+***Assessment Modal****
+*************************/
+.editAssessModal {
+	font-family: 'Futura-Std-Book';
+}
+
+select{
+	color:black;
+}
+/*
+CHANGE CURSOR TO POINTER
+INTENDED FOR CHART DOWNLOAD ICON IF HOVER OVER CHANGE CURSOR TO POINTING
+ */
+.clickableIcons {
+	cursor: pointer;
+}
+
+.container-1{
+  width: 300px;
+  vertical-align: middle;
+  white-space: nowrap;
+  position: relative;
+}
+
+.container-1 .icon{
+  position: absolute;
+  bottom: 0%;
+  right: 0%;
+  margin-left: 17px;
+  margin-top: 17px;
+  z-index: 1;
+  color: grey;
+}
+
+.SearchPad {
+    padding-right: 40px;
+}
+
+.SearchButton {
+    background-color: Transparent;
+    border: none;
+    padding-right: 30px;
+    height: 34px;
+    width: 35px;
+    overflow: hidden;
+    outline:none;
+}
+
+/**********************
+	  Panel Tab
+**********************/
+
+.fade-speeder.ng-leave {
+	transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.8s;
+	opacity: 1;
+}
+
+.fade-speeder.ng-leave.ng-leave-active {
+	opacity: 0;
+}
+
+.highlight {
+	background-color: #18AD18;
+	transition: background-color 1s ease;
+}
+
+.no-highlight {
+	background-color: #FFFFFF;
+	transition: background-color 1.5s ease;
+}

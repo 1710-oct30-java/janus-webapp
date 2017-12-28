@@ -1,4 +1,4 @@
-import { App } from '../app/entities/app';
+import { App } from '../app/entities/App';
 
 
 export const janusGlobal = {
