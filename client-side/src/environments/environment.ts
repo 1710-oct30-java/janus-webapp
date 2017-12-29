@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  context: 'http://localhost:8080/',
+  context: 'http://localhost:8081/',
   bootContext: 'http://localhost/',
 
   /* Reporting service API endpoints */

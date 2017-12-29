@@ -39,6 +39,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.batchSubscription = this.batchService.getList().subscribe((batchList) => {
       this.batchList = batchList;
     });
+    this.trainerSubscription = this.trainerService.getList().subscribe((trainerList) => {
+      this.trainerList = trainerList;
+    });
 
     this.batchService.fetchAll();
     }
@@ -47,12 +50,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       console.log(this.batchList[0].startDate.toString().substr(0, 4));
     }
 
-    public cleanBatchList(): void {
-      for (let i = 0; i < this.batchList.length; i++) {
-        if (this.batchList[i].startDate.toString().substr(0, 4) === this.batchList[i + 1].startDate.toString().substr(0, 4)) {
-          this.batchList.splice(i + 1, 1);
+    public cleanBatchList(): Array<Batch> {
+      for (let i = this.batchList.length - 1; i >= 0; i--) {
+        if (this.batchList[i].startDate.toString().substr(0, 4) === this.batchList[i - 1].startDate.toString().substr(0, 4)) {
+          this.batchList.splice(i, 1);
         }
       }
+      return this.batchList;
     }
 
     ngOnDestroy() {
