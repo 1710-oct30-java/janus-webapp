@@ -1,0 +1,68 @@
+.panel-repeat-topics-passed {
+    color: rgb(252,221,115);
+}
+
+.panel-status-failed {
+    color: red;
+}
+
+.panel-status-pass {
+    color: green;
+}
+
+table {
+    border: 1px rgb(221, 221, 221) solid;
+}
+
+td {
+    border: none;
+}
+
+thead {
+    font-weight: bold;
+    text-align: center;
+}
+
+tr {
+    border: 1px rgb(221, 221, 221) solid;
+    border-bottom: none;
+    text-align: center;
+}
+
+.trainee-name {
+    text-align: left;
+}
+
+.container {
+    margin: 2vmin;
+}
+
+canvas {
+    padding: 3vmin;
+}
+
+tbody {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+th {
+    border: none !important;
+}
+
+tr {
+    padding-right: none !important;
+    padding-left: none !important;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+tr:last-child, tr:nth-last-child(2):nth-child(odd) {
+    border-bottom: none;
+}
+
+tr:nth-child(odd) {
+    border-right: 1px solid rgb(250, 250, 250);
+}

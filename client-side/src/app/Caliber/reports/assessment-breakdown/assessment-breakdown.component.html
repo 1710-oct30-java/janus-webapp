@@ -1,0 +1,26 @@
+<div class="container">
+    <header class="panel-heading">Assessment Breakdown</header>
+    <div class="panel-body">
+      <canvas *ngIf="data" baseChart
+            [datasets]="data"
+            [labels]="labels"
+            [options]="options"
+            [legend]="legend"
+            [chartType]="chartType"></canvas>
+    </div>
+    <div class="table-responsive">
+      <table *ngIf="data" class="table" style="border-collapse: collapse;">
+        <tbody>
+          <tr>
+            <th></th>
+            <td *ngFor="let label of labels" class="col-sm-2 col-md-2 col-lg-2 topic-heading"> {{label}}</td>
+          </tr>
+          <tr *ngFor="let user of data">
+              <th>{{user.label}}</th>
+              <td *ngFor="let value of user.data" class="col-sm-2 col-md-2 col-lg-2"> {{value | number:'2.2-2'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

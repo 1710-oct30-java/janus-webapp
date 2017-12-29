@@ -1,0 +1,34 @@
+.feedback-repeat-topics-passed {
+    color: rgb(252,221,115);
+}
+
+.feedback-status-failed {
+    color: red;
+}
+
+.feedback-status-pass {
+    color: green;
+}
+
+table {
+    border: 1px rgb(221, 221, 221) solid;
+}
+
+td {
+    border: none;
+}
+
+thead {
+    font-weight: bold;
+    text-align: center;
+}
+
+tr {
+    border: 1px rgb(221, 221, 221) solid;
+    border-bottom: none;
+    text-align: center;
+}
+
+.trainee-name {
+    text-align: left;
+}

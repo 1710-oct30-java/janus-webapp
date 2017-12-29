@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-toggleable-md navbar-expand-md navbar-light bg-light">
   <img routerLink="/dashboard" class="rev-logo" src="assets/rev-logo.png" alt="revature">
   <button class="navbar-toggler" (click)="toggleCollapse()" aria-label="Toggle navigation">
     {{currentApp}} <span class="navbar-toggler-icon"></span>
@@ -13,8 +13,8 @@
         </div>
       </li>
     </ul>
-    <div  (click)="toggleCollapse()">
-      <app-caliber-nav *ngIf="currentApp==='Caliber'"></app-caliber-nav>
+    <div (click)="toggleCollapse()">
+      <app-caliber-nav [collapsed]="collapsed" (collapse) = "toggleClose($event)" *ngIf="currentApp==='Caliber'"></app-caliber-nav>
       <app-assign-force-nav *ngIf="currentApp==='Assign Force'"></app-assign-force-nav>
       <app-track-force-nav *ngIf="currentApp==='Track Force'"></app-track-force-nav>
     </div>

@@ -1,0 +1,53 @@
+
+<!--<div class="row" ng-if="stackedBarData">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Last Quality Audit
+        <select class="pull-right" ng-model="selectedBarCity" ng-if="selectedBarState.address.state"
+        ng-change="onBarCharAddressCityChange(selectedBarCity.address.city)"
+          ng-options="batch.address.city for batch in auditData |filter:selectedBarState.address.state:true | filter:{address:{$:''}} | unique:'address.city' ">
+          <option value="">All Cities</option>
+        </select>
+
+        <select class="pull-right" ng-model="selectedBarState" 
+          ng-change="onBarCharAddressStateChange(selectedBarState.address.state)" 
+          ng-options="batch.address.state for batch in auditData |filter:{address:{$:''}}| unique:'address.state' ">
+          <option value="">All States</option>
+        </select>
+      
+      </div>
+      <div class="panel-body">
+        <div class="chart-container top5"> 
+          <canvas class="chart chart-bar" 
+            chart-data="stackedBarData"
+            chart-options="stackedBarOptions" 
+            chart-labels="stackedBarLabels"
+            chart-series="stackedBarSeries" 
+            chart-colors="stackedBarColors"
+            chart-click="onClick">>
+          </canvas>
+          </div>
+          <div>
+            <table ng-if="stackedBarLabels" class="table table-responsive"
+              style="border-collapse: collapse;">
+              <tbody>
+                <tr>
+                  <th class="col-sm-2 col-md-2 col-lg-2"></th>
+                  <th class="col-sm-2 col-md-2 col-lg-2"
+                    ng-repeat="series in stackedBarSeries">{{series}}</th>
+                  <th class="col-sm-2 col-md-2 col-lg-2">Overall Batch Status</th>
+                </tr>
+                <tr ng-repeat="label in stackedBarLabels">
+                  <th class="col-sm-2 col-md-2 col-lg-2">{{label}}</th>
+                  <td class="col-sm-2 col-md-2 col-lg-2"
+                    ng-repeat="series in stackedBarSeries track by $index">{{stackedBarData[$index][$parent.$index]}}</td>
+                  <td class="overall-batch-health" ng-init="getOverallBatchFeedbackMap()" ng-class="{'color-red': qcOverallNotes[stackedBarIds[$index]] === 'Poor', 'color-yellow': qcOverallNotes[stackedBarIds[$index]] === 'Average', 'color-green': qcOverallNotes[stackedBarIds[$index]] === 'Good'}">{{qcOverallNotes[stackedBarIds[$index]]}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+-->

@@ -54,8 +54,10 @@ export class TableComponent implements OnInit, OnChanges {
         // creates a sequence of numbers for iterating in ngFor
 
     }
-    ngOnChanges() {
-
+    public ngOnChanges(changes) {
+        if (changes['data']) {
+            this.ngOnInit();
+        }
     }
     typeCheck() {
         if (this.tableType === 'bar') {

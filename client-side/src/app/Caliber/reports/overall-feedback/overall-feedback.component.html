@@ -1,0 +1,28 @@
+<div *ngIf="allNotes && qcNotes">
+  {{batchId}}
+  <div class="container">
+    <header class="feedback-heading">Overall Feedback</header>
+    <div class="table-responsive">
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <td>Week</td>
+            <td>Categories</td>
+            <td>Quality Audit</td>
+            <td>QC Feedback</td>
+            <td>Trainer Feedback</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let week of weekList">
+            <td>{{week}}</td>
+            <td *ngIf="weekTopics">{{weekTopics[week-1]}}</td>
+            <td>{{qcWeek(week).qcStatus}}</td>
+            <td>{{qcWeek(week).content}}</td>
+            <td>{{allWeek(week).content}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

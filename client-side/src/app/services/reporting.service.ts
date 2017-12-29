@@ -20,26 +20,50 @@ import { PanelReview } from '../Caliber/entities/PanelReview';
 export class ReportingService {
 
   /* Subjects & Paired Observables */
-
-
-  /*  Reports Charts */
   private traineeOverallRadar = new BehaviorSubject<CacheData>(null);
   public traineeOverallRadar$ = this.traineeOverallRadar.asObservable();
 
   private batchOverallRadar = new BehaviorSubject<CacheData>(null);
   public batchOverallRadar$ = this.batchOverallRadar.asObservable();
 
+  // Bar chart used for the Cumulative Scores Graph
+  private batchOverallBar = new BehaviorSubject<CacheData>(null);
+  public batchOverallBar$ = this.batchOverallBar.asObservable();
+
+  private technologiesUpToWeek = new BehaviorSubject<CacheData>(null);
+  public technologiesUpToWeek$ = this.technologiesUpToWeek.asObservable();
+
   private panelBatchAllTrainees = new BehaviorSubject<CacheData>(null);
   public panelBatchAllTrainees$ = this.panelBatchAllTrainees.asObservable();
 
+  private batchOverallLineChart = new BehaviorSubject<CacheData>(null);
+  public batchOverallLineChart$ = this.batchOverallLineChart.asObservable();
+
+  // Used for a variety of API calls related to getting assessment breakdown info
+  private assessmentBreakdownBarChart = new BehaviorSubject<CacheData>(null);
+  public assessmentBreakdownBarChart$ = this.assessmentBreakdownBarChart.asObservable();
+
+  /*  Reports Charts */
+
+
   constructor(private httpClient: HttpClient) { }
 
+  /**
+   * Clear all data stored in subjects.
+   */
   refresh() {
     // Clear all data stored in subjects
     this.traineeOverallRadar.next(null);
     this.batchOverallRadar.next(null);
+    this.batchOverallBar.next(null);
+    this.technologiesUpToWeek.next(null);
   }
 
+  /**
+   * Returns true or false if BehaviorSubject needs to be refreshed.
+   * @param sub
+   * @param params
+   */
   private needsRefresh(sub: BehaviorSubject<CacheData>, params: any): boolean {
     return !sub.getValue() || sub.getValue().params !== params;
   }
@@ -112,25 +136,63 @@ export class ReportingService {
   fetchBatchOverallTraineeBarChart(batchId: Number, traineeId: Number) {
     const endpoint = environment.apiBatchOverallTraineeBarChart(batchId, traineeId);
 
-    // TODO: Implement API call and subject push logic
+    const params = {
+      batchId: batchId,
+      traineeId: traineeId
+    };
+
+    if (this.needsRefresh(this.assessmentBreakdownBarChart, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.assessmentBreakdownBarChart.next({params: params, data: success}));
+    }
 
   }
 
+  /**
+   * Fetches overall batch for Cumulative Scores bar chart.
+   * @param batchId - batch whose cumulative score data should be fetched
+   * @author Edel Benavides
+   */
   fetchBatchOverallBarChart(batchId: Number) {
     const endpoint = environment.apiBatchOverallBarChart(batchId);
 
-    // TODO: Implement API call and subject push logic
+    // Params object for refresh check
+    const params = {
+      batchId: batchId
+    };
+
+    // call backend API if data is not fresh
+    if (this.needsRefresh(this.batchOverallBar, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.batchOverallBar.next({params: params, data: success}));
+    }
 
   }
 
+  /**
+   * Fetches topical assessment data on a given week for a given user along with the
+   * average assessment of a given batch
+   * @param batchId
+   * @param weekId
+   * @param traineeId
+   */
   fetchBatchWeekTraineeBarChart(batchId: Number, weekId: Number, traineeId: Number) {
     const endpoint = environment.apiBatchWeekTraineeBarChart(batchId, weekId, traineeId);
 
-    // TODO: Implement API call and subject push logic
+    const params = {
+      batchId: batchId,
+      weekId: weekId,
+      traineeId: traineeId
+    };
 
+    if (this.needsRefresh(this.assessmentBreakdownBarChart, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.assessmentBreakdownBarChart.next({params: params, data: success}));
+    }
   }
 
   /* Line Charts */
+
   fetchTraineeUpToWeekLineChart(batchId: Number, weekId: Number, traineeId: Number) {
     const endpoint = environment.apiTraineeUpToWeekLineChart(batchId, weekId, traineeId);
 
@@ -148,8 +210,14 @@ export class ReportingService {
   fetchBatchOverallLineChart(batchId: Number) {
     const endpoint = environment.apiBatchOverallLineChart(batchId);
 
-    // TODO: Implement API call and subject push logic
+    const params = {
+      batchId: batchId
+    };
 
+    if (this.needsRefresh(this.batchOverallLineChart, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.batchOverallLineChart.next({params: params, data: success}));
+    }
   }
 
   fetchCurrentBatchesLineChart() {
@@ -237,7 +305,35 @@ export class ReportingService {
     const endpoint = environment.apiTechnologiesForTheWeek(batchId, weekId);
 
     // TODO: Implement API call and subject push logic
+  }
 
+  /**
+   * Updates the multiple weeks subject to contain all the topics
+   * covered up to the given week within the given batch.
+   * @param batchId - Batch whose week topics we're fetching.
+   * @param week - How many weeks we're requesting.
+   */
+  fetchTechnologiesUpToWeek(batchId: Number, week: Number) {
+
+    const params = {batchId: batchId};
+
+    if (this.needsRefresh(this.technologiesUpToWeek, params)) {
+      const result = Array<any>(week);
+      let currentSub = 0;
+
+      for (let i = 0; i < week; i++) {
+        const endpoint = environment.apiTechnologiesForTheWeek(batchId, i + 1);
+
+        this.httpClient.get(endpoint).subscribe((success) => {
+          result[i] = success;
+          currentSub++;
+
+          if (currentSub === week) {
+            this.technologiesUpToWeek.next({params: params, data: result});
+          }
+        });
+      }
+    }
   }
 
   /**

@@ -8,8 +8,9 @@ export class GraphDataPipe implements PipeTransform {
      * takes raw json input; outputs list of datasets.
      * @param rawData
      */
-    transform(rawData: any[], dataSetLabels: string[]): any {
+    transform(rawData: number[], dataSetLabels: string[]): any {
         const output: any[] = [];
+
         for (let i = 0; i < rawData.length; i++) {
             output.push(this.dataSet(rawData[i], dataSetLabels[i]));
         }
@@ -29,7 +30,7 @@ export class GraphDataPipe implements PipeTransform {
 
         for (const key in data) {
             if (data.hasOwnProperty(key)) {
-                map.set(key, data[key]);
+                map.set(key, data[key].toFixed(2));
             }
         }
         return map;

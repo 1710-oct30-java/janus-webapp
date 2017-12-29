@@ -12,6 +12,7 @@ import { TrainerService } from '../../services/trainer.service';
 import { TraineeService } from '../../services/trainee.service';
 import { AssessmentService } from '../../services/assessment.service';
 import { GradeService } from '../../services/grade.service';
+import { NoteService } from '../../services/note.service';
 
 @Component({
   selector: 'app-test',
@@ -21,11 +22,11 @@ import { GradeService } from '../../services/grade.service';
 
 export class TestComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
-  private service: GradeService;
+  private service: NoteService;
   private data: any[];
 
 
-  constructor(service: GradeService) {
+  constructor(service: NoteService) {
     this.service = service;
   }
 

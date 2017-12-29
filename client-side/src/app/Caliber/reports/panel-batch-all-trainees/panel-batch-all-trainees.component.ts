@@ -18,6 +18,7 @@ import { ReportingService } from '../../../services/reporting.service';
 export class PanelBatchAllTraineesComponent implements OnInit {
 
   public data: Array<PanelReview> = null;
+  public headings: Array<String> = null;
   private dataSubscription: Subscription;
 
   constructor(private reportsService: ReportingService) { }
@@ -26,11 +27,9 @@ export class PanelBatchAllTraineesComponent implements OnInit {
     this.dataSubscription = this.reportsService.panelBatchAllTrainees$
       .subscribe((result) => {
         if  (result) {
-          console.log('Panel data received: ');
-          console.log(result.data);
           this.data = result.data;
         } else {
-          console.log('Panel data failed to resolve');
+          console.log('Panel data failed to load');
         }
       });
 
