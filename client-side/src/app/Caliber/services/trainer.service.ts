@@ -12,6 +12,10 @@ import { EnvironmentService } from './environment.service';
 // entities
 import { Trainer } from '../entities/Trainer';
 
+import { Inject } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { environment } from '../../../environments/environment';
+
 /**
  * this service manages calls to the web service
  * for Trainer objects
@@ -19,6 +23,7 @@ import { Trainer } from '../entities/Trainer';
 @Injectable()
 export class TrainerService {
   private http: HttpClient;
+  private httpK: Http;
 
   private listSubject: BehaviorSubject<Trainer[]>;
   private savedSubject: Subject<Trainer>;
@@ -27,8 +32,17 @@ export class TrainerService {
 
   private sendCredentials: boolean;
 
-  constructor(httpClient: HttpClient, envService: EnvironmentService) {
+  private dataSubject = new BehaviorSubject([]);
+  private titlesSubject = new BehaviorSubject([]);
+  private tiersSubject = new BehaviorSubject([]);
+
+  trainers$: Observable<any> = this.dataSubject.asObservable(); // this is how components should access the data if you want to cache it
+  titles$: Observable<any> = this.titlesSubject.asObservable();
+  tiers$: Observable<any> = this.tiersSubject.asObservable();
+
+  constructor(httpClient: HttpClient, envService: EnvironmentService, http: Http) {
     this.http = httpClient;
+    this.httpK = http;
     this.envService = envService;
 
     this.listSubject = new BehaviorSubject([]);
@@ -39,6 +53,13 @@ export class TrainerService {
 
     this.fetchAll();
   }
+
+  populateOnStart() {
+    this.getAll();
+    this.getTitles();
+    this.getTiers();
+  }
+
 
     /**
      * returns a behavior observable of the current
@@ -142,4 +163,100 @@ export class TrainerService {
       });
   }
 
+  // Get All Trainers
+  getAll(): void {
+    this.httpK.get(environment.getAllTrainers, { withCredentials: true })
+      .map(
+      resp => resp.json(), // map the resp so all subscribers just get the body of the request as a js object
+      err => console.log(err)// can have the error mapped for all subscribers if you want also
+    )
+    .subscribe(
+      resp => {
+        this.dataSubject.next(resp);
+      },
+      err => {
+        // handle the error however you want
+      }
+      );
+  }
+
+  getTitles() {
+    this.httpK.get(environment.getAllTitles, { withCredentials: true })
+      .map(
+      resp => resp.json(),
+    )
+      .subscribe(
+      resp => {
+        this.titlesSubject.next(resp);
+      },
+      err => {
+        console.log('err getting titles ' + err);
+      }
+      );
+  }
+
+  getTiers() {
+    this.httpK.get(environment.getAllTiers, { withCredentials: true })
+      .map(
+      resp => resp.json(),
+    )
+      .subscribe(
+      resp => {
+        this.tiersSubject.next(resp);
+      },
+      err => {
+        console.log('err getting tiers ' + err);
+      }
+      );
+  }
+
+
+  updateTrainer(trainer: Trainer) {
+    this.httpK.put(environment.editTrainer, trainer, { withCredentials: true })
+      .map(
+      resp => resp.json(),
+    )
+      .subscribe(
+      resp => {
+        console.log('updated trainer successfully');
+        this.getAll();
+      },
+      err => {
+        console.log('err updating trainer ' + err);
+      }
+      );
+  }
+
+  createTrainer(name, title, email, tier) {
+    const json = {
+      'name': name,
+      'title': title,
+      'email': email,
+      'tier': tier
+    };
+
+    this.http.post(environment.addNewTrainer, json, { withCredentials: true })
+      .subscribe(
+      resp => {
+        this.getAll();
+        console.log('created a new trainer');
+      },
+      err => {
+        console.log(err);
+      }
+      );
+  }
+
+  deleteTrainer(trainer: Trainer) {
+    this.http.delete(environment.deleteTrainer,
+      { withCredentials: true })
+    .subscribe(
+      resp => {
+        this.getAll();
+      },
+      err => {
+      // handle the error however you want
+      }
+    );
+  }
  }

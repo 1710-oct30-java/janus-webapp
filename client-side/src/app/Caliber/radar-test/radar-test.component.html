@@ -1,0 +1,26 @@
+<!-- <h2>Radar Demo</h2>
+<div class="row">
+  <div class="col-md-6">
+    <div class="chartHead">Batch Technical Skills</div>
+    <div class="chartContainer">
+      <canvas baseChart
+      [datasets]="radarChartData"
+      [labels]="radarChartLabels"
+      [chartType]="radarChartType"
+      [options]="radarOptions"></canvas>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col" *ngFor="let set of radarChartData">{{set.label}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let label of radarChartLabels; let id = index">
+            <th scope="row">{{label}}</th>
+            <td *ngFor="let data of radarChartData">{{data.data[id]}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div> -->

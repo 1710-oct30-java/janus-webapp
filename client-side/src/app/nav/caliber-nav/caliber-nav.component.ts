@@ -1,12 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Route, Routes } from '@angular/router';
-
-// rxjs
-import { Subscription } from 'rxjs/Subscription';
-
-// services
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RouteService } from '../../Caliber/services/route.service';
-
+import { Subscription } from 'rxjs/Subscription';
+import { Routes } from '@angular/router/src/config';
+import { OnDestroy } from '@angular/core/';
 
 @Component({
   selector: 'app-caliber-nav',
@@ -14,8 +10,13 @@ import { RouteService } from '../../Caliber/services/route.service';
   styleUrls: ['./caliber-nav.component.css'],
   providers: [ RouteService ],
 })
-
 export class CaliberNavComponent implements OnInit, OnDestroy {
+  @Input()
+  collapsed = false;
+
+  @Output()
+  collapse: EventEmitter<any> = new EventEmitter<any>();
+
   private routeService: RouteService;
   private routeSubscription: Subscription;
 
@@ -36,4 +37,8 @@ export class CaliberNavComponent implements OnInit, OnDestroy {
     this.routeSubscription.unsubscribe();
   }
 
+  toggleCollapse() {
+    this.collapsed = !this.collapsed;
+    this.collapse.emit(this.collapsed);
+  }
 }

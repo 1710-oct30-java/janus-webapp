@@ -137,6 +137,7 @@ export class NoteService {
     });
   }
 
+<<<<<<< HEAD
     /**
    * Find all QC trainee notes in a batch for the week
    *
@@ -169,4 +170,6 @@ public findQCBatchNotes(batch: Batch, note: Note): void {
       this.listSubject.next(notes);
     });
 }
+=======
+>>>>>>> 6897cd88c6ec79d1a42d27936fad55449dd5a49e
 }

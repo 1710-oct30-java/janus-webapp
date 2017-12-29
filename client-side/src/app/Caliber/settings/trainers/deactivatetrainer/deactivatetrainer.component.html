@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<button type="button" class="close" aria-label="Close" (click)="showModal(content)">
+    <span class="glyphicon glyphicon-remove" aria-hidden="true">
+        &times;
+    </span>
+</button>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Deactivate Trainer</h4>
+        <button type="button" class="close close2" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h3 class="ng-binding">
+            Are you sure you want to deactivate {{trainer?.name}}?
+        </h3>
+    </div>
+    <div class="modal-footer">
+        <input type="submit" (click)="d('Confirmed'); deactivateTrainer();" value="Deactivate" class="btn btn-lg btn-danger">
+        <button type="button" class="btn btn-default" (click)="d('cancel')">Cancel</button>
+    </div>
+</ng-template>

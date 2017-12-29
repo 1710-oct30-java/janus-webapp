@@ -48,6 +48,9 @@ export class NavComponent implements OnInit, OnDestroy {
     this.collapsed = !this.collapsed;
   }
 
+  toggleClose(event) {
+    this.collapsed = event;
+  }
 
   // clean up subscriptions
   ngOnDestroy() {

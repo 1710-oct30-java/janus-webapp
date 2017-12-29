@@ -1,0 +1,27 @@
+.btn-update {
+    background-color: #ff8e4d;
+    color: white;
+}
+
+.btn-add {
+    background-color: #ff8e4d;
+    color: white;
+}
+
+.fa-pencil {
+    cursor: pointer;
+}
+
+#addTrainerButton {
+    padding: 10px;
+}
+
+.col-sm-2 {
+    padding-top: 10px;
+}
+/* #tier { 
+    width:100%; 
+} 
+#tier option { 
+    width:100%; 
+} */
