@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Note } from '../entities/Note';
 import { Batch } from '../entities/Batch';
-import { QCNoteService } from '../services/qc-note.service';
+import { NoteService } from '../services/note.service';
 import { BatchService } from '../services/batch.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class QualityComponent implements OnInit {
   batches: any[];
 
 
-  constructor(private qcNoteService: QCNoteService, private batchService: BatchService) {
+  constructor(private qcNoteService: NoteService, private batchService: BatchService) {
     this.batchService.fetchAll();
     this.batchService.getList().subscribe( (batches) => {
       this.batches = batches;

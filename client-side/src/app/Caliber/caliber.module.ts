@@ -22,8 +22,6 @@ import { AssessmentService } from './services/assessment.service';
 import { RouteService } from './services/route.service';
 import { PanelService } from './services/panel.service';
 import { GradeService } from './services/grade.service';
-import { QCNoteService } from './services/qc-note.service';
-
 import { NoteService } from './services/note.service';
 
 // pipes
@@ -80,7 +78,6 @@ import { PanelComponent } from './panel/panel.component';
     PanelService,
     RouteService,
     GradeService,
-    QCNoteService,
     NoteService
   ],
 })
