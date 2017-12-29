@@ -3,6 +3,7 @@ import { Note } from '../entities/Note';
 import { Batch } from '../entities/Batch';
 import { NoteService } from '../services/note.service';
 import { BatchService } from '../services/batch.service';
+import { Console } from '@angular/core/src/console';
 
 @Component({
   selector: 'app-quality',
@@ -11,19 +12,22 @@ import { BatchService } from '../services/batch.service';
 })
 export class QualityComponent implements OnInit {
 
-  batches: any[];
+  batches: Batch[];
+  currentBatch: Batch;
 
 
-  constructor(private qcNoteService: NoteService, private batchService: BatchService) {
+  constructor(private noteService: NoteService, private batchService: BatchService) {
     this.batchService.fetchAll();
     this.batchService.getList().subscribe( (batches) => {
       this.batches = batches;
+      this.currentBatch = this.batches[0];
     });
   }
 
-  ngOnInit() {
-  }
 
+  ngOnInit() {
+
+  }
 }
 
 // get all batchs, set the current batch to the latest batch

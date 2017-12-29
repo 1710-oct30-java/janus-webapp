@@ -1,4 +1,13 @@
-<p *ngFor="let batch of batches">
-  {{batch.trainer.name}}<br>
-  {{batch.batchId}}
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <ul class="nav nav-tabs">
+        <li ngbDropdownMenu role="button" class="dropdown">
+          <a>
+              {{batches[0].trainer.name}} - {{batches[0].startDate}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
