@@ -8,6 +8,17 @@ a {
 	background-color: #F26925 !important;
 	background-image: none;
 }
+.col {
+	padding-right: 8%;
+}
+@media only screen and (max-width: 600px) {
+    /* For mobile phones: */
+    .col{
+		padding: 1%;
+        width: 100%;
+    }
+}
+
 .fa-check{
 	color: #81f575;
 }
