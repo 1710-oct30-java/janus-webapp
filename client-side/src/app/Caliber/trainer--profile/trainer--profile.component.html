@@ -1,0 +1,155 @@
+<!-- Current Trainer profile -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-sm-20">
+            <div class="card hovercard">
+                <div class="cardheader">
+                </div>
+                <div class="info">
+                    <div class="title">
+                        {{ currentTrainer.name }}
+                    </div>
+                    <div class="desc">{{ currentTrainer.title }}</div>
+                    <div class="desc">{{ currentTrainer.email }}</div>
+                    <div class="desc">{{ currentTrainer.tier }}</div>
+                </div>
+                <div class="bottom">
+                    <button class="btn btn-lg btn-outline-primary btn-sm" (click)="open(content)">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{currentTrainer.name}}'s Batches:
+    <div>
+        <table class='table table-striped'>
+            <th>Training Name</th>
+            <th>Training Type</th>
+            <th>Skill Type</th>
+            <th>Trainer</th>
+            <th>Co-Trainer</th>
+            <th>Location</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Good Grade</th>
+            <th>Passing Grade</th>
+            <th></th>
+            <th></th>
+            <tr *ngFor='let batch of batches'>
+                <td>{{batch.trainingName}}</td>
+                <td>{{batch.trainingType}}</td>
+                <td>{{batch.skillType}}</td>
+                <td>{{batch.trainer.name}}</td>
+                <td>{{batch.conTrainer}}</td>
+                <td>{{batch.location}}</td>
+                <td>{{batch.startDate}}</td>
+                <td>{{batch.endDate}}</td>
+                <td>{{batch.goodGradeThreshold}}</td>
+                <td>{{batch.borderlineGradeThreshold}}</td>
+                <td>
+                    <button class="btn btn-lg btn-outline-primary btn-sm" (click)="setCurrentBatch(batch); openLarge(showBatch)">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-lg btn-outline-primary btn-sm" (click)="redirect()">
+                            <i class="fa fa-area-chart" aria-hidden="true"></i>
+                        </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- modal for updating trainer profile -->
+<!-- currently it is just using when we figure out the way to get the trainer who is logged in, change it to that -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Profile</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="form-signin" #updateForm="ngForm">
+
+                    <div class="modal-body">
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-4">
+                                    <label class="col-form-label">Name: </label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" class="form-control" id="name" [(ngModel)]="currentTrainer.name" #picture="ngModel" name="name" value="trainers[0].name"
+                                        pInputText>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-4">
+                                    <label for="email" class="col-form-label">Email: </label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" class="form-control" id="email" [(ngModel)]="currentTrainer.email" #picture="ngModel" name="email" pInputText>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-4">
+                                    <label for="comment" class="col-form-label">Tier: </label>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" class="form-control" id="tier" [(ngModel)]="currentTrainer.tier" #picture="ngModel" name="tier" pInputText>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+                        <button type="submit" class="btn btn-outline-dark" (click)="updateInfo()" (click)="c('Close click')" value="Update" data-dismiss="modal">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!-- Modal for showing the trainees in a batch -->
+<ng-template #showBatch let-c="close" let-d="dismiss">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Trainees</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+    </div>
+    <div class="modal-body modal-lg">
+        <table class='table table-striped'>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Training Status</th>
+            <tr *ngFor='let trainee of currentBatch.trainees'>
+                <td>{{trainee.name}}</td>
+                <td>{{trainee.email}}</td>
+                <td>{{trainee.phoneNumber}}</td>
+                <td>{{trainee.trainingStatus}}</td>
+            </tr>
+        </table>
+
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+
+    </div>
+</ng-template>
+
+
+
+<!-- Modal for showing the trainees in a batch -->
+<ng-template #assessBatch let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Assess Batch</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</ng-template>

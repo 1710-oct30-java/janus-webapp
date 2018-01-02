@@ -8,6 +8,7 @@ import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
 import { TestComponent } from './components/test/test.component';
 import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
+import { TrainerProfile2Component } from './trainer--profile/trainer--profile.component';
 import { TempJohnComponent } from './tempjohn/tempjohn.component';
 
 export const routes: Routes = [
@@ -54,6 +55,10 @@ export const routes: Routes = [
       {
         path: 'trainer-profile',
         component: TrainerProfileComponent,
+      },
+      {
+        path: 'trainer-dev',
+        component: TrainerProfile2Component,
       },
       {
         path: 'tempjohn',

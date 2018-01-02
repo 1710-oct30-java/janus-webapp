@@ -40,22 +40,22 @@ export class TrainerService {
     this.fetchAll();
   }
 
-    /**
-     * returns a behavior observable of the current
-     * trainer list
-     *
-     * @return Observable<Trainer[]>
-     */
+  /**
+   * returns a behavior observable of the current
+   * trainer list
+   *
+   * @return Observable<Trainer[]>
+   */
   public getList(): Observable<Trainer[]> {
     return this.listSubject.asObservable();
   }
 
-    /**
-     * returns a publication observable of the last
-     * saved trainer object
-     *
-     * @return Observable<Trainer>
-     */
+  /**
+   * returns a publication observable of the last
+   * saved trainer object
+   *
+   * @return Observable<Trainer>
+   */
   public getSaved(): Observable<Trainer> {
     return this.savedSubject.asObservable();
   }
@@ -92,37 +92,37 @@ export class TrainerService {
     return this.http.get<Trainer>(url);
   }
 
-   /**
-     * retrieves all trainers and pushes them on the
-     * list subject
-     *
-     * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'QC', 'PANEL')")
-     */
+  /**
+    * retrieves all trainers and pushes them on the
+    * list subject
+    *
+    * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'QC', 'PANEL')")
+    */
   public fetchAll(): void {
     const url = this.envService.buildUrl('all/trainer/all');
 
     this.listSubject.next([]);
 
-    this.http.get<Trainer[]>(url).subscribe( (trainers) => {
-        this.listSubject.next(trainers);
-      });
+    this.http.get<Trainer[]>(url).subscribe((trainers) => {
+      this.listSubject.next(trainers);
+    });
   }
 
-   /**
-   * creates a trainer and pushes the created trainer on the
-   * savedSubject
-   *
-   * spring-security: @PreAuthorize("hasAnyRole('VP')")
-   *
-   * @param trainer: Trainer
-   */
+  /**
+  * creates a trainer and pushes the created trainer on the
+  * savedSubject
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP')")
+  *
+  * @param trainer: Trainer
+  */
   public create(trainer: Trainer): void {
     const url = this.envService.buildUrl('vp/trainer/create');
     const data = JSON.stringify(trainer);
 
-    this.http.post<Trainer>(url, data).subscribe( (savedTrainer) => {
-        this.savedSubject.next(savedTrainer);
-      });
+    this.http.post<Trainer>(url, data).subscribe((savedTrainer) => {
+      this.savedSubject.next(savedTrainer);
+    });
   }
 
   /**
@@ -138,8 +138,8 @@ export class TrainerService {
     const data = JSON.stringify(trainer);
 
     this.http.post<Trainer>(url, data).subscribe((updatedTrainer) => {
-        this.savedSubject.next(updatedTrainer);
-      });
+      this.savedSubject.next(updatedTrainer);
+    });
   }
 
- }
+}
