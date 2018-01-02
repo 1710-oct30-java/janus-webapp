@@ -1,0 +1,30 @@
+<div class="container">
+  <header class="panel-heading">Panel Feedback</header>
+  <div class="table-responsive">
+    <table class="table table-responsive">
+      <thead>
+        <tr>
+          <td class="trainee-name">Trainee</td>
+          <td>Panel Status</td>
+          <td>Date</td>
+          <td>Time</td>
+          <td>Repeat Topics</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let trainee of data">
+          <ng-container *ngIf="trainee.status">
+            <td class="trainee-name">{{trainee.trainee}}</td>
+            <td *ngIf="trainee.status == 'Repanel'" class="panel-status-failed fa fa-times fa-2x panel-glyph"></td>
+            <td *ngIf="trainee.status == 'Pass'" class="panel-status-pass fa fa-check fa-2x panel-glyph"></td>
+  
+            <td class="panel-date">{{trainee.date}}</td>
+            <td class="panel-time">{{trainee.time}}</td>
+            <td *ngIf="trainee.topics" class="panel-repeat-topics">{{trainee.topics}}</td>
+            <td *ngIf="!trainee.topics" class="panel-repeat-topics-passed fa fa-lg fa-minus"></td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

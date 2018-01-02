@@ -7,9 +7,10 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 // services
+import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
 
-// batches
+// entities
 import { Batch } from '../entities/Batch';
 
 
@@ -18,51 +19,10 @@ import { Batch } from '../entities/Batch';
  * for Batch objects
  */
 @Injectable()
-export class BatchService {
-    private http: HttpClient;
-    private envService: EnvironmentService;
-
-    private listSubject: BehaviorSubject<Batch[]>;
-    private savedSubject: Subject<Batch>;
-    private deletedSubject: Subject<Batch>;
+export class BatchService extends AbstractApiService<Batch> {
 
     constructor(httpClient: HttpClient, envService: EnvironmentService) {
-      this.http = httpClient;
-      this.envService = envService;
-
-      this.listSubject = new BehaviorSubject([]);
-      this.savedSubject = new Subject();
-      this.deletedSubject = new Subject();
-    }
-
-    /**
-     * returns a behavior observable of the current
-     * batch list
-     *
-     * @return Observable<Batch[]>
-     */
-    public getList(): Observable<Batch[]> {
-      return this.listSubject.asObservable();
-    }
-
-    /**
-     * returns a publication observable of the last
-     * saved batch object
-     *
-     * @return Observable<Batch>
-     */
-    public getSaved(): Observable<Batch> {
-      return this.savedSubject.asObservable();
-    }
-
-    /**
-     * returns a publication observable of the last
-     * batch object deleted
-     *
-     * @return Observable<Batch>
-     */
-    public getDeleted(): Observable<Batch> {
-      return this.deletedSubject.asObservable();
+      super(envService, httpClient);
     }
 
     /*
@@ -79,9 +39,9 @@ export class BatchService {
      * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'PANEL')")
      */
     public fetchAllByTrainer(): void {
-      const url = this.envService.buildUrl('trainer/batch/all');
+      const url = 'trainer/batch/all';
 
-      this.fetch(url);
+      super.doGetList(url);
     }
 
     /**
@@ -91,9 +51,9 @@ export class BatchService {
      * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'STAGING', 'PANEL')")
      */
     public fetchAll(): void {
-      const url = this.envService.buildUrl('vp/batch/all');
+      const url = 'vp/batch/all';
 
-      this.fetch(url);
+      super.doGetList(url);
     }
 
     /**
@@ -106,12 +66,9 @@ export class BatchService {
     * @param batch: Batch
     */
     public create(batch: Batch): void {
-      const url = this.envService.buildUrl('all/batch/create');
-      const data = JSON.stringify(batch);
+      const url = 'all/batch/create';
 
-      this.http.post<Batch>(url, data).subscribe((savedBatch) => {
-          this.savedSubject.next(savedBatch);
-        });
+      super.doPost(batch, url);
     }
 
     /**
@@ -123,12 +80,9 @@ export class BatchService {
      * @param batch: Batch
      */
     public update(batch: Batch): void {
-      const url = this.envService.buildUrl('all/batch/update');
-      const data = JSON.stringify(batch);
+      const url = 'all/batch/update';
 
-      this.http.put<Batch>(url, data ).subscribe( (updatedBatch) => {
-          this.savedSubject.next(updatedBatch);
-        });
+      super.doPut(batch, url);
     }
 
     /**
@@ -141,34 +95,9 @@ export class BatchService {
      * @param batch: Batch
      */
     public delete(batch: Batch): void {
-      const url = this.envService.buildUrl(`all/batch/delete/${batch.batchId}`);
+      const url = `all/batch/delete/${batch.batchId}`;
 
-      this.http.delete(url).subscribe( () => {
-          this.deletedSubject.next(batch);
-        });
-    }
-
-
-    /*
-      ============================
-      BEGIN: helper functions
-      ============================
-     */
-
-    /**
-     * retrieves a list of batches using the url passed
-     * and pushes them on the list subject
-     *
-     * @param url: string
-     */
-    private fetch(url: string) {
-
-      this.listSubject.next([]);
-
-      this.http.get<Batch[]>(url).subscribe((batches) => {
-          this.listSubject.next(batches);
-        });
-
+      super.doDelete(batch, url);
     }
 
 }

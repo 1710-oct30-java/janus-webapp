@@ -7,61 +7,21 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 // services
+import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
 
 // entities
 import { Grade } from '../entities/Grade';
 
-
+/**
+* this service manages calls to the web services
+* for Grade objects
+*/
 @Injectable()
-export class GradeService {
-  private envService: EnvironmentService;
-  private http: HttpClient;
-
-  private listSubject: BehaviorSubject<Grade[]>;
-  private savedSubject: Subject<Grade>;
-  private deletedSubject: Subject<Grade>;
-  private sendCredentials: boolean;
+export class GradeService extends AbstractApiService<Grade> {
 
   constructor(envService: EnvironmentService, httpClient: HttpClient) {
-    this.envService = envService;
-    this.http = httpClient;
-
-    this.listSubject = new BehaviorSubject([]);
-    this.savedSubject = new Subject();
-    this.deletedSubject = new Subject();
-
-    this.sendCredentials = true;
-  }
-
-  /**
-  * returns a behavior observable of the current
-  * grade list by batch ID by week
-  *
-  * @return Observable<Grade[]>
-  */
-  public getList(): Observable<Grade[]> {
-    return this.listSubject.asObservable();
-  }
-
-  /**
-   * returns a publication observable of the last
-   * grade saved
-   *
-   * @return Observable<Grade[]>
-   */
-  public getSaved(): Observable<Grade> {
-    return this.savedSubject.asObservable();
-  }
-
-  /**
-   * returns a publication observable of the last
-   * grade deleted
-   *
-   * @return Observable<Grade[]>
-   */
-  public getDeleted(): Observable<Grade> {
-    return this.deletedSubject.asObservable();
+    super(envService, httpClient);
   }
 
   /*
@@ -75,18 +35,20 @@ export class GradeService {
  * retrieves all grades by batch ID by week and pushes them on the
  * list subject
  *
+ * NOTE: structure of the data returned is unorthodox
+ *
  * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
  *
  * @param batchId: number
  * @param week: number
- * 
+ *
  */
   public fetchByBatchIdByWeek(batchId: number, week: number): void {
     const url = this.envService.buildUrl(`all/grades/batch/${batchId}/week/${week}`);
 
     this.listSubject.next([]);
 
-    this.http.get<Grade[]>(url).subscribe( (grades) => {
+    this.http.get<any>(url).subscribe( (grades) => {
         const extractedGrades: Grade[] = [];
 
         /*
@@ -94,14 +56,21 @@ export class GradeService {
         *
         * {
         *   ${traineeId}: [
-        *     Grade,
+        *     Grade1,
+              Grade2,
         *   ],
+            ${traineeId}: [
+              Grade1,
+              Grade2,
+            ],
         *   ...
         * }
         */
-        for ( const grade in grades ) {
-          if ( grades.hasOwnProperty(grade) ) {
-            extractedGrades.push(grades[grade][0]);
+        for ( const traineeId in grades ) {
+          if ( grades.hasOwnProperty(traineeId) ) {
+            for ( const grade of grades[traineeId] ) {
+              extractedGrades.push(grade);
+            }
           }
         }
 
@@ -118,10 +87,9 @@ export class GradeService {
    * @param grade: Grade
    */
   public create(grade: Grade): void {
-    const url = this.envService.buildUrl('trainer/grade/create');
-    const data = JSON.stringify(grade);
+    const url = 'trainer/grade/create';
 
-    this.http.post<Grade>(url, data).subscribe( (saved) => this.savedSubject.next(saved) );
+    super.doPost(grade, url);
   }
 
   /**
@@ -133,10 +101,9 @@ export class GradeService {
    * @param grade: Grade
    */
   public update(grade: Grade): void {
-    const url = this.envService.buildUrl('trainer/grade/update');
-    const data = JSON.stringify(grade);
+    const url = 'trainer/grade/update';
 
-    this.http.put<Grade>(url, data).subscribe( (updated) => this.savedSubject.next(updated) );
+    super.doPut(grade, url);
   }
 
 }

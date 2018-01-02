@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Technical Skills
+    </div>
+    <div class="panel-body">
+      <app-graph *ngIf="chartData && chartData.length === 2" [data]="(chartData | graphData:dataSetLabels)" [legend]=true [type]="chartType"></app-graph>
+      <app-table *ngIf="chartData && chartData.length === 2" [data]="(chartData | graphData:dataSetLabels)" [type]="chartType"></app-table>
+    </div>
+  </div>
+</div>

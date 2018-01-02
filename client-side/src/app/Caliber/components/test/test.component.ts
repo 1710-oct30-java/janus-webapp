@@ -12,6 +12,12 @@ import { TrainerService } from '../../services/trainer.service';
 import { TraineeService } from '../../services/trainee.service';
 import { AssessmentService } from '../../services/assessment.service';
 import { GradeService } from '../../services/grade.service';
+import { NoteService } from '../../services/note.service';
+import { CategoryService } from '../../services/category.service';
+import { Trainee } from '../../entities/Trainee';
+import { Assessment } from '../../entities/Assessment';
+import { LocationService } from '../../services/location.service';
+import { PanelService } from '../../services/panel.service';
 
 @Component({
   selector: 'app-test',
@@ -21,25 +27,59 @@ import { GradeService } from '../../services/grade.service';
 
 export class TestComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
-  private service: GradeService;
   private data: any[];
 
 
-  constructor(service: GradeService) {
+  constructor(private service: BatchService ) {
     this.service = service;
+  }
+
+  public getTestTrainee(): Trainee {
+    return {
+      traineeId: 5524,
+      resourceId: null,
+      name: 'Cartagena, Michael',
+      email: 'mcartagenaez8@gmail.com',
+      trainingStatus: 'Employed',
+      phoneNumber: '347-782-4731',
+      skypeId: 'mcart5566',
+      profileUrl: 'https://app.revature.com/profile/MichaelC/55b6b9a398dacdb90093a3088822d35c',
+      recruiterName: null,
+      college: null,
+      degree: null,
+      major: null,
+      techScreenerName: null,
+      projectCompletion: null
+    };
+  }
+
+  public getTestAssessment(): Assessment {
+    return {
+      assessmentId: 3061,
+        title: 'Java Other',
+        rawScore: 20,
+        type: 'Other',
+        batch: null,
+        week: 1,
+        category: {
+          categoryId: 1,
+          skillCategory: 'Java',
+          active: true
+        }
+    };
   }
 
   private log(object: any): void {
     console.log(object);
   }
 
-  private testCreate(): void {
-    const test = Object.assign({}, this.data[0]);
+  // private testCreate(): void {
+  //   const test = Object.assign({}, this.data[0]);
 
-    console.log(test);
+  //   console.log(test);
 
-    this.service.create(test);
-  }
+  //   this.service.create(test);
+  // }
 
   ngOnInit() {
     this.subscription = this.service.getList().subscribe( (data) => {
@@ -51,9 +91,9 @@ export class TestComponent implements OnInit, OnDestroy {
       // }
     });
 
-    // this.service.fetchAll();
+    this.service.fetchAll();
     // this.service.fetchAllByBatch(3002);
-    this.service.fetchByBatchIdByWeek(3002, 1);
+    // this.service.fetchByBatchIdByWeek(2201, 1);
   }
 
   ngOnDestroy() {

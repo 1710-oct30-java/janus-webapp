@@ -5,7 +5,7 @@ import { ChuckNorrisService } from '../../services/chuck-norris.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css', '../../../assets/css/styles.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
     private jokeSubscription: Subscription;
@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.jokeSubscription = this.chuckNorrisService.joke$.subscribe( (resp) => {
+    this.jokeSubscription = this.chuckNorrisService.joke$.subscribe((resp) => {
       this.joke = resp;
     });
   }
