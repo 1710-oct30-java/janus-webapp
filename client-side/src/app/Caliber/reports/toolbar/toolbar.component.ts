@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { BatchService } from '../../../Caliber/services/batch.service';
 import { Batch } from '../../entities/Batch';
@@ -9,6 +9,7 @@ import { Trainer } from '../../entities/Trainer';
 import { forEach } from '@angular/router/src/utils/collection';
 import { GranularityService } from '../services/granularity.service';
 import { Trainee } from '../../entities/Trainee';
+import { isUndefined, isObject } from 'util';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,7 +19,6 @@ import { Trainee } from '../../entities/Trainee';
 export class ToolbarComponent implements OnInit, OnDestroy {
 
   // http://localhost:8080/vp/batch/all
-  @ViewChild('startDate') year;
 
   private batchService: BatchService;
   private trainerService: TrainerService;
@@ -27,10 +27,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   batchList: Array<Batch>;
   trainerList: Array<Trainer>;
   yearList;
-  batchSelect: Object = {};
-  weekSelect: Object = {};
-  yearSelect: Object = {};
-  traineeSelect: Object = {};
+  weekList;
+  batchSelect: any;
+  weekSelect: any;
+  yearSelect: any;
+  traineeSelect: any;
   private batchSubscription: Subscription;
   private trainerSubscription: Subscription;
 
@@ -49,10 +50,15 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         if (batches.length > 0) {
           this.batchList = batches;
           this.createYearList();
-          this.year = this.year.nativeElement;
+          this.createWeekList();
           this.filterByBatch(2201);
         }
       });
+
+      this.yearSelect = document.getElementById('startDate');
+      this.batchSelect = document.getElementById('trainer');
+      this.weekSelect = document.getElementById('week');
+      this.traineeSelect = document.getElementById('trainee');
     }
 
     filterByBatch(batchNum) {
@@ -66,7 +72,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
 
     yearOnChange() {
-      console.log(this.year.value);
+      console.log(this.yearSelect.value);
+      console.log(this.batchSelect.value);
     }
 
     /**
@@ -94,9 +101,50 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       });
     }
 
+    loadWeeks(week): boolean {
+      if (week === 1) {
+        return true;
+      }
+    }
+
+    weekOnChange() {
+      console.log(this.weekSelect.value);
+    }
+
+    createWeekList(): void {
+      // create Set
+      this.weekList = new Set();
+
+      // Add current week and further weeks
+        for (let i = 0; i < this.batchList.length; i++) {
+          console.log('entered for');
+          console.log(this.batchSelect);
+          console.log(this.batchList[i].batchId.toString());
+          if (2201 === this.batchList[i].batchId) {
+            console.log('entered if');
+            for (let j = 1; j <= this.batchList[i].weeks; j++) {
+              this.weekList.add(j);
+            }
+        }
+      }
+
+      // Add all batch weeks to Set. It will not allow duplicates
+      // for (const week of this.batchList) {
+      //   this.weekList.add(week);
+      // }
+
+      // Converts Set to an Array
+      this.weekList = Array.from(this.weekList);
+
+      // Sort the array
+      this.weekList.sort(function(a, b) {
+        return a - b;
+      });
+    }
+
     public debug(): void {
       // console.log(this.batchList[0].startDate.toString().substr(0, 4));
-      console.log(this.year.value);
+      console.log(this.yearSelect.value);
     }
 
     public cleanBatchList(): Array<Batch> {
