@@ -73,6 +73,7 @@ import { AlertsComponent } from './alerts/alerts.component';
 import { ReactivateLocationComponent } from './settings/locations/reactivatelocation/reactivatelocation.component';
 import { BarGraphModalComponent } from './home/vp-bar-graph/bar-graph-modal/bargraphmodal.component';
 import { EvaluationService } from './services/evaluation.service';
+import { OrderByPipe } from './pipes/order-by.pipe';
 
 
 @NgModule({
@@ -125,6 +126,7 @@ import { EvaluationService } from './services/evaluation.service';
     GraphDataPipe,
     PanelBatchAllTraineesComponent,
     TierPipe,
+    OrderByPipe,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests

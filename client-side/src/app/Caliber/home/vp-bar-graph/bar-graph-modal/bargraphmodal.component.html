@@ -22,7 +22,7 @@
                 <th>Notes</th>
             </tr>
             <tbody>
-                <tr *ngFor="let trainee of trainees">
+                <tr *ngFor="let trainee of (trainees | orderBy: 'trainee.name')">
                     <td class="ng-binding">{{trainee?.trainee.name}}</td>
                     <td class="ng-binding">{{trainee?.qcStatus}}</td>
                     <td class="ng-binding">{{trainee?.content}}</td>
