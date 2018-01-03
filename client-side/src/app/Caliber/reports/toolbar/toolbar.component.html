@@ -1,9 +1,33 @@
-<div class="toolbar-container">
-  <div class="row">
-    <div class="col">
-      <select class="button" id="startDate" *ngIf="batchList">
-        <ng-container class="container" *ngFor="let batch of batchList">
-          <option [ngValue]="batch">{{ batch.startDate | date: 'yyyy'}}</option>
+<div class="container">
+  <div class="col">
+    <select class="button" #startDate (change)="yearOnChange()">
+      <ng-container class="container" *ngFor="let year of yearList">
+        <option [ngValue]="year" [selected]="loadYears(year)">{{ year }}</option>
+      </ng-container>
+    </select>
+
+    <span class="paddingRight"></span>
+
+    <select class="button" #trainer>
+      <ng-container class="container" *ngFor="let batch of batchList">
+        <option [ngValue]="batch">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
+      </ng-container>
+    </select>
+
+    <span class="paddingRight"></span>
+
+    <select class="button" id="week" *ngIf="batchList">
+      <ng-container class="container" *ngFor="let batch of batchList">
+        <option [ngValue]="batch">Week {{ batch.weeks }}</option>
+      </ng-container>
+    </select>
+
+    <span class="paddingRight"></span>
+
+    <select class="button" id="trainee" *ngIf="batchList">
+      <ng-container class="container" *ngFor="let batch of batchList">
+        <ng-container class="container" *ngFor="let trainee of batch.trainees">
+          <option [ngValue]="batch">{{ trainee.name }}</option>
         </ng-container>
       </select>
       <select class="button" id="trainer" *ngIf="batchList">

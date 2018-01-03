@@ -99,11 +99,11 @@
 <!-- <hr> -->
 
 
-<div class="container">
+<div>
     <div class="panel panel-default">
         <div class="panel-heading">
             Cumulative Scores
-            <i (click)="downloadPDF()" class="fa fa-download cursorPointer"></i>
+            <i (click)="downloadPDF()" class="fa fa-download"></i>
         </div>
         <div id="chart" class="panel-body">
             <app-graph *ngIf="chartData" [data]="(chartData) | graphData:dataSetLabels" [legend]=true [type]="chartType"></app-graph>
