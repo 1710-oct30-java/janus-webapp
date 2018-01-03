@@ -8,18 +8,18 @@
       </select>
       <select class="button" id="trainer" *ngIf="batchList">
         <ng-container class="container" *ngFor="let batch of batchList">
-          <option [ngValue]="batch">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
+          <option [ngValue]="batch" onselect="filterBatch(batch)">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
         </ng-container>
       </select>
       <select class="button" id="week" *ngIf="batchList">
         <ng-container class="container" *ngFor="let batch of batchList">
-          <option [ngValue]="batch">Week {{ batch.weeks }}</option>
+          <option [ngValue]="batch" onselect="filterWeek(batch.weeks)">Week {{ batch.weeks }}</option>
         </ng-container>
       </select>
       <select class="button" id="trainee" *ngIf="batchList">
         <ng-container class="container" *ngFor="let batch of batchList">
           <ng-container class="container" *ngFor="let trainee of batch.trainees">
-            <option [ngValue]="batch">{{ trainee.name }}</option>
+            <option [ngValue]="batch" onselect="filterTrainee(batch.trainees)">{{ trainee.name }}</option>
           </ng-container>
         </ng-container>
       </select>

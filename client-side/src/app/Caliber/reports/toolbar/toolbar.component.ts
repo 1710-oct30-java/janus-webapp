@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { TrainerService } from '../../services/trainer.service';
 import { Trainer } from '../../entities/Trainer';
 import { forEach } from '@angular/router/src/utils/collection';
+import { GranularityService } from '../services/granularity.service';
+import { Trainee } from '../../entities/Trainee';
 
 @Component({
   selector: 'app-toolbar',
@@ -17,6 +19,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   private batchService: BatchService;
   private trainerService: TrainerService;
+  private granService: GranularityService;
 
   batchList: Array<Batch>;
   trainerList: Array<Trainer>;
@@ -27,9 +30,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private batchSubscription: Subscription;
   private trainerSubscription: Subscription;
 
-  constructor(batchService: BatchService, trainerService: TrainerService) {
+  constructor(batchService: BatchService, trainerService: TrainerService, granService: GranularityService) {
     this.batchService = batchService;
     this.trainerService = trainerService;
+    this.granService = granService;
 
     this.batchSubscription = new Subscription();
     this.trainerSubscription = new Subscription();
@@ -57,6 +61,18 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         }
       }
       return this.batchList;
+    }
+
+    public traineeFilter(trainee: Trainee) {
+      this.granService.pushTrainee(trainee);
+    }
+
+    public batchFilter(batch: Batch) {
+      this.granService.pushBatch(batch);
+    }
+
+    public weekFilter(week: number) {
+      this.granService.pushWeek(week);
     }
 
     ngOnDestroy() {
