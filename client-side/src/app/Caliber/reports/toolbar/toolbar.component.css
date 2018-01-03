@@ -1,0 +1,16 @@
+.toolbar-container {
+    padding: 5px;
+}
+
+.button {
+    background-color: rgb(255, 255, 255); /* Green */
+    border: none;
+    color: #F26925;
+    margin-top: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
