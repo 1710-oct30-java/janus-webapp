@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  context: 'http://localhost:8080/',
+  context: 'http://localhost:8070/',
   bootContext: 'http://localhost/',
 
   // API calls for the VP functionality group
