@@ -28,6 +28,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   trainerList: Array<Trainer>;
   yearList;
   weekList;
+  traineeList;
   batchSelect: any;
   weekSelect: any;
   yearSelect: any;
@@ -51,12 +52,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           this.batchList = batches;
           this.createYearList();
           this.createWeekList();
+          this.createTraineeList();
           this.filterByBatch(2201);
         }
       });
 
       this.yearSelect = document.getElementById('startDate');
-      this.batchSelect = document.getElementById('trainer');
       this.weekSelect = document.getElementById('week');
       this.traineeSelect = document.getElementById('trainee');
     }
@@ -114,11 +115,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     createWeekList(): void {
       // create Set
       this.weekList = new Set();
+      this.batchSelect = document.getElementById('trainer');
 
       // Add current week and further weeks
         for (let i = 0; i < this.batchList.length; i++) {
           console.log('entered for');
-          console.log(this.batchSelect);
+          console.log(this.batchSelect.value);
           console.log(this.batchList[i].batchId.toString());
           if (2201 === this.batchList[i].batchId) {
             console.log('entered if');
@@ -140,6 +142,41 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.weekList.sort(function(a, b) {
         return a - b;
       });
+    }
+
+    traineeOnChange() {
+      console.log(this.traineeSelect.value);
+    }
+
+    createTraineeList(): void {
+        // create Set
+        this.traineeList = new Set();
+
+        // Add trainees to a list from the current batch
+          for (let i = 0; i < this.batchList.length; i++) {
+            console.log('entered for');
+            console.log(this.batchSelect);
+            console.log(this.batchList[i].batchId.toString());
+            if (2201 === this.batchList[i].batchId) {
+              console.log('entered if');
+              for (let j = 0; j <= this.batchList[i].trainees.length; j++) {
+                this.traineeList.add(this.batchList[i].trainees[j].name);
+              }
+          }
+        }
+
+        // Add all batch weeks to Set. It will not allow duplicates
+        // for (const week of this.batchList) {
+        //   this.weekList.add(week);
+        // }
+
+        // Converts Set to an Array
+        this.traineeList = Array.from(this.traineeList);
+
+        // Sort the array
+        this.traineeList.sort(function(a, b) {
+          return a - b;
+        });
     }
 
     public debug(): void {

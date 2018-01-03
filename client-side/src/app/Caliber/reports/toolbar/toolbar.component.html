@@ -25,11 +25,9 @@
 
     <span class="paddingRight"></span>
 
-    <select class="button" id="trainee" *ngIf="batchList">
-      <ng-container class="container" *ngFor="let batch of batchList">
-        <ng-container class="container" *ngFor="let trainee of batch.trainees">
-          <option [ngValue]="batch">{{ trainee.name }}</option>
-        </ng-container>
+    <select class="button" id="trainee" (change)="traineeOnChange()">
+      <ng-container class="container" *ngFor="let trainee of traineeList">
+        <option [value]="trainee">{{ trainee }}</option>
       </ng-container>
     </select>
 
