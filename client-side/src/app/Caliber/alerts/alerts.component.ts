@@ -17,7 +17,7 @@ export class AlertsComponent implements OnInit {
    * global config for notification
    */
   public options = {
-    position: ["top", "left"],
+    position: ['top', 'left'],
     timeOut: 2500,
     maxStack: 10,
     maxLength: 36,

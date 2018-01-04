@@ -128,7 +128,7 @@ export class TrainersComponent implements OnInit, OnDestroy {
    */
   updateTrainer(modal) {
     // replacing the trainer's fields with the new ones
-    let temp = new Trainer();
+    const temp = new Trainer();
     temp.trainerId = this.currEditTrainer.trainerId;
     temp.tier = this.newTier;
     temp.title = this.newTitle;
