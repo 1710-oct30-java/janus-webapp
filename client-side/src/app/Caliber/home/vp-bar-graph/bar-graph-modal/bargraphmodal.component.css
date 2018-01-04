@@ -19,6 +19,7 @@ element.style {
     left: 0;
     z-index: 1050;
     outline: 0;
+    width: 60%;
 }
 
 .modal-lg {

@@ -27,6 +27,7 @@ export class DeactivateLocationComponent implements OnInit {
     }
 
     deactivateLocation() {
+        // update the current object and send the API call to deactivate location
         this.location.active = false;
         this.ls.deleteLocation(this.location);
     }

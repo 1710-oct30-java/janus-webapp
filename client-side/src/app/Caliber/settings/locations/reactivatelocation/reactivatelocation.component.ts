@@ -27,6 +27,7 @@ export class ReactivateLocationComponent implements OnInit {
     }
 
     reactivateLocation() {
+        // update the current object and send the API call to reactivate location
         this.location.active = true;
         this.ls.reactivateLocation(this.location);
     }
