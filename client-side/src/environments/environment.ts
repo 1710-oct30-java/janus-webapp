@@ -47,7 +47,7 @@ export const environment = {
     environment.context + `all/reports/batch/{batchId}/chart`,
 
   apiAllBatchesCurrentWeekQCStackedBarChart: (batchId: Number, week: Number) =>
-    environment.context + `all/reports/batch/${batchId}/week/${week}/bar-batch-week-avg`,
+    environment.context + `all/reports/batch/week/stacked-bar-current-week`,
 
   apiBatchWeekAvgBarChart: (batchId: Number, week: Number) =>
     environment.context + `all/reports/batch/${batchId}/week/${week}/bar-batch-week-avg`,

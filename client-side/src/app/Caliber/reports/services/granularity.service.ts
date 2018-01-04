@@ -161,9 +161,10 @@ export class GranularityService {
 
     this.currentBatch.next(testBatch);
 
-    // const testTrainee: Trainee = null;
+    // Default testing trainee Id: 5530
+
     const testTrainee: Trainee = {
-      'traineeId': 5530, 'resourceId': null, 'name': 'Ali, Fareed', 'email': 'fareed.ali37@qmail.cuny.edu',
+      'traineeId': 0, 'resourceId': null, 'name': 'Ali, Fareed', 'email': 'fareed.ali37@qmail.cuny.edu',
       'trainingStatus': 'Employed', 'phoneNumber': '347-526-5184', 'skypeId': 'live:bassph',
       'profileUrl': 'https://app.revature.com/profile/fareed/03198a1e81a3f4e32433a9e9c9db353e',
       'recruiterName': null, 'college': null, 'degree': null, 'major': null, 'techScreenerName': null,
@@ -171,7 +172,7 @@ export class GranularityService {
     };
     this.currentTrainee.next(testTrainee);
 
-    const week = 0;
+    const week = 4;
     this.currentWeek.next(week);
   }
 

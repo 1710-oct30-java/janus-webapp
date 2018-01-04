@@ -119,17 +119,21 @@ export class ReportingService {
 
   fetchAllBatchesCurrentWeekQCStackedBarChart(batchId: Number, week: Number) {
     const endpoint = environment.apiAllBatchesCurrentWeekQCStackedBarChart(batchId, week);
-
     // TODO: Implement API call and subject push logic
-
   }
 
   /* Bar Charts */
   fetchBatchWeekAvgBarChart(batchId: Number, week: Number) {
     const endpoint = environment.apiBatchWeekAvgBarChart(batchId, week);
+    const params = {
+      batchId: batchId,
+      week: week
+    };
 
-    // TODO: Implement API call and subject push logic
-
+    if (this.needsRefresh(this.assessmentBreakdownBarChart, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.assessmentBreakdownBarChart.next({ params: params, data: success}));
+    }
   }
 
   fetchBatchWeekSortedBarChart(batchId: Number, week: Number) {
