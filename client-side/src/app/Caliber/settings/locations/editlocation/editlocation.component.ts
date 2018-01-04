@@ -14,15 +14,15 @@ export class EditlocationComponent implements OnInit {
 
   @Input()
   currEditLocation: Location;
-  newCompanyName: String;
-  newStreet: String;
-  newCity: String;
-  newZip: String;
-  newState: String;
+  newCompanyName: string;
+  newStreet: string;
+  newCity: string;
+  newZip: string;
+  newState: string;
 
   rForm: FormGroup;
   private modalRef: NgbModalRef;
-  closeResult: String;
+  closeResult: string;
 
   constructor(private modalService: NgbModal,
     private locationService: LocationService,

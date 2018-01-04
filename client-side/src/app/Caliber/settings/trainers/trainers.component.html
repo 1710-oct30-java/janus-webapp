@@ -42,6 +42,9 @@ add or edit a trainer-->
           {{trainer.tier | displayTier: trainer.tier}}
         </td>
         <td>
+          <i class="fa fa-user" style="color:#ff8e4d;" (click)="goToProfile(trainer)"></i>
+        </td>
+        <td>
           <i class="fa fa-pencil" style="color:#ff8e4d;" (click)="editTrainer(content, trainer)"></i>
         </td>
         <td>

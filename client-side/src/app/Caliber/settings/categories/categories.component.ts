@@ -40,6 +40,7 @@ export class CategoriesComponent implements OnInit {
   ngOnInit() {
     this.initFormControl();
     // console.log(this.columns);
+    this.categoriesService.fetchAll();
     this.categorySubscription = this.categoriesService.categories$.subscribe((resp) => {
       this.categories = resp;
       this.numColumns = this.categories.length / 8 + 1;

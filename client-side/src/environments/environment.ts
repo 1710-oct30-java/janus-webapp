@@ -18,8 +18,6 @@ export const environment = {
   reactivateLocation: 'http://localhost:8080/vp/location/reactivate',
   addLocation: 'http://localhost:8080/vp/location/create',
   deleteTrainer: 'http://localhost:8080/vp/trainer/delete',
-  getAllLocations: 'http://localhost:8080/all/location/all/',
-  getAllTrainers: 'http://localhost:8080/all/trainer/all',
   getAllTitles: 'http://localhost:8080/vp/trainer/titles/',
   getAllTiers: 'http://localhost:8080/types/trainer/role/all',
   editTrainer: 'http://localhost:8080/vp/trainer/update',

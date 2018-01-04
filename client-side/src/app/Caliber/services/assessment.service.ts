@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 // rxjs
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 // services
+import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
 
 // entities
@@ -18,54 +17,10 @@ import { Assessment } from '../entities/Assessment';
  * for Assessment objects
  */
 @Injectable()
-export class AssessmentService {
-
-  private http: HttpClient;
-  private envService: EnvironmentService;
-
-  private listSubject: BehaviorSubject<Assessment[]>;
-  private savedSubject: Subject<Assessment>;
-  private deletedSubject: Subject<Assessment>;
-
-  private sendCredentials: boolean;
+export class AssessmentService extends AbstractApiService<Assessment> {
 
   constructor(eService: EnvironmentService, httpClient: HttpClient) {
-    this.envService = eService;
-    this.http = httpClient;
-
-    this.listSubject = new BehaviorSubject([]);
-    this.savedSubject = new Subject();
-    this.deletedSubject = new Subject();
-  }
-
-   /**
-   * returns a behavior observable of the list
-   * of assessments
-   *
-   * @return Observable<Assessment[]>
-   */
-  public getList(): Observable<Assessment[]> {
-    return this.listSubject.asObservable();
-  }
-
-  /**
-   * returns a publicate observable of the last
-   * saved assessment
-   *
-   * @return Observable<Assessment>
-   */
-  public getSaved(): Observable<Assessment> {
-    return this.savedSubject.asObservable();
-  }
-
-  /**
-   * returns a publicate observable of the last
-   * deleted assessment
-   *
-   * @return Observable<Assessment>
-   */
-  public getDeleted(): Observable<Assessment> {
-    return this.deletedSubject.asObservable();
+    super(eService, httpClient);
   }
 
    /*
@@ -82,16 +37,16 @@ export class AssessmentService {
      * @param week: number
      */
   public fetchByBatchIdByWeek(batchId: number, week: number): void {
-    const url = this.envService.buildUrl(`trainer/assessment/${batchId}/${week}`);
+    const url = `trainer/assessment/${batchId}/${week}`;
 
-    this.listSubject.next([]);
-
-    this.http.get<Assessment[]>(url).subscribe( (assessments) => {
-        this.listSubject.next(assessments);
-      });
+    super.doGetList(url);
   }
 
   /**
+   * @overload
+   *
+   * @see save()
+   *
    * creates an assessment and pushes the created assessement on
    * the savedSubject
    *
@@ -100,12 +55,21 @@ export class AssessmentService {
    * @param assessment: Assessment
    */
   public create(assessment: Assessment): void {
-    const url = this.envService.buildUrl('trainer/assessment/create');
-    const data = JSON.stringify(assessment);
+    this.save(assessment);
+  }
 
-    this.http.post<Assessment>(url, data).subscribe( (saved) => {
-        this.savedSubject.next(saved);
-      });
+ /**
+ * creates an assessment and pushes the created assessement on
+ * the savedSubject
+ *
+ * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER')")
+ *
+ * @param assessment: Assessment
+ */
+  public save(assessment: Assessment): void {
+    const url = 'trainer/assessment/create';
+
+    super.doPost(assessment, url);
   }
 
   /**
@@ -117,12 +81,9 @@ export class AssessmentService {
    * @param assessment: Assessment
    */
   public update(assessment: Assessment): void {
-    const url = this.envService.buildUrl('trainer/assessment/update');
-    const data = JSON.stringify(assessment);
+    const url = 'trainer/assessment/update';
 
-    this.http.put<Assessment>(url, data).subscribe( (updated) => {
-        this.savedSubject.next(updated);
-      });
+    super.doPut(assessment, url);
   }
 
   /**
@@ -134,11 +95,9 @@ export class AssessmentService {
    * @param assessment: Assessment
    */
   public delete(assessment: Assessment): void {
-    const url = this.envService.buildUrl(`trainer/assessment/delete/${assessment.assessmentId}`);
+    const url = `trainer/assessment/delete/${assessment.assessmentId}`;
 
-    this.http.delete(url).subscribe( () => {
-        this.deletedSubject.next(assessment);
-      });
+    super.doDelete(assessment, url);
   }
 
 

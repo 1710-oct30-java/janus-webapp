@@ -14,7 +14,7 @@ import { DeactivateTrainerComponent } from './settings/trainers/deactivatetraine
 import { QualityComponent } from './quality/quality.component';
 import { PanelComponent } from './panel/panel.component';
 import { TestComponent } from './components/test/test.component';
-import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
+import { TrainerProfilesComponent } from './settings/trainer-profile/trainer-profile.component';
 
 export const routes: Routes = [
   {
@@ -46,10 +46,6 @@ export const routes: Routes = [
         component: TestComponent,
       },
       {
-        path: 'trainer-profile',
-        component: TrainerProfileComponent,
-      },
-      {
         path: 'panel',
         component: PanelComponent
       },
@@ -68,6 +64,10 @@ export const routes: Routes = [
           {
             path: 'trainers',
             component: TrainersComponent
+          },
+          {
+            path: 'trainer-profile',
+            component: TrainerProfilesComponent,
           }
         ]
       },

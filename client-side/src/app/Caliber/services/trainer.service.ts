@@ -7,6 +7,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 // services
+import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
 import { environment } from '../../../environments/environment';
 import { AlertsService } from './alerts.service';
@@ -19,86 +20,74 @@ import { Trainer } from '../entities/Trainer';
  * for Trainer objects
  */
 @Injectable()
-export class TrainerService {
-  private http: HttpClient;
+export class TrainerService extends AbstractApiService<Trainer> {
 
-  private listSubject: BehaviorSubject<Trainer[]>;
-  private titlesSubject: BehaviorSubject<any[]>;
-  private tiersSubject: BehaviorSubject<any[]>;
-  private savedSubject: Subject<Trainer>;
-  private deletedSubject: Subject<Trainer>;
-  private envService: EnvironmentService;
-  private alertService: AlertsService;
+  private titlesSubject = new BehaviorSubject<string[]>([]);
+  private tiersSubject = new BehaviorSubject<string[]>([]);
 
-  private sendCredentials: boolean;
+  /**
+  * current trainer for trainer profile page
+  */
+  private trainerSource = new BehaviorSubject<Trainer>(null);
+  currentTrainer = this.trainerSource.asObservable();
 
-  constructor(private httpClient: HttpClient, envService: EnvironmentService, alertService: AlertsService) {
-    this.http = httpClient;
-    this.envService = envService;
-    this.alertService = alertService;
+  /**
+  * @deprecated
+  * -> retained for backwards compatibility
+  */
+  trainers$: Observable<any> = this.getList(); // this is how components should access the data if you want to cache it
+  titles$: Observable<any> = this.getTitleList();
+  tiers$: Observable<any> = this.getTierList();
 
-    this.listSubject = new BehaviorSubject([]);
-    this.titlesSubject = new BehaviorSubject([]);
-    this.tiersSubject = new BehaviorSubject([]);
-    this.savedSubject = new Subject();
-    this.deletedSubject = new Subject();
+  constructor(httpClient: HttpClient, envService: EnvironmentService) {
+    super(envService, httpClient);
 
-    this.sendCredentials = true;
-
-    this.fetchAll();
+    this.populateOnStart();
   }
 
-  populateOnStart() {
+  /**
+  *
+  * fetches the data of the service initially and
+  * bootstraps default responsive behavior with subscriptons
+  */
+  public populateOnStart(): void {
+    this.fetchAll();
     this.getTitles();
     this.getTiers();
+
+    this.getSaved().subscribe( (saved) => {
+      this.fetchAll();
+
+      /*
+      * push the saved object on the deletedSubject
+      * if it is a soft delete
+      */
+      if ( saved.tier === Trainer.ROLE_INACTIVE) {
+        this.deletedSubject.next(saved);
+      }
+    });
   }
 
   /**
-   * returns a behavior observable of the current
-   * trainer list
-   *
-   * @return Observable<Trainer[]>
-   */
-  public getList(): Observable<Trainer[]> {
-    return this.listSubject.asObservable();
-  }
-
-  /**
- * returns a behavior observable of the current
- * title list
- *
- * @return Observable<any[]>
- */
-  public getTitlesList(): Observable<Trainer[]> {
+  * returns an observable of trainer title strings
+  */
+  public getTitleList(): Observable<string[]> {
     return this.titlesSubject.asObservable();
   }
+
   /**
-  * returns a behavior observable of the current
-  * tier list
-  *
-  * @return Observable<any[]>
+  * returns an observable of TrainerRole values
   */
-  public getTierList(): Observable<Trainer[]> {
+  public getTierList(): Observable<string[]> {
     return this.tiersSubject.asObservable();
-  }
-  /**
-   * returns a publication observable of the last
-   * saved trainer object
-   *
-   * @return Observable<Trainer>
-   */
-  public getSaved(): Observable<Trainer> {
-    return this.savedSubject.asObservable();
   }
 
   /**
-     * returns a publication observable of the last
-     * trainer object deleted
-     *
-     * @return Observable<Batch>
-     */
-  public getDeleted(): Observable<Trainer> {
-    return this.deletedSubject.asObservable();
+  *
+  * sets current trainer
+  */
+  public changeCurrentTrainer(trainer: Trainer) {
+    this.trainerSource.next(trainer);
   }
 
   /*
@@ -112,15 +101,15 @@ export class TrainerService {
    * email
    *
    * sprint-security: @PreAuthorize("permitAll")
-   * @param email: string
    *
+   * @param email: string
    *
    * @return Observable<Trainer>
    */
   public fetchByEmail(email: string): Observable<Trainer> {
-    const url = this.envService.buildUrl(`training/trainer/byemail/${email}`);
+    const url = `training/trainer/byemail/${email}`;
 
-    return this.http.get<Trainer>(url);
+    return super.doGetOneObservable(url);
   }
 
   /**
@@ -130,40 +119,23 @@ export class TrainerService {
     * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'QC', 'PANEL')")
     */
   public fetchAll(): void {
-    const url = this.envService.buildUrl('all/trainer/all');
+    const url = 'all/trainer/all';
 
-    console.log('fetching all trainers in fetchall()');
-    this.listSubject.next([]);
-
-    this.http.get<Trainer[]>(url).subscribe((trainers) => {
-      this.listSubject.next(trainers);
-      this.alertService.success('Retrieved all trainers successfully!');
-    },
-      (err) => {
-        this.alertService.error('Failed to retrieve all trainers!');
-      });
+    super.doGetList(url);
   }
 
-  /**
-  * creates a trainer and pushes the created trainer on the
-  * savedSubject
-  *
-  * spring-security: @PreAuthorize("hasAnyRole('VP')")
-  *
-  * @param trainer: Trainer
-  */
-  public create(trainer: Trainer): void {
-    const url = this.envService.buildUrl('vp/trainer/create');
-    const data = JSON.stringify(trainer);
+   /**
+   * creates a trainer and pushes the created trainer on the
+   * savedSubject
+   *
+   * spring-security: @PreAuthorize("hasAnyRole('VP')")
+   *
+   * @param trainer: Trainer
+   */
+  public save(trainer: Trainer): void {
+    const url = 'vp/trainer/create';
 
-    this.http.post<Trainer>(url, data).subscribe(
-      (savedTrainer) => {
-        this.savedSubject.next(savedTrainer);
-        this.alertService.success('Created trainer successfully!');
-      },
-      (err) => {
-        this.alertService.error('Failed to create trainer!');
-      });
+    super.doPost(trainer, url);
   }
 
   /**
@@ -175,68 +147,112 @@ export class TrainerService {
    * @param trainer: Trainer
    */
   public update(trainer: Trainer): void {
-    const url = this.envService.buildUrl('vp/trainer/update');
-    const data = JSON.stringify(trainer);
+    const url = 'vp/trainer/update';
 
-    this.http.put<Trainer>(url, data).subscribe((updatedTrainer) => {
-      this.savedSubject.next(updatedTrainer);
-      this.alertService.success('Updated trainer successfully!');
-    },
-      (err) => {
-        this.alertService.error('Failed to update trainer!');
-      });
+    super.doPut(trainer, url);
   }
 
   /**
-    * retrieves all titles and pushes them on the
-    * titles subject
-    *
-    * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'QC', 'PANEL')")
-    */
-  public getTitles(): void {
-
-    this.http.get<any[]>(environment.getAllTitles).subscribe((titles) => {
-      this.alertService.success('Got all titles successfully!');
-      this.titlesSubject.next(titles);
-    },
-      (err) => {
-        this.alertService.error('Failed to get all titles!');
-      });
-  }
-
-  /**
-  * retrieves all tiers and pushes them on the
-  * tiers subject
+  * the DELETE method on the API actually updates
+  * the Trainer passed as inactive
   *
-  * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'QC', 'PANEL')")
+  * HttpClient adheres to RESTful conventions and does not
+  * allow a delete mehthod call to pass a body
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP')")
+  *
+  * @param trainer: Trainer
+  */
+  public delete(trainer: Trainer): void {
+    trainer.tier = Trainer.ROLE_INACTIVE;
+
+    this.update(trainer);
+  }
+
+  /**
+  * retrieves a list of trainer titles and pushes them on the
+  * titlesSubject
+  *
+  * if a list of titles is needed, we could just use a custom pipe
+  * that extracts if from the list of Trainers
+  */
+  public getTitles(): void {
+    const url = this.envService.buildUrl('vp/trainer/titles');
+
+    this.http.get<string[]>(url).subscribe( (data) => this.titlesSubject.next(data) );
+  }
+
+  /**
+  * retrieves a list of TrainerRoles and pushes them on
+  * the tiersSubject
+  *
+  * this appears to be an API for the TrainerRole object
+  * there should probably be a separate service for those
+  * -> retained for backward compatibility
   */
   public getTiers(): void {
+    const url = this.envService.buildUrl('types/trainer/role/all');
 
-    this.http.get<any[]>(environment.getAllTiers).subscribe((tiers) => {
-      this.alertService.success('Got all roles successfully!');
-      this.tiersSubject.next(tiers);
-    },
-      (err) => {
-        this.alertService.error('Failed to get all roles!');
-      });
+    this.http.get<string[]>(url).subscribe( (data) => this.tiersSubject.next(data) );
+  }
+
+  /*
+  * ============================================
+  * BEGIN: deprecated functions
+  *
+  * -> retained for backwards compatibility
+  * ============================================
+  */
+
+  /**
+  * @deprecated
+  *
+  * @see fetchAll()
+  */
+  public getAll(): void {
+    this.fetchAll();
+  }
+
+
+  /**
+  * @deprecated
+  *
+  * @see update()
+  *
+  */
+  public updateTrainer(trainer: Trainer): void {
+    this.update(trainer);
   }
 
   /**
-   * grabs a given trainer and sets their tier to
-   * inactive and disables them in the system
-   *
-   * spring-security: @PreAuthorize("hasAnyRole('VP')")
-   *
-   * @param trainer
-   */
-  public deleteTrainer(trainer): void {
-    this.http.request('delete', environment.deleteTrainer, { body: trainer })
-      .subscribe((resp) => {
-        this.fetchAll();
-        this.alertService.success('Trainer deactivated successfully!');
-      },
-      (err) => {
-        this.alertService.error('Failed to reactivate trainer!');
-      });
+  * @deprecated
+  *
+  * @see save()
+  *
+  * @param name: string
+  * @param title: string
+  * @param email: string
+  * @param tier: string   // actually this is a TrainerRole
+  *
+  */
+  public createTrainer(name: string, title: string, email: string, tier: string): void {
+    const trainer = new Trainer();
+
+    trainer.name = name;
+    trainer.title = title;
+    trainer.email = email;
+    trainer.tier = tier;
+
+    this.save(trainer);
   }
-}
+
+  /**
+  * @deprecated
+  *
+  * @see delete()
+  */
+  public deleteTrainer(trainer: Trainer) {
+    this.delete(trainer);
+  }
+
+ }

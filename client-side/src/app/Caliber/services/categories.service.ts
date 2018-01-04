@@ -7,69 +7,43 @@ import { Observable } from 'rxjs/Observable';
 
 // services
 import { environment } from '../../../environments/environment';
+import { EnvironmentService } from './environment.service';
+import { CategoryService } from './category.service';
 
 // entities
 import { Category } from '../entities/Category';
 import { AlertsService } from './alerts.service';
 
 /**
- * this service is used to manage API calls
- * for the category objects
- */
+* @deprecated
+*
+* @see CategoryService
+*
+* this service manages calls to the web services
+* for Category objects
+*/
 @Injectable()
-export class CategoriesService {
-
-  private dataSubject = new BehaviorSubject([]);
-  public newCategory: Category = new Category();
-
-  categories$: Observable<any> = this.dataSubject.asObservable(); // this is how components should access the data if you want to cache it
-
-  constructor(private http: HttpClient, private alertService: AlertsService) {
-    this.fetchAll();
-   }
+export class CategoriesService extends CategoryService {
 
   /**
-   * retrieves a list of all categories and pushes them to the
-   * data subject
-   *
-   */
-  public fetchAll(): void {
-    this.http.get<Category[]>(environment.getAllCategories).subscribe( (resp) => {
-      this.dataSubject.next(resp);
-      this.alertService.success('Got all Categories successfully');
-    });
+  * @deprecated
+  */
+  categories$: Observable<any> = this.listSubject.asObservable(); // this is how components should access the data if you want to cache it
+
+  constructor(envService: EnvironmentService, httpClient: HttpClient) {
+    super(envService, httpClient);
   }
 
-  /**
-   * Creates a new category and pushes it on the same
-   * data subject
-   *
-   * @param newCategory
-   */
-  public addNewCategory(newCategory: Category): void {
-    const data = JSON.stringify(newCategory);
-    this.http.post<Category>(environment.addNewCategory, data).subscribe( (resp) => {
-      this.alertService.success('Added a new Category');
-      this.fetchAll();
-    },
-    (err) => {
-      this.alertService.error('Failed to add new Category');
-    });
+  public getAll(): void {
+    super.fetchAll();
   }
 
-  /**
-   * edits a the currently selected category and
-   * updates the category in the database
-   *
-   * @param currentCategory
-   */
-  public editCurrentCategory(currentCategory: Category): void {
-    const data = JSON.stringify(currentCategory);
-    this.http.put(environment.editCurrentCategory, data).subscribe( (resp) => {
-      this.alertService.success('Successfully edited ' + currentCategory.skillCategory);
-     },
-    (err) => {
-      this.alertService.error('Failed to edit ' + currentCategory.skillCategory);
-    });
+  // adds a new category to the database
+  public addNewCategory(category: Category): void {
+    super.save(category);
+  }
+
+  public editCurrentCategory(category: Category): void {
+    super.update(category);
   }
 }

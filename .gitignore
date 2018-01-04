@@ -67,3 +67,6 @@ Servers/
 
 # built code
 /spring-boot-server/src/main/resources/static
+
+# stashed files
+/stash
