@@ -28,6 +28,12 @@ export class EvaluationService {
   private allTraineeNotes = new BehaviorSubject<CacheData>(null);
   public allTraineeNotes$ = this.allTraineeNotes.asObservable();
 
+  private traineeNote = new BehaviorSubject<CacheData>(null);
+  public traineeNote$ = this.traineeNote.asObservable();
+
+  private qcTraineeNote = new BehaviorSubject<CacheData>(null);
+  public qcTraineeNote$ = this.qcTraineeNote.asObservable();
+
   constructor(private httpClient: HttpClient) { }
 
   refresh() {
@@ -85,6 +91,44 @@ export class EvaluationService {
     if (this.needsRefresh(this.allTraineeNotes, params)) {
       this.httpClient.get(endpoint).subscribe(
         success => this.allTraineeNotes.next({params: params, data: success}));
+    }
+  }
+
+  /**
+   * Fetch A QC for a given trainee id and week.
+   * @param traineeId - Trainee ID
+   * @param week - Week number
+   * @returns Note - The QC note on a given trainee for a given week.
+   */
+  fetchQCTraineeNote(traineeId: Number, week: Number) {
+      const endpoint = environment.apiQCTraineeNote(traineeId, week);
+
+      // Params object for refresh check
+      const params = {
+        traineeId: traineeId,
+        week: week
+      };
+
+      // call backend API if data is not fresh
+      if (this.needsRefresh(this.qcTraineeNote, params)) {
+        this.httpClient.get(endpoint).subscribe(
+          success => this.qcTraineeNote.next({params: params, data: success}));
+      }
+    }
+
+  fetchTraineeNote(traineeId: Number, week: Number) {
+    const endpoint = environment.apiTraineeNote(traineeId, week);
+
+    // Params object for refresh check
+    const params = {
+      traineeId: traineeId,
+      week: week
+    };
+
+    // call backend API if data is not fresh
+    if (this.needsRefresh(this.traineeNote, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.traineeNote.next({params: params, data: success}));
     }
   }
 }

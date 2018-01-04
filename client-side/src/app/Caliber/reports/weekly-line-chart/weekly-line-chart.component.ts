@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ReportingService } from '../../../services/reporting.service';
 import { PDFService } from '../../../services/pdf.service';
 import { Subscription } from 'rxjs/Subscription';
+import { GranularityService } from '../services/granularity.service';
 
 /**
  * This component display the weekly line chart. It also has a download
@@ -16,8 +17,8 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class WeeklyLineChartComponent implements OnInit {
 
-  @Input()
-  public batchId: number;
+  // @Input()
+  public batchId = 0;
 
   public chartData: any = [];
   public scoresAverage = 0;
@@ -28,7 +29,9 @@ export class WeeklyLineChartComponent implements OnInit {
 
   private dataSubscription: Subscription;
 
-  constructor(private reportsService: ReportingService, private pdfService: PDFService) { }
+  constructor(private reportsService: ReportingService,
+              private pdfService: PDFService,
+              private granularityService: GranularityService) { }
 
   // Chart labels - for other charts the labels would have to be dynamic
   public dataSetLabels: string[] = ['Batch Scores', 'Benchmark'];
@@ -42,7 +45,7 @@ export class WeeklyLineChartComponent implements OnInit {
       if (!result) {
         // console.log('data not received');
         this.chartData = null;
-        this.reportsService.fetchBatchOverallBarChart(this.batchId);
+        this.reportsService.fetchBatchOverallBarChart(this.getBatchId());
       } else {
         // console.log('data received');
 
@@ -52,14 +55,17 @@ export class WeeklyLineChartComponent implements OnInit {
         }
 
         // First sort array by highest scores, then create chart with sorted array
-
         const sortedBatchArray = this.sortByHighestScore(result.data);
         const newbatch = {};
+
+        // for (let i = 0; i < sortedBatchArray.length; i++) {
+        //   newbatch[sortedBatchArray[i][0]] = sortedBatchArray[i][1];
+        // }
+        // console.log(newbatch);
 
         for (let i = 0; i < sortedBatchArray.length; i++) {
           newbatch[sortedBatchArray[i][0]] = sortedBatchArray[i][1];
         }
-
         this.createChartData(newbatch);
       }
     });
@@ -94,6 +100,23 @@ export class WeeklyLineChartComponent implements OnInit {
     result = result / this.batch.length;
 
     return result;
+  }
+
+  /**
+   * Sets current batch ID and returns it.
+   * Access current batch from granularity to retrieve batch ID.
+   */
+  getBatchId(): number {
+    this.granularityService.currentBatch$.subscribe(response => {
+      if (response) {
+        this.batchId = response.batchId;
+      }
+    });
+    return this.batchId;
+  }
+
+  getBatch() {
+
   }
 
   /**

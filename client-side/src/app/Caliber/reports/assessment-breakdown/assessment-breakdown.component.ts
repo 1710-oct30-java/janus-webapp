@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ReportingService } from '../../../services/reporting.service';
 import { GradeService } from '../../services/grade.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -8,13 +8,15 @@ import { GranularityService } from '../services/granularity.service';
  * Component will display a bar graph comparing the specific trainees
  * assessment for the specified week or overall if all weeks selected
  * compared to the batch average
+ *
+ * @author Mitch Goshorn
  */
 @Component({
   selector: 'app-assessment-breakdown',
   templateUrl: './assessment-breakdown.component.html',
   styleUrls: ['./assessment-breakdown.component.css']
 })
-export class AssessmentBreakdownComponent implements OnInit {
+export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
 
   private batchId: Number;
   private week: Number;
@@ -81,17 +83,28 @@ export class AssessmentBreakdownComponent implements OnInit {
       });
 
       this.batchIdSub = this.granularityService.currentBatch$.subscribe(
-          data => { this.batchId = data.batchId; this.tryFetch(); });
+          data => {
+            // Make sure batchId is not undefined
+            if (this.batchId) {
+              this.batchId = data.batchId; this.tryFetch();
+            }
+          });
 
       this.weekSub = this.granularityService.currentWeek$.subscribe(
-          data => { this.week = data; this.tryFetch(); });
+          data => {
+            // Make sure traineeId is not undefined
+            if (data) {
+              this.week = data; this.tryFetch();
+            }
+          });
 
       this.traineeIdSub = this.granularityService.currentTrainee$.subscribe(
-          data => { this.traineeId = data.traineeId; this.tryFetch(); });
-
-    // Used in testing without granularity support
-    // this.reportsService.fetchBatchWeekTraineeBarChart(2201, 1, 5532);
-    // this.reportsService.fetchBatchOverallTraineeBarChart(2201, 5532);
+          data => {
+            // Make sure traineeId is not undefined
+            if (data) {
+              this.traineeId = data.traineeId; this.tryFetch();
+            }
+          });
   }
 
   tryFetch() {
@@ -105,6 +118,14 @@ export class AssessmentBreakdownComponent implements OnInit {
         this.reportsService.fetchBatchWeekTraineeBarChart(this.batchId, this.week, this.traineeId);
       }
     }
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from subscriptions
+    this.batchIdSub.unsubscribe();
+    this.weekSub.unsubscribe();
+    this.traineeIdSub.unsubscribe();
+    this.dataSubscription.unsubscribe();
   }
 
 }

@@ -4,15 +4,19 @@
     <div class="panel-heading">
       Technical Skills
       <i (click)="downloadPDF()" class="fa fa-download"></i>
-      <div role="button" class="pull-right" (click)="open(traineeTechSkillsSelector)">
+      <div *ngIf="week === 0" role="button" class="pull-right" (click)="open(traineeTechSkillsSelector)">
         <i class="fa fa-user-circle-o fa-lg"></i>
       </div>
     </div>
 
-    <div class="panel-body">
+    <div *ngIf="week === 0" class="panel-body">
       <app-graph *ngIf="chartData && chartData.length === trainees.length + 1" [data]="(chartData | graphData:dataSetLabels)" [legend]=true
         [type]="chartType"></app-graph>
       <app-table *ngIf="chartData && chartData.length === trainees.length + 1" [data]="(chartData | graphData:dataSetLabels)" [type]="chartType"></app-table>
+    </div>
+    <div *ngIf="week !== 0" class="panel-body">
+      <app-graph *ngIf="chartData && chartData.length === 2" [data]="(chartData | graphData:dataSetLabels)" [legend]=true [type]="chartType"></app-graph>
+      <app-table *ngIf="chartData && chartData.length === 2" [data]="(chartData | graphData:dataSetLabels)" [type]="chartType"></app-table>
     </div>
   </div>
 </div>
@@ -25,15 +29,12 @@
     </button>
   </div>
   <div class="modal-body row">
-    <div class="col-4 modal-body-row" *ngFor="let t of traineesList; let i = index">
+    <div class="col-4 modal-body-row" *ngFor="let t of traineesNames; let i = index">
       <span>
         <b>{{t}}</b>
         <input class="pull-right" type="checkbox" [checked]="this.trainees.includes(this.traineesList[i])" (change)="traineeChecked(i)"
         />
       </span>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

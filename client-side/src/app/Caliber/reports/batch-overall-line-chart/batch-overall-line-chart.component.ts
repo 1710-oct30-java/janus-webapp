@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ReportingService } from '../../../services/reporting.service';
 import { GranularityService } from '../services/granularity.service';
@@ -14,14 +14,20 @@ import { GranularityService } from '../services/granularity.service';
   templateUrl: './batch-overall-line-chart.component.html',
   styleUrls: ['./batch-overall-line-chart.component.css']
 })
-export class BatchOverallLineChartComponent implements OnInit {
+export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
 
   public data: any = null;
   private dataSubscription: Subscription;
+  public dataShown = null;
   private batchId: Number;
-  private granularitySubscription: Subscription;
+  private week: number;
+
+  private batchSub: Subscription;
+  private weekSub: Subscription;
 
   public labels: Array<String> = null;
+  public labelsShown: Array<String> = null;
+
   public lineChartLegend = false;
   public lineChartType = 'line';
 
@@ -71,6 +77,7 @@ export class BatchOverallLineChartComponent implements OnInit {
         const newData = [];
         const newLabels = [];
 
+        // Format data for charts
         for (const key in result.data) {
           if (result.data.hasOwnProperty(key)) {
 
@@ -80,23 +87,78 @@ export class BatchOverallLineChartComponent implements OnInit {
           }
         }
 
+        // Assign new data
         this.labels = newLabels;
         this.data = [{data: newData, label: 'label'}];
+
+        // Update display data with new data accounting for week limitation
+        this.updateWeeks();
+
       } else {
         console.log('line chart data failed to load');
       }
     });
 
-    this.granularitySubscription = this.granularityService.currentBatch$.subscribe(
+    this.batchSub = this.granularityService.currentBatch$.subscribe(
       (result) => {
-        if (result.batchId !== this.batchId) {
-          this.batchId = result.batchId;
-          this.fetch();
+        // Make sure batchId is not undefined
+        if (result) {
+          if (result.batchId !== this.batchId) {
+            this.batchId = result.batchId;
+            this.fetch();
+          }
         }
-      });
+    });
+
+    this.weekSub = this.granularityService.currentWeek$.subscribe(
+      (result) => {
+        if (result !== this.week) {
+          this.week = result;
+          this.updateWeeks();
+        }
+      }
+    );
   }
 
+  // Fetches data when new data is pushed in
   private fetch() {
     this.reportsService.fetchBatchOverallLineChart(this.batchId);
+  }
+
+  /**
+   * Method copies contents of stored user array and updates the arrays
+   * used to display data such that the data includes all weeks up to the
+   * selected week or all weeks if all are selected
+   */
+  private updateWeeks() {
+    // return if there is no stored data yet
+    if (this.data === null) { return; }
+
+    // if all weeks is not selected
+    if (this.week !== 0) {
+      // Copy arrays
+      const newData = this.data[0].data.slice();
+      const newLabels = this.labels.slice();
+
+      // Splice arrays by current week
+      newData.splice(this.week);
+      newLabels.splice(this.week);
+
+      // Assign new arrays to data used for display
+      this.dataShown = [{data: newData, label: this.data[0].label }];
+      this.labelsShown = newLabels;
+
+    } else {
+      // When all weeks are selected, just use the full dataset
+      this.dataShown = this.data;
+      this.labelsShown = this.labels;
+    }
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from subscriptions
+    this.batchSub.unsubscribe();
+    this.weekSub.unsubscribe();
+    this.dataSubscription.unsubscribe();
   }
 }

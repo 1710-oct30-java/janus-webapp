@@ -8,12 +8,6 @@ export const environment = {
   context: 'http://localhost:8081/',
   bootContext: 'http://localhost/',
 
-  /* Evaluation Service API endpoints */
-  apiAllQCTraineeOverallNotes: (traineeId: Number) =>
-    environment.context + `qc/note/trainee/${traineeId}`,
-
-  apiAllTraineeNotes: (traineeId: Number) =>
-    environment.context + `all/notes/trainee/${traineeId}`,
   // API calls for the VP functionality group
   addNewCategory: 'http://localhost:8080/vp/category',
   getAllCategories: 'http://localhost:8080/vp/category',
@@ -28,6 +22,19 @@ export const environment = {
   getAllTitles: 'http://localhost:8080/vp/trainer/titles/',
   getAllTiers: 'http://localhost:8080/types/trainer/role/all',
   editTrainer: 'http://localhost:8080/vp/trainer/update',
+
+  /* Evaluation Service API endpoints */
+  apiAllQCTraineeOverallNotes: (traineeId: Number) =>
+    environment.context + `qc/note/trainee/${traineeId}`,
+
+  apiAllTraineeNotes: (traineeId: Number) =>
+    environment.context + `all/notes/trainee/${traineeId}`,
+
+  apiQCTraineeNote: (traineeId: Number, week: Number) =>
+    environment.context + `/qc/note/trainee/${traineeId}/for/${week}`,
+
+  apiTraineeNote: (traineeId: Number, week: Number) =>
+    environment.context + `/trainer/note/trainee/${traineeId}/for/${week}`,
 
   /* Reporting service API endpoints */
   apiBatchComparisonAvgEndpoint: (skill: string, training: string, startDate) =>

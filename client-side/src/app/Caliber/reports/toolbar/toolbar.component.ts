@@ -12,7 +12,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { TrainerService } from '../../services/trainer.service';
 import { Trainer } from '../../entities/Trainer';
-import { forEach } from '@angular/router/src/utils/collection';
 import { GranularityService } from '../services/granularity.service';
 import { Trainee } from '../../entities/Trainee';
 
@@ -61,7 +60,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           this.createBatchWeeks();
           this.createTrainees();
           this.pushToGranularityService();
-          console.log(this.granularityService.currentBatch$);
         }
       });
 
@@ -81,10 +79,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     createYearList(): void {
       // create Set
       this.yearList = new Set();
-
-      // Add current year and next year
-      // this.yearList.add(new Date().getFullYear().toString());
-      // this.yearList.add((new Date().getFullYear() + 1).toString());
 
       // Add all batch years to Set. It will not allow duplicates
       for (const date of this.batchList) {
@@ -152,19 +146,23 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.getBatchesByYear();
       this.createBatchWeeks();
       this.createTrainees();
+      this.pushToGranularityService();
     }
 
     weekOnChange() {
       // week on change logic
+      this.pushToGranularityService();
     }
 
     batchOnChange() {
       this.createBatchWeeks();
       this.createTrainees();
+      this.pushToGranularityService();
     }
 
     traineeOnChange() {
       // trainee on change logic
+      this.pushToGranularityService();
     }
     /********************************
      * END On Change Events
@@ -211,9 +209,20 @@ export class ToolbarComponent implements OnInit, OnDestroy {
      * Pushes all current selected information to granularity service.
      */
     pushToGranularityService() {
-      this.granularityService.pushBatch(this.getBatchById(Number(this.batchSelect)));
-      this.granularityService.pushTrainee(this.getTraineeById(Number(this.traineeSelect.value)));
-      this.granularityService.pushWeek(this.getWeek());
+      console.log('batch: ' + this.batchSelect.value + ', trainee: ' + this.traineeSelect.value + ', week: ' + this.getWeek());
+
+      // Check if initial selections are empty
+      if (this.batchesBasedOnYearList.length === 0) {
+        const trainee = new Trainee();
+        trainee.traineeId = 0;
+        this.granularityService.pushBatch(this.latestBatch);
+        this.granularityService.pushTrainee(this.traineeSelect.value);
+        this.granularityService.pushWeek(this.getWeek());
+      } else { // else add current selections
+        this.granularityService.pushBatch(this.getBatchById(Number(this.batchSelect.value)));
+        this.granularityService.pushTrainee(this.getTraineeById(Number(this.traineeSelect.value)));
+        this.granularityService.pushWeek(this.getWeek());
+      }
     }
 
     /**
@@ -266,38 +275,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     /********************************
      * END other functions
      ********************************/
-
-    public debug(): void {
-      // console.log(this.batchList[0].startDate.toString().substr(0, 4));
-      // console.log(this.yearSelect.value);
-      console.log(this.yearSelect.value);
-      console.log(this.batchSelect.value);
-      console.log(this.weekSelect.value);
-      console.log(this.traineeSelect.value);
-    }
-
-    /*
-    public cleanBatchList(): void {
-      for (let i = 0; i < this.batchList.length; i++) {
-        if (this.batchList[i].startDate.toString().substr(0, 4) === this.batchList[i + 1].startDate.toString().substr(0, 4)) {
-          this.batchList.splice(i + 1, 1);
-        }
-      }
-      return this.batchList;
-    }
-
-    public traineeFilter(trainee: Trainee) {
-      this.granService.pushTrainee(trainee);
-    }
-
-    public batchFilter(batch: Batch) {
-      this.granService.pushBatch(batch);
-    }
-
-    public weekFilter(week: number) {
-      this.granService.pushWeek(week);
-    }
-    */
 
     ngOnDestroy() {
       this.batchSubscription.unsubscribe();

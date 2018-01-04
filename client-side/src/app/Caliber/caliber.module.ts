@@ -46,7 +46,8 @@ import { PanelComponent } from './panel/panel.component';
 import { OverallFeedbackComponent } from './reports/overall-feedback/overall-feedback.component';
 
 import { GraphDataPipe } from './pipes/graph-data.pipe';
-import { ToolbarFilterPipe } from './pipes/toolbar-filter.pipe';
+import { OrderByPipe } from './pipes/order-by.pipe';
+import { FilterByPipe } from './pipes/filter-by.pipe';
 
 import { VpBarGraphComponent } from './home/vp-bar-graph/vp-bar-graph.component';
 import { VpLineGraphComponent } from './home/vp-line-graph/vp-line-graph.component';
@@ -70,7 +71,10 @@ import { GraphComponent } from './reports/graph/graph.component';
 import { TableComponent } from './reports/table/table.component';
 import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-trainees/panel-batch-all-trainees.component';
 import { BatchOverallLineChartComponent } from './reports/batch-overall-line-chart/batch-overall-line-chart.component';
+import { PanelFeedbackComponent } from './reports/panel-feedback/panel-feedback.component';
 import { AssessmentBreakdownComponent } from './reports/assessment-breakdown/assessment-breakdown.component';
+import { WeeklyFeedbackComponent } from './reports/weekly-feedback/weekly-feedback.component';
+import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.component';
 
 @NgModule({
   imports: [
@@ -84,6 +88,12 @@ import { AssessmentBreakdownComponent } from './reports/assessment-breakdown/ass
     ReactiveFormsModule,
   ],
   declarations: [
+    // pipes
+    TraineeSearchPipePipe,
+    GraphDataPipe,
+    OrderByPipe,
+    FilterByPipe,
+
     // components
     CaliberComponent,
     HomeComponent,
@@ -115,17 +125,11 @@ import { AssessmentBreakdownComponent } from './reports/assessment-breakdown/ass
     TrainerProfileComponent,
     PanelComponent,
     OverallFeedbackComponent,
-
-    // pipes
-    TraineeSearchPipePipe,
-    GraphDataPipe,
     PanelBatchAllTraineesComponent,
-    ToolbarFilterPipe,
-  ],
-  exports: [
-    TraineeTechSkillsComponent,
     BatchOverallLineChartComponent,
     AssessmentBreakdownComponent,
+    WeeklyFeedbackComponent,
+    WeeklyGradesComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests

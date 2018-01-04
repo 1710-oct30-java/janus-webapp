@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container" *ngIf="dataShown">
   <header class="panel-heading">Weekly Progress</header>
   <div class="panel-body">
-    <canvas *ngIf="data" baseChart
-          [datasets]="data"
-          [labels]="labels"
+    <canvas  baseChart
+          [datasets]="dataShown"
+          [labels]="labelsShown"
           [colors]="lineChartColors"
           [legend]="lineChartLegend"
           [options]="options"
@@ -12,7 +12,7 @@
   <div class="table-responsive">
     <table *ngIf="data" class="table ng-scope table-responsive" style="border-collapse: collapse">
       <tbody class="row">
-        <tr class="col-sm-6 col-md-6 col-lg-6 ng-scope" *ngFor="let datum of data[0].data; let i = index">
+        <tr class="col-sm-6 col-md-6 col-lg-6 ng-scope" *ngFor="let datum of dataShown[0].data; let i = index">
           <th class="pull-left">Week {{i+1}}</th>
           <td class="pull-right">{{datum | number:'2.2-2'}}%</td>
         </tr>
