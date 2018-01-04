@@ -83,8 +83,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.yearList = new Set();
 
       // Add current year and next year
-      this.yearList.add(new Date().getFullYear().toString());
-      this.yearList.add((new Date().getFullYear() + 1).toString());
+      // this.yearList.add(new Date().getFullYear().toString());
+      // this.yearList.add((new Date().getFullYear() + 1).toString());
 
       // Add all batch years to Set. It will not allow duplicates
       for (const date of this.batchList) {

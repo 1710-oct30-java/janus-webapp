@@ -6,7 +6,7 @@
       </ng-container>
     </select>
 
-    <span class="paddingRight"></span>
+    <!-- <span class="paddingRight"></span> -->
 
     <!-- <span *ngIf="batchesBasedOnYear.length > 0"> -->
     <span>
@@ -22,7 +22,7 @@
         </ng-container>
       </select>
     
-      <span class="paddingRight"></span>
+      <!-- <span class="paddingRight"></span> -->
   
       <select class="button" id="week" (change)="weekOnChange()">
         <ng-container class="container" *ngFor="let week of batchWeeksList; let i = index;">
@@ -30,7 +30,7 @@
         </ng-container>
       </select>
     
-      <span class="paddingRight"></span>
+      <!-- <span class="paddingRight"></span> -->
   
       <select class="button" id="trainee" (change)="traineeOnChange()">
         <option [value]="0">Trainee (All)</option>
@@ -69,5 +69,4 @@
       </form>
     </span>
   </div>
-  <hr>
 </div>

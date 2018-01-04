@@ -1,13 +1,27 @@
 .button {
-    background-color: rgb(255, 255, 255); /* Green */
+    height: 30px;
+    background-color: transparent;
     border: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-right: 10px;
     color: #F26925;
-    margin-top: 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
     font-weight: bold;
+}
+
+.col {
+    margin-bottom: 0px;
+}
+
+hr {
+    padding: 0px;
+    border-width: 0px;
+    margin-bottom: 0em;
+    margin-top: 0em;
 }
 
 select {
@@ -17,3 +31,56 @@ select {
 .paddingRight {
     padding-right: 25px;
 }
+
+option {
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    padding: 12px 16px;
+}
+
+select option:hover {
+    background-color: grey;
+}
+
+.button:hover,
+.button:focus {
+    color: #2a69a0;
+    background-color: #f3f3f1;
+    transition: all 500ms linear;
+    transition-delay: 0.25s;
+    -webkit-transition-delay: 0.25s;
+}
+
+/* .button:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.bg-primary {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.button.bg-primary:hover,
+.button.bg-primary:focus {
+    background-color: #286090;
+}
+
+.bg-success {
+    background-color: #dff0d8;
+}
+
+.button.bg-success:hover,
+.button.bg-success:focus {
+    background-color: #c1e2b3;
+}
+
+.bg-info {
+    background-color: #d9edf7;
+}
+
+.button.bg-info:hover,
+.button.bg-info:focus {
+  background-color: #afd9ee;
+} */
