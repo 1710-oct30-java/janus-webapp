@@ -77,8 +77,6 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
                 this.labels = incomingLabels;
             }
           }
-        } else {
-          console.log('Failed to load assessment data');
         }
       });
 
@@ -94,13 +92,15 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
 
   tryFetch() {
     // Check that all objects are present
-    if (this.batchId && this.week !== null && this.traineeId) {
+    if (this.batchId && this.week !== null && this.traineeId !== undefined) {
       if (this.week === 0) {
         // If week is 0, fetch data for all weeks
         this.reportsService.fetchBatchOverallTraineeBarChart(this.batchId, this.traineeId);
-      } else {
+      } else if (this.traineeId > 0) {
         // Else fetch data for the specific week
         this.reportsService.fetchBatchWeekTraineeBarChart(this.batchId, this.week, this.traineeId);
+      } else {
+        this.reportsService.fetchBatchWeekAvgBarChart(this.batchId, this.week);
       }
     }
   }
