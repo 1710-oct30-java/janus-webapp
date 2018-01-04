@@ -1,6 +1,6 @@
 <div class="container">
   <div class="col">
-    <select class="button" id="startDate" (change)="yearOnChange()">
+    <select class="button" id="startDate" (change)="yearOnChange()" (click)="createBatchWeeks(); createTrainees();">
       <ng-container class="container" *ngFor="let year of yearList">
         <option [ngValue]="year" [selected]="loadYears(year)">{{ year }}</option>
       </ng-container>
@@ -8,30 +8,66 @@
 
     <span class="paddingRight"></span>
 
-    <select class="button" id="batch">
-      <ng-container class="container" *ngFor="let batch of batchList">
-        <option [value]="batch.batchId">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
-      </ng-container>
-    </select>
+    <!-- <span *ngIf="batchesBasedOnYear.length > 0"> -->
+    <span>
+      <select class="button" id="batch" (change)="batchOnChange()">
+        <ng-container class="container" *ngIf="latestBatch !== null && batchesBasedOnYearList.length === 0">
+          <option [value]="latestBatch.batchId">{{ latestBatch.trainer.name }} - {{ latestBatch.startDate }}</option>
+        </ng-container>
+        
+        <ng-container class="container" *ngIf="batchesBasedOnYearList.length > 0">
+          <ng-container class="container" *ngFor="let batch of getBatchesByYear()">
+            <option [value]="batch.batchId">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
+          </ng-container>
+        </ng-container>
+      </select>
+    
+      <span class="paddingRight"></span>
+  
+      <select class="button" id="week" (change)="weekOnChange()">
+        <ng-container class="container" *ngFor="let week of batchWeeksList; let i = index;">
+          <option [value]="i">{{ week }}</option>
+        </ng-container>
+      </select>
+    
+      <span class="paddingRight"></span>
+  
+      <select class="button" id="trainee" (change)="traineeOnChange()">
+        <option [value]="0">Trainee (All)</option>
+        <ng-container class="container" *ngFor="let trainee of traineesList">
+          <option [value]="trainee.traineeId">{{ trainee.name }}</option>
+        </ng-container>
+      </select>
+        
+        <!-- <button (click)="debug()">Debug</button> -->
 
-    <span class="paddingRight"></span>
+      <form class="pull-right">
+        <input ng-model="chosenTrainee" list="traineeList" type="search" id="searchTextBox" placeholder="Search..." class="search"
+              autocomplete="off">
 
-    <select class="button" id="week" (change)="weekOnChange()">
-      <option [value]="all">Week (All)</option>
-      <ng-container class="container" *ngFor="let week of weekList">
-        <option [value]="week" [selected]="loadWeeks(week)">Week {{ week }}</option>
-      </ng-container>
-    </select>
+        <button type="submit" class="searchButton"><i class="fa fa-search"></i></button>
 
-    <span class="paddingRight"></span>
+        <datalist id="traineeList">
+          <ng-container class="container" *ngFor="let trainee of traineesList">
+            <option [value]="trainee.name" class="ng-binding ng-scope">{{ trainee.name }} | {{ trainee.email }} | {{ trainee.skypeId }}</option>
+          </ng-container>
+        </datalist>
 
-    <select class="button" id="trainee" (change)="traineeOnChange()">
-      <ng-container class="container" *ngFor="let trainee of traineeList">
-        <option [value]="trainee">{{ trainee }}</option>
-      </ng-container>
-    </select>
-
-      <button (click)="debug()">Debug</button>
-    </div>
+        <span class="dropdown" ngbDropdown placement="bottom-right">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" ngbDropdownToggle>
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+              <li>
+                <a ng-click="downloadAllChartButton()"> Charts </a>
+              </li>
+              <li>
+                <a ng-click="generatePDF()"> Charts + Feedback </a>
+              </li>
+          </div>
+        </span>
+      </form>
+    </span>
+  </div>
   <hr>
 </div>
