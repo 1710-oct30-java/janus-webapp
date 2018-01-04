@@ -102,7 +102,7 @@ export abstract class AbstractApiService<T> {
    */
   protected doGetOneObservable(apiUrl: string, params: any = {}): Observable<T> {
     const url = this.envService.buildUrl(apiUrl, params);
-
+    console.log('making request to server from abstract api service to url: ' + url);
     return this.http.get<T>(url);
   }
 

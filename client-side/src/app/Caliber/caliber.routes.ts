@@ -15,11 +15,8 @@ import { QualityComponent } from './quality/quality.component';
 import { PanelComponent } from './panel/panel.component';
 import { TestComponent } from './components/test/test.component';
 import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
-<<<<<<< HEAD
 import { TrainerProfile2Component } from './trainer--profile/trainer--profile.component';
 import { TempJohnComponent } from './tempjohn/tempjohn.component';
-=======
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
 
 export const routes: Routes = [
   {
@@ -55,16 +52,12 @@ export const routes: Routes = [
         component: TrainerProfileComponent,
       },
       {
-<<<<<<< HEAD
         path: 'trainer-dev',
         component: TrainerProfile2Component,
       },
       {
         path: 'tempjohn',
         component: TempJohnComponent,
-=======
-        path: 'panel',
-        component: PanelComponent
       },
       {
         path: 'settings',
@@ -83,7 +76,6 @@ export const routes: Routes = [
             component: TrainersComponent
           }
         ]
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
       },
       {
         path: '**',

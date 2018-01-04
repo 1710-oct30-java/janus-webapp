@@ -28,6 +28,7 @@ import { CategoryService } from './services/category.service';
 // pipes
 import { TraineeSearchPipePipe } from './pipes/trainee-search-pipe.pipe';
 import { GradeByTraineeByAssessmentPipe } from './pipes/grade-by-trainee-by-assessment.pipe';
+// import { BatchByTrainerPipe } from './pipes/batch-by-trainer.pipe';
 
 // components
 import { CaliberComponent } from './caliber.component';
@@ -43,15 +44,13 @@ import { HttpClient } from '@angular/common/http';
 import { ToolbarComponent } from './reports/toolbar/toolbar.component';
 import { TestComponent } from './components/test/test.component';
 import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
-<<<<<<< HEAD
 import { TempJohnComponent } from './tempjohn/tempjohn.component';
 import { PanelComponent} from './panel/panel.component';
 import { AuthenticationService } from './services/authentication.service';
 import { TrainerProfile2Component } from './trainer--profile/trainer--profile.component';
-=======
-import { PanelComponent } from './panel/panel.component';
 
 import { GraphDataPipe } from './pipes/graph-data.pipe';
+import { BatchByTrainerPipe } from './pipes/trainerbatch.pipe';
 
 import { VpBarGraphComponent } from './home/vp-bar-graph/vp-bar-graph.component';
 import { VpLineGraphComponent } from './home/vp-line-graph/vp-line-graph.component';
@@ -75,7 +74,6 @@ import { GraphComponent } from './reports/graph/graph.component';
 import { TableComponent } from './reports/table/table.component';
 import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-trainees/panel-batch-all-trainees.component';
 
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
 
 
 @NgModule({
@@ -117,21 +115,16 @@ import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-traine
     TableComponent,
     TestComponent,
     TrainerProfileComponent,
-<<<<<<< HEAD
     TrainerProfile2Component,
     TempJohnComponent,
-=======
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
     PanelComponent,
 
     // pipes
     TraineeSearchPipePipe,
-<<<<<<< HEAD
-=======
     GraphDataPipe,
     PanelBatchAllTraineesComponent,
     GradeByTraineeByAssessmentPipe,
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
+    BatchByTrainerPipe,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests
@@ -144,10 +137,8 @@ import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-traine
     PanelService,
     RouteService,
     GradeService,
-<<<<<<< HEAD
     AuthenticationService,
 
-=======
     HttpClient,
     NoteService,
     VpHomeLineGraphService,
@@ -160,7 +151,6 @@ import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-traine
   ],
   bootstrap: [
     TrainersComponent
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
   ],
   exports: [
     TraineeTechSkillsComponent,

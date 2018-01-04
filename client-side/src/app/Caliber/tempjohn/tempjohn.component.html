@@ -1,15 +1,21 @@
-Trainers: 
+Trainers:
 <div>
     <table class='table table-striped'>
         <th>name</th>
         <th>email</th>
         <th>title</th>
         <th>tier</th>
+        <th></th>
         <tr *ngFor='let trainer of trainers'>
             <td>{{trainer.name}}</td>
             <td>{{trainer.email}}</td>
             <td>{{trainer.title}}</td>
             <td>{{trainer.tier}}</td>
+            <td>
+                <button type="submit" class="btn btn-outline-dark" (click)="goToProfile(trainer)">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </button>
+            </td>
         </tr>
     </table>
 </div>

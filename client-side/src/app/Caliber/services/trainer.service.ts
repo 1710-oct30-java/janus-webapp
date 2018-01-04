@@ -28,6 +28,12 @@ export class TrainerService extends AbstractApiService<Trainer> {
   private tiersSubject = new BehaviorSubject<string[]>([]);
 
   /**
+  * added to get current trainer for trainer profile page
+  */
+  private trainerSource = new BehaviorSubject<Trainer>(null);
+  currentTrainer = this.trainerSource.asObservable();
+
+  /**
   * @deprecated
   * -> retained for backwards compatibility
   */
@@ -42,25 +48,14 @@ export class TrainerService extends AbstractApiService<Trainer> {
   }
 
   /**
-<<<<<<< HEAD
-   * returns a behavior observable of the current
-   * trainer list
-   *
-   * @return Observable<Trainer[]>
-   */
-  public getList(): Observable<Trainer[]> {
-    return this.listSubject.asObservable();
+  *
+  * sets current trainer
+  */
+  public changeCurrentTrainer(trainer: Trainer) {
+    this.trainerSource.next(trainer);
   }
 
   /**
-   * returns a publication observable of the last
-   * saved trainer object
-   *
-   * @return Observable<Trainer>
-   */
-  public getSaved(): Observable<Trainer> {
-    return this.savedSubject.asObservable();
-=======
   *
   * fetches the data of the service initially and
   * bootstraps default responsive behavior with subscriptons
@@ -88,7 +83,6 @@ export class TrainerService extends AbstractApiService<Trainer> {
   */
   public getTitleList(): Observable<string[]> {
     return this.titlesSubject.asObservable();
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
   }
 
   /**
@@ -129,28 +123,6 @@ export class TrainerService extends AbstractApiService<Trainer> {
   public fetchAll(): void {
     const url = 'all/trainer/all';
 
-<<<<<<< HEAD
-    this.http.get<Trainer[]>(url).subscribe((trainers) => {
-      this.listSubject.next(trainers);
-    });
-  }
-
-  /**
-  * creates a trainer and pushes the created trainer on the
-  * savedSubject
-  *
-  * spring-security: @PreAuthorize("hasAnyRole('VP')")
-  *
-  * @param trainer: Trainer
-  */
-  public create(trainer: Trainer): void {
-    const url = this.envService.buildUrl('vp/trainer/create');
-    const data = JSON.stringify(trainer);
-
-    this.http.post<Trainer>(url, data).subscribe((savedTrainer) => {
-      this.savedSubject.next(savedTrainer);
-    });
-=======
     super.doGetList(url);
   }
 
@@ -166,7 +138,6 @@ export class TrainerService extends AbstractApiService<Trainer> {
     const url = 'vp/trainer/create';
 
     super.doPost(trainer, url);
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
   }
 
   /**
@@ -183,11 +154,6 @@ export class TrainerService extends AbstractApiService<Trainer> {
     super.doPut(trainer, url);
   }
 
-<<<<<<< HEAD
-    this.http.post<Trainer>(url, data).subscribe((updatedTrainer) => {
-      this.savedSubject.next(updatedTrainer);
-    });
-=======
   /**
   * the DELETE method on the API actually updates
   * the Trainer passed as inactive
@@ -289,7 +255,6 @@ export class TrainerService extends AbstractApiService<Trainer> {
   */
   public deleteTrainer(trainer: Trainer) {
     this.delete(trainer);
->>>>>>> 5930e64f545115c7bc07f149ce764dfa4a942b9e
   }
 
 }
