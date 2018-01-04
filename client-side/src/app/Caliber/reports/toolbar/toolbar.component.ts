@@ -58,6 +58,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       });
 
       this.yearSelect = document.getElementById('startDate');
+      this.batchSelect = document.getElementById('batch');
       this.weekSelect = document.getElementById('week');
       this.traineeSelect = document.getElementById('trainee');
     }
@@ -115,14 +116,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     createWeekList(): void {
       // create Set
       this.weekList = new Set();
-      this.batchSelect = document.getElementById('trainer');
 
       // Add current week and further weeks
         for (let i = 0; i < this.batchList.length; i++) {
           console.log('entered for');
           console.log(this.batchSelect.value);
           console.log(this.batchList[i].batchId.toString());
-          if (2201 === this.batchList[i].batchId) {
+          if (this.batchList[i].batchId === 2201) {
             console.log('entered if');
             for (let j = 1; j <= this.batchList[i].weeks; j++) {
               this.weekList.add(j);
@@ -155,12 +155,14 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         // Add trainees to a list from the current batch
           for (let i = 0; i < this.batchList.length; i++) {
             console.log('entered for');
-            console.log(this.batchSelect);
+            console.log(this.batchSelect.value);
             console.log(this.batchList[i].batchId.toString());
             if (2201 === this.batchList[i].batchId) {
               console.log('entered if');
               for (let j = 0; j <= this.batchList[i].trainees.length; j++) {
-                this.traineeList.add(this.batchList[i].trainees[j].name);
+                if (this.batchList[i].trainees[j].name && this.batchList[i].trainees[j].name !== undefined) {
+                  this.traineeList.add(this.batchList[i].trainees[j].name);
+                }
               }
           }
         }

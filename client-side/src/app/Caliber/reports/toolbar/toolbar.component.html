@@ -8,7 +8,7 @@
 
     <span class="paddingRight"></span>
 
-    <select class="button" id="trainer">
+    <select class="button" id="batch">
       <ng-container class="container" *ngFor="let batch of batchList">
         <option [value]="batch.batchId">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
       </ng-container>
