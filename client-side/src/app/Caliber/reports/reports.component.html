@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row reports-row">
         <div class="col-md-12">
-            <app-weekly-line-chart></app-weekly-line-chart>
+            <app-weekly-line-chart *ngIf="traineeId === null"></app-weekly-line-chart>
             <app-assessment-breakdown></app-assessment-breakdown>
         </div>
     </div>

@@ -161,6 +161,7 @@ export class GranularityService {
 
     this.currentBatch.next(testBatch);
 
+    // const testTrainee: Trainee = null;
     const testTrainee: Trainee = {
       'traineeId': 5530, 'resourceId': null, 'name': 'Ali, Fareed', 'email': 'fareed.ali37@qmail.cuny.edu',
       'trainingStatus': 'Employed', 'phoneNumber': '347-526-5184', 'skypeId': 'live:bassph',
