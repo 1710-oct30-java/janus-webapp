@@ -71,6 +71,7 @@ import { GraphComponent } from './reports/graph/graph.component';
 import { TableComponent } from './reports/table/table.component';
 import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-trainees/panel-batch-all-trainees.component';
 import { BatchByTrainerPipe } from './pipes/trainerbatch.pipe';
+import { TempComponent } from './tempjohn/temp.component';
 
 
 
@@ -115,6 +116,7 @@ import { BatchByTrainerPipe } from './pipes/trainerbatch.pipe';
     TestComponent,
     TrainerProfilesComponent,
     PanelComponent,
+    TempComponent,
 
     // pipes
     TraineeSearchPipePipe,

@@ -15,6 +15,7 @@ import { QualityComponent } from './quality/quality.component';
 import { PanelComponent } from './panel/panel.component';
 import { TestComponent } from './components/test/test.component';
 import { TrainerProfilesComponent } from './settings/trainer-profile/trainer-profile.component';
+import { TempComponent } from './tempjohn/temp.component';
 
 export const routes: Routes = [
   {
@@ -48,6 +49,10 @@ export const routes: Routes = [
       {
         path: 'panel',
         component: PanelComponent
+      },
+      {
+        path: 'tempjohn',
+        component: TempComponent
       },
       {
         path: 'settings',
