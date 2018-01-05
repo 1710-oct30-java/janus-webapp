@@ -6,6 +6,7 @@
 export const environment = {
   production: false,
   context: 'http://localhost:8080/',
+  // context: 'http://ec2-18-216-169-252.us-east-2.compute.amazonaws.com:8080/',
   bootContext: 'http://localhost/',
 
   // API calls for the VP functionality group

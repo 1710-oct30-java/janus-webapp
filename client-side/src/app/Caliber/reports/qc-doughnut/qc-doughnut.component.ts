@@ -31,6 +31,7 @@ export class QcDoughnutComponent implements OnInit {
 
     this.batchSubscription = this.granularityService.currentBatch$.subscribe((batch) => {
       this.batchId = batch.batchId;
+      this.dataSetLabels = [batch.trainingName];
       this.reportsService.fetchQcStatusDoughnutChart(batch.batchId);
 
     });
