@@ -216,7 +216,10 @@
                                 <td>{{trainee.techScreenerName}}</td>
                                 <td>{{trainee.projectCompletion}}</td>
                                 <td><i class="fa fa-times" style="color:#ff8e4d ;" aria-hidden="true" (click)="deleteTraineeFunction(trainee)"></i></td>
-                            </tr>      
+                                <td>
+                                    <i class="fa fa-pencil" style="color:#ff8e4d;" (click)="editTrainee(editTraineeModal, trainee)"></i>
+                                </td>
+                              </tr>      
                           </tbody>
                         </table>
                       </div>
@@ -507,3 +510,86 @@
         <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="createNewTraineeFunction()">Add Trainee</button>
       </div>
     </ng-template>
+
+
+
+<!-- 
+**************************************************************************************************************
+   Modal for updating the trainees in a batch 
+**************************************************************************************************************
+ -->
+ <ng-template #editTraineeModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Edit Trainee</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #editTrainee="ngForm" [formGroup]="rForm">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- Field for Trainee name -->
+              <label class="col-sm-2 control-label text-nowrap" for="name">Trainee Name:</label>
+              <input type="text" class="form-control" id="name" name="name" formControlName="name" placeholder="Trainee Name" />
+            </div>
+            <div class="col-md-6">
+                <!-- Field for Trainee name -->
+                <label class="col-sm-2 control-label text-nowrap" for="email">Trainee Email:</label>
+                <input type="text" class="form-control" id="email" name="email" formControlName="email" placeholder="Email" />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="trainingStatus">Training Status:</label>
+              <input type="text" class="form-control" formControlName="trainingStatus" id="trainingStatus" name="trainingStatus" placeholder="Training Status"/>
+            </div>
+            <div class="col-md-6">
+                <label class="col-sm-2 control-label text-nowrap" for="phoneNumber">Phone Number:</label>
+                <input type="text" class="form-control" formControlName="phoneNumber" id="phoneNumber" name="phoneNumber" placeholder="Phone Number"/>
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="skypeId">Skype Id:</label>
+              <input type="text" class="form-control" id="skypeId" name="skypeId" formControlName="skypeId" placeholder="Skype Id" />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="profileUrl">Profile URL:</label>
+              <input type="text" class="form-control" id="profileUrl" name="profileUrl" formControlName="profileUrl" placeholder="Profile URL"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="recruiterName">Recruiter Name:</label>
+              <input type="text" class="form-control" id="recruiterName" name="recruiterName" formControlName="recruiterName" placeholder="Recruiter Name"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="college">College:</label>
+              <input type="text" class="form-control" id="college" name="college" formControlName="college" placeholder="College" />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="degree">Degree:</label>
+              <input type="text" class="form-control" id="degree" name="degree" formControlName="degree" placeholder="Degree" />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="major">Major:</label>
+              <input type="text" class="form-control" id="major" name="major" formControlName="major" placeholder="Major" />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="techScreenerName">Tech Screener:</label>
+              <input type="text" class="form-control" id="techScreenerName" name="techScreenerName" formControlName="techScreenerName"
+                placeholder="Tech Screener" />
+            </div>
+            <div class="col-md-6">
+              <label class="col-sm-2 control-label text-nowrap" for="projectCompletion">Project Completion:</label>
+              <input type="text" class="form-control" id="projectCompletion" name="projectCompletion" formControlName="projectCompletion"
+                placeholder="Project Completion" />
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" data-dismiss="modal" class="btn btn-update" [disabled]="!rForm.valid" (click)="updateTrainee(editTrainee.value); c('Close click')">Update</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c()">Close</button>
+    </div>
+  </ng-template>

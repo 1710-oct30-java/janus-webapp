@@ -16,6 +16,8 @@ import { SkillService } from '../services/skill.service';
 import { Address } from '../entities/Address';
 import { TraineeService } from '../services/trainee.service';
 import { Trainee } from '../entities/Trainee';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 // import { exists } from 'fs';
 
 @Component({
@@ -42,7 +44,7 @@ export class ManageComponent implements OnInit, OnDestroy {
   trainingTypes: string[] = [];
   skills: string[] = [];
   createNewTrainee: Trainee = new Trainee;
-  
+
   /* Subscriptions */
   batchSub: Subscription;
   trainerSub: Subscription;
@@ -50,10 +52,18 @@ export class ManageComponent implements OnInit, OnDestroy {
   trainingTypeSub: Subscription;
   skillSub: Subscription;
 
+    /**
+  * create variables for subscribing and trainees
+  * and storing form data
+  */
+  currEditTrainee: Trainee;
+  newTrainee: Trainee;
+  rForm: FormGroup;
+
   constructor(private batchService: BatchService, private trainerService: TrainerService,
     private locationService: LocationService, private trainingTypeService: TrainingTypeService,
     private skillService: SkillService, private traineeService: TraineeService,
-    private modalService: NgbModal, private datePipe: DatePipe) {
+    private modalService: NgbModal, private datePipe: DatePipe, private fb: FormBuilder) {
    }
 
 
@@ -289,6 +299,59 @@ export class ManageComponent implements OnInit, OnDestroy {
   updateYear(year) {
     this.currentYear = year;
   }
+
+
+
+
+  /*************************************************
+   * Adding Modal for editing Trainee
+   * ***********************************************
+   */
+    /**
+  * Open modal and get Trainee that belong to this modal
+  * Backup these fields before the edit
+  *
+  * @param editTraineeModal: String
+  * @param modalTrainee: Trainer
+  */
+  editTrainee(content, modalTrainee: Trainee) {
+    this.currEditTrainee = modalTrainee;
+    this.rForm = this.fb.group({
+      'name': [this.currEditTrainee.name, Validators.required],
+      'email': [this.currEditTrainee.email, Validators.required],
+      'trainingStatus': [this.currEditTrainee.trainingStatus],
+      'phoneNumber': [this.currEditTrainee.phoneNumber],
+      'skypeId': [this.currEditTrainee.skypeId],
+      'profileUrl': [this.currEditTrainee.profileUrl],
+      'recruiterName': [this.currEditTrainee.recruiterName],
+      'college': [this.currEditTrainee.college],
+      'degree': [this.currEditTrainee.degree],
+      'major': [this.currEditTrainee.major],
+      'techScreenerName': [this.currEditTrainee.techScreenerName],
+      'projectCompletion': [this.currEditTrainee.projectCompletion],
+    });
+    this.modalService.open(content, { size: 'lg' });
+  }
+  updateTrainee(modal) {
+    // problem with updating a trainee because in the backend their is a not null constraint on 
+    // replacing the trainee's fields with the submitted modal's ones
+    this.currEditTrainee.name = modal.name;
+    this.currEditTrainee.email = modal.email;
+    this.currEditTrainee.trainingStatus = modal.trainingStatus;
+    this.currEditTrainee.phoneNumber = modal.phoneNumber;
+    this.currEditTrainee.skypeId = modal.skypeId;
+    this.currEditTrainee.profileUrl = modal.profileUrl;
+    this.currEditTrainee.recruiterName = modal.recruiterName;
+    this.currEditTrainee.college = modal.college;
+    this.currEditTrainee.degree = modal.degree;
+    this.currEditTrainee.major = modal.major;
+    this.currEditTrainee.techScreenerName = modal.techScreenerName;
+    this.currEditTrainee.projectCompletion = modal.projectCompletion;
+    // call traineeService to update
+    console.log('request to update trainee with new info: ' + JSON.stringify(this.currEditTrainee));
+    this.traineeService.update(this.currEditTrainee);
+  }
+}
 
 
 }
