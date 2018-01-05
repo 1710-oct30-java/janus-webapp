@@ -78,6 +78,9 @@ export class CreatelocationComponent implements OnInit {
     this.currNewLocation.zipcode = modal.zipcode;
     this.currNewLocation.active = true;
     this.locationService.addLocation(this.currNewLocation);
+    this.locationService.getSaved().subscribe((succ) => {
+      this.locationService.fetchAll();
+    });
   }
 
   /**

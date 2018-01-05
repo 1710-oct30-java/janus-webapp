@@ -3,6 +3,18 @@
   <div class="row">
     <div class="col-md-12 col-lg-12 tab-panes">
       <br>
+      <ul class="nav nav-tabs">
+        <li (click) = "buttonChange('ACTIVE')">
+          <button type="button" class="btn btn-secondary">
+            <strong>Active</strong>
+          </button>
+        </li>
+        <li (click) = "buttonChange('INACTIVE')">
+          <button type="button" class="btn btn-secondary">
+            <strong>Inactive</strong>
+          </button>
+        </li>
+      </ul>
       <ul class="nav nav-tabs justify-content-end">
         <li (click)="open(addTrainerContent)">
           <button type="button" class="btn btn-secondary">
@@ -28,7 +40,7 @@ add or edit a trainer-->
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let trainer of trainers">
+      <tr *ngFor="let trainer of (trainers | trainerPipe:this.activeStatus)">
         <td>
           {{trainer.name}}
         </td>
@@ -95,7 +107,7 @@ add or edit a trainer-->
               <!-- Dropdown for Trainer tier/role -->
               <label class="col-sm-2 control-label text-nowrap" for="tier">Tier</label>
               <select class="form-control"  formControlName="tier" (ngModelChange)="tierChange($event)" name="tier">
-                <option [value]="tier" *ngFor="let tier of tiers">{{tier | slice:5}}</option>
+                <option [value]="tier" *ngFor="let tier of tiers">{{tier | displayTier}}</option>
               </select>
 
             </div>
@@ -160,7 +172,7 @@ add or edit a trainer-->
               <label class="col-sm-2 control-label text-nowrap" for="tier">Tier</label>
               <div class="col-sm-12">
                 <select class="form-control" formControlName="tier" (ngModelChange)="newTierChange($event)" name="tier">
-                  <option [value]="tier" *ngFor="let tier of tiers">{{tier}}</option>
+                  <option [value]="tier" *ngFor="let tier of tiers">{{tier | displayTier}}</option>
                 </select>
               </div>
             </div>

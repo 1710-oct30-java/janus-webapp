@@ -1,24 +1,24 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 // rxjs
-import { BehaviorSubject } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 // services
-import { environment } from '../../../environments/environment';
-import { AlertsService } from './alerts.service';
 import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 // entities
-import { Location } from '../../entities/Location';
+import { Location } from '../entities/Location';
+
 
 /**
-* this service manages calls to the web services
-* for Location objects
-*/
+ * this service is used to make API calls
+ * to for the location component
+ *
+ */
 @Injectable()
 export class LocationService extends AbstractApiService<Location> {
 
@@ -33,11 +33,11 @@ export class LocationService extends AbstractApiService<Location> {
   * you can also use the getList() method directly going forward
   */
   locations$: Observable<any> = super.getList();
-  alertService: AlertsService;
 
   constructor( envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService ) {
-    super(envService, httpClient);
-    this.alertService = alertService;
+    super(envService, httpClient, alertService);
+
+    this.initializeSubscriptions();
   }
 
   /**
@@ -72,8 +72,12 @@ export class LocationService extends AbstractApiService<Location> {
   */
   public fetchAll(): void {
     const url = 'all/location/all/';
+    const messages = {
+      success: 'Got all locations successfully!',
+      error: 'Failed to get all locations!',
+    };
 
-    super.doGetList(url);
+    super.doGetList(url, {}, messages);
   }
 
   /**
@@ -87,8 +91,12 @@ export class LocationService extends AbstractApiService<Location> {
   */
   public save(location: Location): void {
     const url = 'vp/location/create';
+    const messages = {
+      success: 'Location saved successfully!',
+      error: 'Location failed to save!',
+    };
 
-    super.doPost(location, url);
+    super.doPost(location, url, {}, messages);
   }
 
   /**
@@ -102,8 +110,12 @@ export class LocationService extends AbstractApiService<Location> {
   */
   public update(location: Location): void {
     const url = 'vp/location/update';
+    const messages = {
+      success: 'Location saved successfully!',
+      error: 'Location failed to save!',
+    };
 
-    super.doPut(location, url);
+    super.doPut(location, url, {}, messages);
   }
 
   /**
@@ -124,11 +136,43 @@ export class LocationService extends AbstractApiService<Location> {
   * @param location: Location
   */
   public delete(location: Location): void {
+    const url = 'vp/location/update';
+    const messages = {
+      success: 'Location deactivated successfully!',
+      error: 'Location failed to deactivate!',
+    };
+
     location.active = false;
 
-    this.update(location);
+    super.doPut(location, url, {}, messages);
 
     // @see savedSubscription in constructor for deletedSubject implementation
+  }
+
+  /**
+  * transmits a Location to be reactivated
+  * to the API and pushes the reactivated
+  * location on the updatedSubject
+  *
+  * NOTE: there is no literal DELETE on the API
+  *       it simply updates the object requiring the
+  *       client to know to set the active flag to false
+  *       in advance
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP')")
+  *
+  * @param location: Location
+  */
+  public reactivate(location: Location) {
+    const url = 'vp/location/update';
+    const messages = {
+      success: 'Location reactivated successfully!',
+      error: 'Location failed to reactivate!',
+    };
+
+    location.active = true;
+
+    super.doPut(location, url, {}, messages);
   }
 
   /*
@@ -144,7 +188,7 @@ export class LocationService extends AbstractApiService<Location> {
   *
   * @see fetchAll()
   *
-  * convience function for the fetchAll() method
+  * convenience function for the fetchAll() method
   * retained to honor the initial design pattern
   * for components that may be dependent on it
   *
@@ -162,7 +206,7 @@ export class LocationService extends AbstractApiService<Location> {
   *
   * @see save();
   *
-  * convience function for the save() method
+  * convenience function for the save() method
   * retained to honor the initial design path
   */
   public addLocation(location: Location): void {
@@ -174,7 +218,7 @@ export class LocationService extends AbstractApiService<Location> {
   *
   * @see update()
   *
-  * convience function for the update() method
+  * convenience function for the update() method
   * retained to honor the initial design path
   */
   public updateLocation(location: Location): void {
@@ -182,32 +226,26 @@ export class LocationService extends AbstractApiService<Location> {
   }
 
   /**
+   * @deprecated
+   *
+   * @see reactivate()
+   *
+   * @param location
+   */
+  public reactivateLocation(location: Location) {
+    this.reactivate(location);
+  }
+
+  /**
   * @deprecated
   *
   * @see delete()
   *
-  * convience function for the delete() method
+  * convenience function for the delete() method
   * retained to honor the initial design path
   */
   public deleteLocation(location: Location) {
     this.delete(location);
-  }
-
-  reactivateLocation(location: Location) {
-    location.active = true;
-    this.http.request('put', environment.reactivateLocation,
-      {
-        withCredentials: true,
-        body: location
-      })
-      .subscribe(
-      resp => {
-        this.alertService.success('Location reactivated successfully!');
-      },
-      err => {
-        this.alertService.error('Location failed to reactivate!');
-      }
-      );
   }
 
 }

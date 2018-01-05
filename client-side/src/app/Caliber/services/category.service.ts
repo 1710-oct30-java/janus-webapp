@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 // services
 import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 // entities
 import { Category } from '../entities/Category';
@@ -20,8 +21,8 @@ import { Category } from '../entities/Category';
 @Injectable()
 export class CategoryService extends AbstractApiService<Category> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient) {
-    super(envService, httpClient);
+  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
+    super(envService, httpClient, alertService);
   }
 
  /*
@@ -38,8 +39,12 @@ export class CategoryService extends AbstractApiService<Category> {
  */
  public fetchAll(): void {
    const url = 'vp/category';
+   const messages = {
+      success: 'Categories retrieved successfully',
+      error: 'Category retrieval failed',
+   };
 
-   super.doGetList(url);
+   super.doGetList(url, {}, messages);
  }
 
  /**
@@ -49,9 +54,13 @@ export class CategoryService extends AbstractApiService<Category> {
  *
  */
  public fetchAllActive(): void {
-   const url = 'category/all';
+   const url = 'category/all'; const messages = {
+     success: 'ACTIVE Categories retrieved successfully',
+     error: 'ACTIVE Category retrieval failed',
+   };
 
-   super.doGetList(url);
+
+   super.doGetList(url, {}, messages);
  }
 
   /**
@@ -79,8 +88,12 @@ export class CategoryService extends AbstractApiService<Category> {
   */
   public save(category: Category): void {
     const url = 'vp/category';
+    const messages = {
+      success: 'Category saved successfully',
+      error: 'Category save failed',
+    };
 
-    super.doPost(category, url);
+    super.doPost(category, url, {}, messages);
   }
 
   /**
@@ -93,8 +106,12 @@ export class CategoryService extends AbstractApiService<Category> {
    */
   public update(category: Category): void {
     const url = 'vp/category/update';
+    const messages = {
+      success: 'Categories updated successfully',
+      error: 'Category updated failed',
+    };
 
-    super.doPut(category, url);
+    super.doPut(category, url, {}, messages);
   }
 
 }

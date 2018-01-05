@@ -1,11 +1,11 @@
 .card {
-    padding-top: 20px;
-    margin: 10px 0 20px 0;
-    border-top-width: 0;
-    border-bottom-width: 2px;
+    padding-top: 30px;
+    margin: 20px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-    border-radius: 3px;
+    border-radius: 5px;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -15,7 +15,7 @@
 }
 .card.hovercard {
     position: relative;
-    padding-top: 0;
+    padding-top: 10px;
     overflow: hidden;
     text-align: center;
 }

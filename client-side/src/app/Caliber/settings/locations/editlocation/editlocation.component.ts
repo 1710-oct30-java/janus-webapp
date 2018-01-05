@@ -81,7 +81,7 @@ export class EditlocationComponent implements OnInit {
   /**
    * save all new fields into the location objet
    * send the update request
-   * @param modal: fields from the modal 
+   * @param modal: fields from the modal
    */
   updateLocation(modal) {
     this.currEditLocation.state = this.newState;
@@ -89,6 +89,7 @@ export class EditlocationComponent implements OnInit {
     this.currEditLocation.city = modal.city;
     this.currEditLocation.street = modal.street;
     this.currEditLocation.zipcode = modal.zipcode;
+    this.popTemp();
     this.locationService.updateLocation(this.currEditLocation);
   }
 

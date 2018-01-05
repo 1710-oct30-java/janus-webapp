@@ -5,6 +5,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { Trainer } from '../../../entities/Trainer';
 import { TrainerService } from '../../../services/trainer.service';
 
+
 @Component({
     selector: 'app-deactivatetrainer',
     templateUrl: './deactivatetrainer.component.html',
@@ -29,5 +30,6 @@ export class DeactivateTrainerComponent implements OnInit {
     deactivateTrainer() {
         this.ts.deleteTrainer(this.trainer);
         this.trainer.tier = 'ROLE_INACTIVE';
+        this.ts.fetchAll();
     }
 }

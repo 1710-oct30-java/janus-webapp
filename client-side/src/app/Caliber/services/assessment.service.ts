@@ -3,13 +3,18 @@ import { HttpClient } from '@angular/common/http';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/operator/delay';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 // entities
 import { Assessment } from '../entities/Assessment';
+
 
 
 /**
@@ -19,8 +24,8 @@ import { Assessment } from '../entities/Assessment';
 @Injectable()
 export class AssessmentService extends AbstractApiService<Assessment> {
 
-  constructor(eService: EnvironmentService, httpClient: HttpClient) {
-    super(eService, httpClient);
+  constructor(eService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
+    super(eService, httpClient, alertService);
   }
 
    /*
@@ -62,14 +67,55 @@ export class AssessmentService extends AbstractApiService<Assessment> {
  * creates an assessment and pushes the created assessement on
  * the savedSubject
  *
+ * NOTE: the createAssessment on the AssessmentController does NOT
+ * return the created assessment object with the generated ID so
+ * this is going to fake it and not make a lot of sense as a result
+ *
  * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER')")
  *
  * @param assessment: Assessment
  */
   public save(assessment: Assessment): void {
-    const url = 'trainer/assessment/create';
+    const url = this.envService.buildUrl('trainer/assessment/create');
+    const fetchUrl = `trainer/assessment/${assessment.batch.batchId}/${assessment.week}`;
+    const body = JSON.stringify(assessment);
 
-    super.doPost(assessment, url);
+    this.http.post(url, body, { responseType: 'text'} ).subscribe( () => {
+      this.fetchByBatchIdByWeek(assessment.batch.batchId, assessment.week);
+
+      super.doGetListObservable(fetchUrl).subscribe( (list) => {
+        // console.log(assessment);
+        // console.log(list);
+        const matches = list.filter( (value) => {
+          switch (true) {
+            case ( value.title !== assessment.title ) :
+            case ( value.rawScore !== assessment.rawScore ) :
+            case ( value.type !== assessment.type ) :
+            case ( value.category.categoryId !== assessment.category.categoryId ) :
+              return false;
+            default:
+              return true;
+          }
+        });
+
+        /*
+        * reverse sort with the highest id value on top
+        */
+        matches.sort( (a, b) => {
+          switch (true) {
+            case ( a.assessmentId > b.assessmentId ):
+              return -1;
+            case ( a.assessmentId < b.assessmentId ):
+              return 1;
+            default:
+              return 0;
+          }
+        });
+
+        this.savedSubject.next(matches[0]);
+        this.listSubject.next(list);
+      });
+    });
   }
 
   /**
@@ -82,8 +128,12 @@ export class AssessmentService extends AbstractApiService<Assessment> {
    */
   public update(assessment: Assessment): void {
     const url = 'trainer/assessment/update';
+    const messages = {
+      success: 'Assessment updated successfully',
+      error: 'Assessment failed to update',
+    };
 
-    super.doPut(assessment, url);
+    super.doPut(assessment, url, {}, messages);
   }
 
   /**
@@ -96,11 +146,12 @@ export class AssessmentService extends AbstractApiService<Assessment> {
    */
   public delete(assessment: Assessment): void {
     const url = `trainer/assessment/delete/${assessment.assessmentId}`;
+    const messages = {
+      success: 'Assessment deleted successfully',
+      error: 'Assessment failed to delete',
+    };
 
-    super.doDelete(assessment, url);
+    super.doDelete(assessment, url, {}, messages);
   }
-
-
-
 
 }

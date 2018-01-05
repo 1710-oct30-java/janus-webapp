@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Input } from '@angular/core/';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { LocationService } from '../../../services/location.service';
-import { Location } from '../../../../entities/Location';
+import { Location } from '../../../entities/Location';
 
 @Component({
     selector: 'app-reactivatelocation',

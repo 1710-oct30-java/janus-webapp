@@ -1,5 +1,3 @@
-import { Component } from '@angular/core';
-
 export class Trainer {
     public static ROLE_INACTIVE = 'ROLE_INACTIVE';
 

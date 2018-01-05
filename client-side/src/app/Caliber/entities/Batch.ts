@@ -7,7 +7,7 @@ export class Batch {
     resourceId: number;
     trainingName: string;
     trainer: Trainer;
-    conTrainer: Trainer;
+    coTrainer: Trainer;
     skillType: string;
     trainingType: string;
     startDate: Date;

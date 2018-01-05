@@ -39,7 +39,6 @@ export class CategoriesComponent implements OnInit {
   // Loads all categories
   ngOnInit() {
     this.initFormControl();
-    // console.log(this.columns);
     this.categoriesService.fetchAll();
     this.categorySubscription = this.categoriesService.categories$.subscribe((resp) => {
       this.categories = resp;
@@ -61,6 +60,9 @@ export class CategoriesComponent implements OnInit {
     this.newCategory.skillCategory = value.name;
     this.newCategory.active = true;
     this.categoriesService.addNewCategory(this.newCategory);
+    this.categoriesService.getSaved().subscribe((succ) => {
+      this.categoriesService.fetchAll();
+    });
   }
 
   // Change active status of category

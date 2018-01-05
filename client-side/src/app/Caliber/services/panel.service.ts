@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 // services
 import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 // entities
 import { Trainee } from '../entities/Trainee';
@@ -16,8 +17,8 @@ import { Panel } from '../entities/Panel';
 @Injectable()
 export class PanelService extends AbstractApiService<Panel> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient) {
-    super(envService, httpClient);
+  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
+    super(envService, httpClient, alertService);
   }
 
   /*
@@ -33,8 +34,12 @@ export class PanelService extends AbstractApiService<Panel> {
   */
   public fetchAll(): void {
     const url = 'panel/all';
+    const messages = {
+      success: 'Panels retrieved successfully',
+      error: 'Panel retrieval failed',
+    };
 
-    super.doGetList(url);
+    super.doGetList(url, {}, messages);
   }
 
   /**
@@ -47,8 +52,12 @@ export class PanelService extends AbstractApiService<Panel> {
    */
   public fetchAllByTrainee(trainee: Trainee): void {
     const url = `panel/trainee/${trainee.traineeId}`;
+    const messages = {
+      success: 'Panels retrieved successfully',
+      error: 'Panel retrieval failed',
+    };
 
-    super.doGetList(url);
+    super.doGetList(url, {}, messages);
   }
 
   /**
@@ -60,9 +69,25 @@ export class PanelService extends AbstractApiService<Panel> {
   * @param panel: Panel
   */
   public create(panel: Panel): void {
-    const url = 'panel/create';
+    this.save(panel);
+  }
 
-    super.doPost(panel, url);
+  /**
+  * creates a panel and pushes the created panel on the
+  * savedSubject
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP' , 'PANEL')")
+  *
+  * @param panel: Panel
+  */
+  public save(panel: Panel): void {
+    const url = 'panel/create';
+    const messages = {
+      success: 'Panels saved successfully',
+      error: 'Panel save failed',
+    };
+
+    super.doPost(panel, url, {}, messages);
   }
 
   /**
@@ -75,8 +100,12 @@ export class PanelService extends AbstractApiService<Panel> {
   */
   public update(panel: Panel): void {
     const url = 'panel/update';
+    const messages = {
+      success: 'Panels updated successfully',
+      error: 'Panel udpated failed',
+    };
 
-    super.doPut(panel, url);
+    super.doPut(panel, url, {}, messages);
   }
 
   /**
@@ -89,8 +118,12 @@ export class PanelService extends AbstractApiService<Panel> {
   */
   public delete(panel: Panel): void {
     const url = `panel/delete/${panel.panelId}`;
+    const messages = {
+      success: 'Panels deleted successfully',
+      error: 'Panel deletion failed',
+    };
 
-    super.doDelete(panel, url);
+    super.doDelete(panel, url, {}, messages);
   }
 
 }
