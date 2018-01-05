@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { GranularityService } from '../services/granularity.service';
 
 /**
- * This component display the weekly line chart. It also has a download
- * button that allows to save the graph as a PDF.
+ * This component displays the weekly line chart. It also has a download
+ * button that allows saving the graph as a PDF.
  * @author Edel Benavides
+ * @author Robert Choboy
  */
 
 @Component({
@@ -30,8 +31,8 @@ export class WeeklyLineChartComponent implements OnInit {
   private dataSubscription: Subscription;
 
   constructor(private reportsService: ReportingService,
-              private pdfService: PDFService,
-              private granularityService: GranularityService) { }
+    private pdfService: PDFService,
+    private granularityService: GranularityService) { }
 
   // Chart labels - for other charts the labels would have to be dynamic
   public dataSetLabels: string[] = ['Batch Scores', 'Benchmark'];
@@ -72,18 +73,18 @@ export class WeeklyLineChartComponent implements OnInit {
 
   }
 
-    /**
-   * Creates chart with Benchmark and Batch Scores.
-   * @param data
-   */
+  /**
+ * Creates chart with Benchmark and Batch Scores.
+ * @param data
+ */
   public createChartData(data): void {
     this.chartData =
-    [
-     {
-        benchmark: this.calculateScoreAverage()
-     },
-       data
-    ];
+      [
+        {
+          benchmark: this.calculateScoreAverage()
+        },
+        data
+      ];
   }
 
   /**
