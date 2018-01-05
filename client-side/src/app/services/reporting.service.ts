@@ -30,7 +30,7 @@ export class ReportingService {
   public batchOverallRadar$ = this.batchOverallRadar.asObservable();
 
   private qcStatusDoughnut = new BehaviorSubject<CacheData>(null);
-  public qcStatusDoughnut$ = this.batchOverallRadar.asObservable();
+  public qcStatusDoughnut$ = this.qcStatusDoughnut.asObservable();
   // Bar chart used for the Cumulative Scores Graph
   private batchOverallBar = new BehaviorSubject<CacheData>(null);
   public batchOverallBar$ = this.batchOverallBar.asObservable();
@@ -113,7 +113,6 @@ export class ReportingService {
     const params = {
       batchId: batchId
     };
-
     // call backend API if data is not fresh
     if (this.needsRefresh(this.qcStatusDoughnut, params)) {
       this.httpClient.get(endpoint).subscribe(
@@ -159,7 +158,7 @@ export class ReportingService {
 
   fetchBatchWeekSortedBarChart(batchId: Number, week: Number) {
     const endpoint = environment.apiBatchWeekSortedBarChart(batchId, week);
-    
+
     const params = {
       batchId: batchId,
       week: week
@@ -417,7 +416,7 @@ export class ReportingService {
       this.httpClient.get(endpoint).subscribe(
         success => {
           // console.log(success);
-          this.panelBatchAllTrainees.next({params: params, data: success});
+          this.panelBatchAllTrainees.next({ params: params, data: success });
         });
     }
   }

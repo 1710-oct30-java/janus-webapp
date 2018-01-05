@@ -70,3 +70,5 @@ Servers/
 
 # stashed files
 /stash
+client-side/src/app/Caliber/caliber.component.html
+client-side/src/app/Caliber/caliber.component.html

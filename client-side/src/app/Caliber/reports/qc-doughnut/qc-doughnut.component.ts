@@ -4,10 +4,11 @@ import { environment } from '../../../../environments/environment';
 import { Http } from '@angular/http';
 import { PDFService } from '../../../services/pdf.service';
 import { ReportingService } from '../../../services/reporting.service';
+import { Subscription } from 'rxjs/Subscription';
+import { GranularityService } from '../services/granularity.service';
 
 /**
- * This component displays the QC statuses of a given batch as a doughnut chart.
- * @author Chris Worcester
+ * Displays the QC statuses of a given batch as a doughnut chart.
 */
 
 @Component({
@@ -17,23 +18,49 @@ import { ReportingService } from '../../../services/reporting.service';
 })
 export class QcDoughnutComponent implements OnInit {
 
-  constructor() { }
-
-  public doughnutChartLabels: string[] = ['Superstar', 'Good', 'Average', 'Poor'];
-  public doughnutChartData: number[] = [1, 11, 6, 2];
-  public doughnutChartType = 'doughnut';
+  public batchId = 0;
+  public dataSetLabels: string[] = ['batch'];
+  public chartData: number[];
+  public chartType = 'doughnut';
+  private dataSubscription: Subscription;
+  private batchSubscription: Subscription;
+  constructor(private reportsService: ReportingService, private pdfService: PDFService,
+    private granularityService: GranularityService) { }
 
   ngOnInit() {
+
+    this.batchSubscription = this.granularityService.currentBatch$.subscribe((batch) => {
+      this.batchId = batch.batchId;
+      this.reportsService.fetchQcStatusDoughnutChart(batch.batchId);
+
+    });
+
+    this.dataSubscription = this.reportsService.qcStatusDoughnut$.subscribe((result) => {
+      console.log('debug');
+      if (result) {
+        console.log(result.data);
+        this.chartData = [result.data];
+      }
+    });
   }
 
-  // events
-  public chartClicked(e: any): void {
-    console.log(e);
+  /**
+   * Sets current batch ID and returns it.
+   * Access current batch from granularity to retrieve batch ID.
+   */
+  getBatchId(): number {
+    this.granularityService.currentBatch$.subscribe(response => {
+      if (response) {
+        this.batchId = response.batchId;
+      }
+    });
+    return this.batchId;
   }
 
-  public chartHovered(e: any): void {
-    console.log(e);
+  /**
+   * Downloads weekly chart as a PDF file.
+   */
+  public downloadPDF(): void {
+    this.pdfService.downloadPDF('chart');
   }
-
 }
-
