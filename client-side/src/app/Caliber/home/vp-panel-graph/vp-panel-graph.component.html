@@ -1,0 +1,29 @@
+<div class="row" *ngIf="hasPanelGraphData">
+  <div class="col-sm-12 col-md-12 col-lg-12" *ngIf="hasPanelGraphData">
+    <div class="panel panel-default">
+
+      <div class="panel-heading">Panel Progress</div>
+      <div class="panel-body">
+        <div class="chart-container top5">
+          <canvas baseChart class="chart chart-line" [datasets]="panelChartData.data" [labels]="panelChartData.labels" [colors]="panelChartData.colors"
+            [options]="panelChartData.options" [chartType]="panelChartData.type">
+          </canvas>
+        </div>
+        <div class = "table-responsive">
+        <table  class="table" style="border-collapse: collapse;">
+          <tbody>
+            <tr>
+              <th class="col-sm-1 col-md-1 col-lg-1"></th>
+              <th class="col-sm-1 col-md-1 col-lg-1" *ngFor="let label of panelChartData.labels">{{label}}</th>
+            </tr>
+            <tr *ngFor="let data of panelChartData.data; let j = index">
+              <th class="col-sm-1 col-md-1 col-lg-1">{{data.label}}</th>
+              <td class="col-sm-1 col-md-1 col-lg-1" *ngFor="let dataPoint of data.data">{{dataPoint}}</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

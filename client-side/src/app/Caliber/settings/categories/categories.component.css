@@ -1,0 +1,73 @@
+
+/* New CSS */
+.table-hover:hover {
+    background: rgba(242, 105, 37, 0.3)
+}
+.pointer {cursor: pointer;}
+
+.col {
+	padding-right: 8%;
+}
+@media only screen and (max-width: 600px) {
+    /* For mobile phones: */
+    .col{
+		padding: 1%;
+        width: 100%;
+    }
+}
+/* End New CSS */
+
+
+a {
+	color: rgb(242, 105, 37);
+}
+
+.btn-primary, .fa .fa-file-code-o {
+	color: white !important;
+	border-color: white !important;
+	background-color: rgb(242, 105, 37) !important;
+	background-image: none;
+}
+
+
+.fa-check{
+	color: #81f575;
+}
+.fa-minus{
+	color: rgb(252,221,115);
+}
+.btn-update {
+    background-color: #ff8e4d;
+    color: white;
+}
+
+.btn-add {
+    background-color: #ff8e4d;
+    color: white;
+}
+
+.fa-pencil {
+    cursor: pointer;
+}
+
+.col-sm-2 {
+    padding-top: 10px;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #fa7427;
+	border-bottom: 1px solid #ebe8e8;
+	border-color: white;
+}
+.btn-secondary:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    color: #10009c;
+    transition: 1s;
+}
+
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }

@@ -1,0 +1,24 @@
+.btn-update {
+    background-color: #fa7427;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #fa7427;
+    border-bottom: 1px solid #ebe8e8;
+    border-color: white;
+    padding: 10px;
+}
+.btn-secondary:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    color: #10009c;
+    transition: 1s;
+}
+
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+

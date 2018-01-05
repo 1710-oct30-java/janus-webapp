@@ -1,0 +1,111 @@
+<app-alerts></app-alerts>
+<!-- Create Assessment Categories and Edit assessment Categories including making it active or inactive -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 tab-panes">
+            <br>
+            <ul class="nav nav-tabs justify-content-end">
+                <li id="addButton" role="button" (click)="open(addCategory)">
+                    <button type="button" class="btn btn-secondary pointer">
+                        <strong>Create Category
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </strong>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br>
+<!-- Display all assessment categories -->
+<div class="container centered" id="trainer-assess-table" *ngIf="categories[0]">
+    <div class="row">
+        <!-- Col Start -->
+        <div class="col top5" *ngFor='let column of columns;let c=index;'>
+            <!-- Accordian table -->
+            <table class="table table-responsive" style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th class='text-right'>Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Load all categories -->
+                    <tr *ngFor="let category of categories; let i=index;" class='table-hover'>
+                        <td *ngIf='nextColumn(c,i)' (click)='editopen(editCategory,category);' class='pointer'>
+                            {{category.skillCategory}}
+                        </td>
+                        <!-- Display active condition -->
+                        <td class='text-center' *ngIf='!category.active && nextColumn(c,i)'>
+                            <span style="color: #ff7575" class="fa fa-times fa-2x" aria-hidden="true"></span>
+                        </td>
+                        <td class='text-center' *ngIf='category.active && nextColumn(c,i)'>
+                            <span style="color: #81f575" class="fa fa-check fa-2x" aria-hidden="true"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- End row -->
+    </div>
+</div>
+
+<!-- Add category modal -->
+<ng-template #addCategory let-c="close" let-d="dismiss">
+    <form #myForm="ngForm" [formGroup]="addForm">
+        <div class="modal-header">
+            <h4 class="modal-title">Add Category</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="categoryName">Category:</label>
+                    <input formControlName= "name" name="category" type="text" class="form-control" id="categoryName" placeholder="Category"
+                        required/>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="addNewCategory(myForm.value); c();" type="button" [disabled]="!myForm.valid" class="btn btn-primary" data-dismiss="modal">Submit</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c()">Close</button>
+        </div>
+    </form>
+</ng-template>
+
+<!-- Edit category modal -->
+<ng-template #editCategory let-c="close" let-d="dismiss">
+    <form #myForm="ngForm" class="form-control">
+        <div class="modal-header">
+            <h4 class="modal-title">Edit Category</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true" class='fa fa-times-circle-o'></span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group col-md-6 col-sm-6">
+                    <label for="categoryName">Category:</label>
+                    <input  name="skillCategory" type="text" class="form-control" #name='ngModel' [ngModel]="currentCategory.skillCategory" id="editCategory"
+                        placeholder="Category" required>
+                </div>
+            </div>
+            <div class="form-group col-sm-1 col-md-1">
+                <label for="categoryName">Active:</label>
+                <br />
+                <input type="checkbox" name='active' style="text-align: left" [ngModel]="currentCategory.active" 
+                (ngModelChange)="activeChange($event)" *ngIf="currentCategory.active===true"
+                [checked]="true"/>
+                <input type="checkbox" name='active' style="text-align: left" [ngModel]="currentCategory.active"
+                (ngModelChange)="activeChange($event)" *ngIf="currentCategory.active===false"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="editCurrentCategory(myForm); c()" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        </div>
+    </form>
+</ng-template>

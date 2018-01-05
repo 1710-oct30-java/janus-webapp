@@ -1,0 +1,12 @@
+.btn-update {
+    background-color: #fa7427;
+    color: white;
+}
+
+.fa-pencil {
+    cursor: pointer;
+}
+
+.col-sm-2 {
+    padding-top: 10px;
+}

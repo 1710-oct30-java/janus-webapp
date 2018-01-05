@@ -1,0 +1,55 @@
+<div class="row" *ngIf="hasBarChartData">
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-default">
+
+      <div class="panel-heading"> Last Quality Audit
+
+        <select class="pull-right" [(ngModel)]="selectedBarCity" *ngIf="selectedState" (ngModelChange)="hasCity($event)">
+          <option value="">All Cities</option>
+          <option *ngFor="let city of cities" [ngValue]="city">{{city}}</option>
+        </select>
+
+        <select class="pull-right" [(ngModel)]="selectedBarState" (ngModelChange)="findCities($event)">
+          <option value="">All States</option>
+          <option *ngFor="let state of states" [ngValue]="state">{{state}}</option>
+        </select>
+
+      </div>
+      <div class="panel-body">
+        <div class="chart-container top5">
+
+          <canvas baseChart 
+          class="chart chart-bar" 
+          [datasets]="barChartData.data" 
+          [labels]="barChartData.labels"
+          [colors]="barChartData.colors" 
+          [options]="barChartData.options" 
+          [chartType]="barChartData.type" 
+          (chartClick)="onClick($event)">
+          </canvas> 
+
+        </div>
+        <div class = "table-responsive">
+          <table class="table" style="border-collapse: collapse;" *ngIf = "hasBatchStatuses">
+            <tbody>
+              <tr>
+                <th class="col-sm-2 col-md-2 col-lg-2"></th>
+                <th class="col-sm-2 col-md-2 col-lg-2" *ngFor="let data of barChartData.data">{{data.label}}</th>
+                <th class="col-sm-2 col-md-2 col-lg-2">Overall Batch Status</th>
+              </tr>
+              <tr *ngFor="let label of barChartData.labels; let j = index;">
+                <th class="col-sm-2 col-md-2 col-lg-2">{{label}}</th>
+                <td class="col-sm-2 col-md-2 col-lg-2" *ngFor="let dataPoint of barChartData.data">{{dataPoint.data[j]}}</td>
+                <td class="overall-batch-health" [ngClass]="{'color-red': overallBatchStatusArray[j] === 'Poor',
+                'color-yellow': overallBatchStatusArray[j] === 'Average',
+                'color-green': overallBatchStatusArray[j] === 'Good'}">
+                {{overallBatchStatusArray[j]}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

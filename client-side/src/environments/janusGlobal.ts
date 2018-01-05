@@ -1,4 +1,4 @@
-import { App } from '../app/entities/app';
+import { App } from '../app/entities/App';
 
 
 export const janusGlobal = {
@@ -6,17 +6,20 @@ export const janusGlobal = {
     {
       name: 'Assign Force',
       homeUrl: '/AssignForce/home',
-      baseUrl: '/AssignForce'
+      baseUrl: '/AssignForce',
+      imgUrl: '/'
     },
     {
       name: 'Caliber',
       homeUrl: '/Caliber/home',
-      baseUrl: '/Caliber'
+      baseUrl: '/Caliber',
+      imgUrl: '../../assets/caliber.png'
     },
     {
       name: 'Track Force',
       homeUrl: '/TrackForce/home',
-      baseUrl: '/TrackForce'
+      baseUrl: '/TrackForce',
+      imgUrl: '/'
     }
   ]
 };

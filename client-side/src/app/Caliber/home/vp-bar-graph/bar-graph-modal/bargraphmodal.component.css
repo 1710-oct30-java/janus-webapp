@@ -1,0 +1,91 @@
+element.style {
+    display: block;
+}
+
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.fade.in {
+    opacity: 1;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    outline: 0;
+}
+
+.modal-lg {
+    width: 60%;
+}
+
+.modal-dialog {
+    position: relative;
+    margin: 10px;
+    max-width: 600px;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+
+.modal-header {
+    background-color: #f1f2f4;
+    border-radius: 6px;
+}
+
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+
+button.close {
+    -webkit-appearance: none;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+}
+
+.close {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+
+.h4, h4 {
+    font-size: 18px;
+}
+
+.modal-body {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.modal-body {
+    position: relative;
+    padding: 15px;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}

@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'Futura-Std-Book';
+    src: url('../../../assets/fonts/Futura-Std-Book.otf') format ('opentype');
+}
+
+h1, p {
+    font-family: 'Futura-Std-Book';
+    
+}
+
+h1 {
+    margin-top: 20px;
+	margin-bottom:10px;
+	font-size: 36px;
+}
+p {
+    font-size: 14px;
+}
+
+@media ( max-width : 400px) {
+	.chart-container {
+		min-height: 8.8em;
+	}
+	.container {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+}
+
+@media ( min-width : 401px) and (max-width: 600px) {
+	.chart-container {
+		min-height: 11.8em;
+	}
+}
+
+@media ( min-width : 601px) {
+	.chart-container {
+		min-height: 25.8em;
+	}
+}

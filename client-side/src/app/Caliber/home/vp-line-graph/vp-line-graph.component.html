@@ -1,0 +1,44 @@
+<div class="row" *ngIf="hasData">
+
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-default">
+
+      <div class="panel-heading"> Weekly Progress
+
+        <select class="pull-right" [(ngModel)]="selectedLineCity" *ngIf="selectedState" (ngModelChange) = "hasCity($event)">
+          <option value="">All Cities</option>
+          <option *ngFor = "let city of cities" [ngValue] = "city">{{city}}</option>
+        </select>
+
+        <select class="pull-right" [(ngModel)]="selectedLineState" (ngModelChange) ="findCities($event)">
+          <option value = "" [selected] = "true">All States</option>
+          <option  *ngFor = "let state of states" [ngValue] = "state">{{state}}</option>
+        </select>
+
+      </div>
+      <div class="panel-body">
+        <div class="chart-container top5">
+          <canvas baseChart
+           class="chart chart-line"
+            *ngIf="hasData" [datasets]="lineChartData.data" [options]="lineChartData.options" [labels]="lineChartData.labels"
+            [colors]="lineChartData.colors" [chartType]="lineChartData.type">
+          </canvas>
+        </div>
+        <div class = "table-responsive">
+          <table class="table" style="border-collapse: collapse;">
+            <tbody>
+              <tr>
+                <th class="col-sm-1 col-md-1 col-lg-1" scope = "col"></th>
+                <th class="col-sm-1 col-md-1 col-lg-1" *ngFor="let label of lineChartData.labels" scope = "col">{{label}}</th>
+              </tr>
+              <tr *ngFor="let data of lineChartData.data;  let j = index">
+                <th class="col-sm-1 col-md-1 col-lg-1" scope = "row">{{data.label}}</th>
+                <td class="col-sm-1 col-md-1 col-lg-1" *ngFor="let dataPoint of data.data">{{dataPoint}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

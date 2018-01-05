@@ -1,8 +1,27 @@
-<p>
-  caliber home works!
-</p>
+<div id="home">
+  <!-- Welcome new trainer -->
+  <div class="container">
+    <br>
+    <h1>Welcome to Caliber!</h1>
+    <div>
+      <p>
+        To get started, please visit the
+        <a href="https://github.com/pjw6193/caliber/wiki#user-guide">user guide</a>
+        for an introduction and orientation.
+      </p>
+    </div>
+    <br />
+  </div>
+  <!-- Charts -->
+  <div class="container">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <app-vp-bar-graph></app-vp-bar-graph>
+        <app-vp-line-graph></app-vp-line-graph>
+        <app-vp-panel-graph></app-vp-panel-graph>
 
-{{joke.value.joke}}
-<button class="btn btn-primary" (click)="newJoke()">New Joke</button>
 
-<app-weekly-line-chart></app-weekly-line-chart>
+    </div>
+  </div>
+  <!-- Quality Audit view modal -->
+  <div ui-view="qc-quality-audit"></div>
+</div>

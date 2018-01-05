@@ -1,0 +1,52 @@
+<div class="table-responsive ">
+    <table *ngIf="typeCheck() === 0" class="table" style="border-collapse: collapse;">
+        <tr class="col-sm-6 col-md-6 col-lg-6">
+            <th class="pull-left"></th>
+            <th *ngFor="let set of tableData" class="pull-right">{{set.label}}</th>
+        </tr>
+        <tr class="col-sm-6 col-md-6 col-lg-6 " *ngFor="let label of tableLabels;let i = index">
+            <th class="pull-left">{{tableLabels[i]}}</th>
+            <td *ngFor="let set of tableData" class="pull-right">{{set.data[i]  | number : '1.2-2'}}</td>
+        </tr>
+    </table>
+    <div *ngIf="typeCheck() === 1">
+        <table class="table" style="border-collapse: collapse;">
+            <tr *ngFor="let i of indexSequence(2);">
+                <td class="col-6" *ngFor="let j of  numberSequence(2);">
+                    <span class="row justify-content-between">
+                        <span class="col">
+                            <b>{{tableLabels[i+j]}}</b>
+                        </span>
+                        <span *ngFor="let set of tableData" class="col">{{set.data[i+j] | number : '1.2-2'}}</span>
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <span *ngIf="typeCheck() === 2">
+        <table class="table" style="border-collapse: collapse;">
+            <tr>
+                <th class="pull-left"></th>
+                <th *ngFor="let i of indexSequence(1)" class="pull-left">{{tableLabels[i]}}</th>
+            </tr>
+            <tr *ngFor="let set of tableData; let j = index">
+                <th>{{i}} {{set.label}}</th>
+                <td *ngFor="let i of indexSequence(1)" class="pull-right">{{set.data[i]  | number : '1.2-2'}}</td>
+            </tr>
+        </table>
+    </span>
+</div>
+<div *ngIf="typeCheck() === 3">
+    <table class="table" style="border-collapse: collapse;">
+        <tr *ngFor="let i of indexSequence(3);">
+            <td class="col-4" *ngFor="let j of  numberSequence(3);">
+                <span class="row justify-content-between">
+                    <span class="col">
+                        <b>{{tableLabels[i+j]}}</b>
+                    </span>
+                    <span class="col">{{tableData[1].data[i+j] | number : '1.2-2'}}</span>
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
