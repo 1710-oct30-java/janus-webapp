@@ -1,0 +1,43 @@
+/* Tags */
+
+td {
+    text-align: center;
+}
+
+td, th {
+    border: none;
+    border-top: 1px solid rgb(250, 250, 250);
+}
+
+.row-border {
+    border: none;
+    border-top: 2px solid rgb(221, 221, 221);
+}
+
+thead {
+    font-weight: 800;
+}
+
+table {
+    border: 1px rgb(221, 221, 221) solid;
+    border-top: 0px;
+}
+
+/* Classes */
+
+.feedback-heading {
+    background: rgb(242, 105, 37);
+    color: white;
+    padding: 1vmin;
+    border-top-left-radius: 2vmin;
+    border-top-right-radius: 2vmin;
+}
+
+.feedback-body {
+    border: 1px solid rgb(221, 221, 221);
+    border-top: 0px;
+}
+
+.align-left {
+    text-align: left;
+}

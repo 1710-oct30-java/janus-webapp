@@ -13,10 +13,27 @@ export const environment = {
   getAllCategories: 'http://localhost:8080/vp/category',
   addNewTrainer: 'http://localhost:8080/vp/trainer/create',
   editCurrentCategory: 'http://localhost:8080/vp/category/update',
+  editLocation: 'http://localhost:8080/vp/location/update',
+  deleteLocation: 'http://localhost:8080/vp/location/delete',
+  reactivateLocation: 'http://localhost:8080/vp/location/reactivate',
+  addLocation: 'http://localhost:8080/vp/location/create',
   deleteTrainer: 'http://localhost:8080/vp/trainer/delete',
   getAllTitles: 'http://localhost:8080/vp/trainer/titles/',
   getAllTiers: 'http://localhost:8080/types/trainer/role/all',
   editTrainer: 'http://localhost:8080/vp/trainer/update',
+
+  /* Evaluation Service API endpoints */
+  apiAllQCTraineeOverallNotes: (traineeId: Number) =>
+    environment.context + `qc/note/trainee/${traineeId}`,
+
+  apiAllTraineeNotes: (traineeId: Number) =>
+    environment.context + `all/notes/trainee/${traineeId}`,
+
+  apiQCTraineeNote: (traineeId: Number, week: Number) =>
+    environment.context + `/qc/note/trainee/${traineeId}/for/${week}`,
+
+  apiTraineeNote: (traineeId: Number, week: Number) =>
+    environment.context + `/trainer/note/trainee/${traineeId}/for/${week}`,
 
   /* Reporting service API endpoints */
   apiBatchComparisonAvgEndpoint: (skill: string, training: string, startDate) =>
@@ -74,20 +91,15 @@ export const environment = {
     environment.context + `all/assessments/average/${batchId}/${weekId}`,
 
   apiTechnologiesForTheWeek: (batchId: Number, weekId: Number) =>
-    environment.context + `all/assessments/categories/batch/${batchId}/${weekId}`,
+    environment.context + `all/assessments/categories/batch/${batchId}/week/${weekId}`,
 
   apiPanelBatchAllTrainees: (batchId: Number) =>
     environment.context + `all/reports/batch/${batchId}/panel-batch-all-trainees`,
 
-  /**
-  * @deprecated
-  */
-  getAllLocations: 'http://localhost:8080/all/location/all/',
-  editLocation: 'http://localhost:8080/vp/location/update',
-  deleteLocation: 'http://localhost:8080/vp/location/delete',
-  addLocation: 'http://localhost:8080/vp/location/create',
+  /* Evaluation service API endpoints */
+  apiFetchAllQCTraineeNotes: (batchId: Number, weekId: Number) =>
+    environment.context + `qc/note/trainee/${batchId}/${weekId}`,
 
-  getAllTrainers: 'http://localhost:8080/all/trainer/all',
-
-
+  apiFetchAllQCBatchNotes: (batchId: Number, weekId: Number) =>
+    environment.context + `qc/note/batch/${batchId}/${weekId}`,
 };

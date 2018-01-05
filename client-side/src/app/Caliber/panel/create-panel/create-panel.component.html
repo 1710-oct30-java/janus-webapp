@@ -1,0 +1,32 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Panel Interview Feedback</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-6">
+        <app-interview-details></app-interview-details>
+      </div>
+      <div class="col-6">
+        <app-general-feedback></app-general-feedback>
+      </div>
+    </div>
+    <div class="row top-buffer">
+      <div class="col-12">
+        <app-technical-feedback></app-technical-feedback>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-default" (click)="onSubmit">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" [disabled]="trainee==null" (click)="open(content)">Create Panel</button>
+<hr>

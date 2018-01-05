@@ -1,3 +1,142 @@
-<p>
-  assess works!
-</p>
+<button class="btn btn-lg btn-outline-primary pointer" (click)="open(addAssessmentContent)">Add Assessment</button>
+
+
+<!--ADD WEEK MODAL **START** -->
+  <ng-template #addWeekContent let-c="close" let-d="dismiss" id ="addWeek">
+    <div class="modal-header">
+      <h4 class="modal-title">Add Week</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you wish to create a new week? (This cannot be undone.)</p>
+      <button (click)="this.addWeek(); c('Close click')">Confirm</button>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+<!--ADD WEEK MODAL **END**  -->
+
+<!--ADD ASSESSMENT MODAL **START** -->
+<ng-template #addAssessmentContent let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Assessment</h4>
+          <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                <div class="form-group">
+                        <label>Assessment Category:</label>
+                        <select #cat class="form-control" id="categorySelect" (change)="changeCategory(cat)">
+                          <option *ngFor="let category of this.categories">{{category | categorySkill}}</option>
+                        </select>
+                </div>
+                <div>
+                    <label>Max Points:</label>
+                    <input type="number" class ="form-control" value ="100" [(ngModel)]="newAssessment.rawScore">
+                </div>
+                <div>
+                        <label>Assessment Type:</label>
+                        <select class="form-control" id="typeSelect" [(ngModel)]="newAssessment.type">
+                          <option>Exam</option>
+                          <option>Verbal</option>
+                          <option>Project</option>
+                          <option>Other</option>
+                        </select>
+                </div>
+          <button (click)="this.addAssessment(); c('Close click')">Confirm</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        </div>
+      </ng-template>
+<!--ADD ASSESSMENT MODAL **END**  -->
+
+<!-- EDIT ASSESSMENT MODAL **START** -->
+<ng-template #editAssessmentContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Assessment</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+              <div class="form-group">
+                      <label>Assessment Category:</label>
+                      <select #cat class="form-control" id="categorySelect" (change)="editCategory(cat)" [value]="editingAssessment.category.skillCategory">
+                        <option *ngFor="let category of this.categories">{{category | categorySkill}}</option>
+                      </select>
+              </div>
+              <div>
+                  <label>Max Points:</label>
+                  <input type="number" class ="form-control" value ="100" [(ngModel)]="editingAssessment.rawScore">
+              </div>
+              <div>
+                      <label>Assessment Type:</label>
+                      <select class="form-control" id="typeSelect" [(ngModel)]="editingAssessment.type">
+                        <option>Exam</option>
+                        <option>Verbal</option>
+                        <option>Project</option>
+                        <option>Other</option>
+                      </select>
+              </div>
+      </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-danger clickable" (click)="deleteAssessment(); c('Close click');">Delete</button>
+      <button type="button" class="btn btn-primary revature-button clickable" (click)="updateAssessment(); c('Close click');">Update</button>
+    <button type="button" class="btn btn-outline-dark clickable" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--EDIT ASSESSMENT MODAL **END**  -->
+
+<!-- TABS **START** -->
+<div class = "main-container">
+    <ngb-tabset (tabChange)="fetchNews($event)">
+        <ngb-tab id="{{i+1}}" *ngFor="let in of counter(this.selectedBatch.weeks); let i = index">
+                <ng-template ngbTabTitle>
+                    <div class="revature-orange"><b>Week {{i+1}}</b></div> </ng-template>
+                <ng-template ngbTabContent></ng-template>
+        </ngb-tab>
+        <ngb-tab id="+">
+            <ng-template ngbTabTitle>
+                <div class="revature-orange"><b>+</b></div> </ng-template>
+            <ng-template ngbTabContent></ng-template>
+    </ngb-tab>
+      </ngb-tabset>
+      <button  (click)="open(addWeekContent)">+</button>
+<!-- TABS **END** -->
+
+    <table class="table table-responsive" style="border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>
+            Trainee
+          </th>
+          <th class ="clickable" *ngFor="let assessment of this.assessments" (click)="editAssessment(editAssessmentContent, assessment);">
+            <div class = "assessment-header">{{assessment.category.skillCategory}} {{assessment.type}}</div>
+          </th>
+          <th class = "note">
+            Notes
+          </th>
+        </tr>
+      </thead>
+      <tr *ngFor="let trainee of selectedBatch.trainees">
+        <td>
+          {{trainee.name}}
+        </td>
+        <td *ngFor="let assessment of this.assessments">
+            <input #inputGradeScore class="form-control assessment-area" type="text" [value]="getGrade(trainee, assessment).score"
+            (change)="updateGrade(this.getGrade(trainee, assessment), inputGradeScore)">
+            <div *ngIf="checkGradeLoading(getGrade(trainee, assessment))">loading thing</div>
+        </td>
+        <td>
+            <textarea *ngIf="trainee" class="form-control note" id="exampleTextarea" rows="2" [value]="getNote(trainee)"></textarea>
+        </td>
+      </tr>
+    </table>
+</div>
+
+

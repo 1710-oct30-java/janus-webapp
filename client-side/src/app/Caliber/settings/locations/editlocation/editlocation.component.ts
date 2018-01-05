@@ -14,15 +14,15 @@ export class EditlocationComponent implements OnInit {
 
   @Input()
   currEditLocation: Location;
-  newCompanyName: String;
-  newStreet: String;
-  newCity: String;
-  newZip: String;
-  newState: String;
+  newCompanyName: string;
+  newStreet: string;
+  newCity: string;
+  newZip: string;
+  newState: string;
 
   rForm: FormGroup;
   private modalRef: NgbModalRef;
-  closeResult: String;
+  closeResult: string;
 
   constructor(private modalService: NgbModal,
     private locationService: LocationService,
@@ -34,7 +34,9 @@ export class EditlocationComponent implements OnInit {
     this.initFormControl();
   }
 
-  // create form control with original values
+  /**
+   * Create a form control with pre-populated fields
+   */
   initFormControl() {
     this.rForm = this.fb.group({
       'company': [this.newCompanyName, Validators.required],
@@ -44,7 +46,9 @@ export class EditlocationComponent implements OnInit {
     });
   }
 
-  // populate all temp variables
+  /**
+   * populate all temp variables just in case update was cancelled
+   */
   popTemp() {
     this.newCompanyName = this.currEditLocation.company;
     this.newStreet = this.currEditLocation.street;
@@ -52,7 +56,10 @@ export class EditlocationComponent implements OnInit {
     this.newZip = this.currEditLocation.zipcode;
   }
 
-
+  /**
+   * save the original state before changing, open the modal
+   * @param content: the modal that needed to be opened
+   */
   editLocation(content) {
     this.newState = this.currEditLocation.state;
     this.modalRef = this.modalService.open(content, { size: 'lg' });
@@ -63,17 +70,26 @@ export class EditlocationComponent implements OnInit {
     });
   }
 
-  // When company was changed
+  /**
+   * triggers whenever state field was changed
+   * @param newState: state was changed
+   */
   stateChange(newState) {
     this.newState = newState;
   }
 
+  /**
+   * save all new fields into the location objet
+   * send the update request
+   * @param modal: fields from the modal
+   */
   updateLocation(modal) {
     this.currEditLocation.state = this.newState;
     this.currEditLocation.company = modal.company;
     this.currEditLocation.city = modal.city;
     this.currEditLocation.street = modal.street;
     this.currEditLocation.zipcode = modal.zipcode;
+    this.popTemp();
     this.locationService.updateLocation(this.currEditLocation);
   }
 

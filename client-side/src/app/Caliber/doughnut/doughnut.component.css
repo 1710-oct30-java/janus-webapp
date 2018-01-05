@@ -1,0 +1,30 @@
+.data-box {
+    font-size: 80%;
+    text-align: center;
+    width: 10%;
+}
+.data-head {
+    font-weight: bold; 
+}
+.data-container {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3vmin;
+}
+h2 {
+    text-align: center;
+}
+.chartHead {
+    background: #be5108;
+    box-shadow: 0 1 1 1 lightgray;
+    color: white;
+    padding: 1vmin;
+    border: 1px solid lightgrey;
+}
+
+.chartContainer {
+    padding: 0.5vmin;
+    border: 1px solid lightgrey;
+    border-top: none;
+    background: white;
+}

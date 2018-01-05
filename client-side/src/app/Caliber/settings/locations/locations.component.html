@@ -3,7 +3,7 @@
         <div class="col-md-12 col-lg-12 tab-panes">
             <br>
             <ul class="nav nav-tabs justify-content-end">
-                <li class="nav-item tab-pane fade show">
+                <li>
                     <app-createlocation></app-createlocation>
                 </li>
             </ul>
@@ -35,8 +35,13 @@
                             <div class="col-sm-6 text-right">
                                 <app-editlocation [currEditLocation]="location"></app-editlocation>
                             </div>
-                            <div class="col-sm-6 text-left">
-                                <span *ngIf="location.active == true;then deactivateButton else activateButton"></span>
+                            <div class="col-sm-6 text-right">
+                                <span *ngIf="location.active == true">
+                                    <app-deactivatelocation [location]="location"></app-deactivatelocation>
+                                </span>
+                                <span *ngIf="location.active != true">
+                                    <app-reactivatelocation [location]="location"></app-reactivatelocation>
+                                </span>
                             </div>
                         </div>
                     </td>

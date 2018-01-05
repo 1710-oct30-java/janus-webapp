@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-
+import { Component, ViewChild, OnInit, Input, OnChanges } from '@angular/core';
+import { BaseChartDirective } from 'ng2-charts/ng2-charts';
 /**
  * To use this component insert this html element:
  *<app-graph  *ngIf="chartData" [data]="(chartData | graphData:dataSetLabels)" [legend]=true [type]="chartType"></app-graph>
@@ -27,6 +27,8 @@ export class GraphComponent implements OnInit, OnChanges {
   @Input() public legend: boolean;
   @Input() public type: string;
 
+  @ViewChild('baseChart') chart: BaseChartDirective;
+
   // class variables
   // raw data from input
   public chartMaps: any = null;
@@ -40,6 +42,11 @@ export class GraphComponent implements OnInit, OnChanges {
 
   public chartColors: Array<any> = [];
 
+
+  private golden_ratio_conjugate = 0.618033988749895;
+  private h: number;
+
+
   // events
   public chartClicked(e: any): void {
   }
@@ -50,7 +57,9 @@ export class GraphComponent implements OnInit, OnChanges {
     this.chartMaps = this.data;
     this.chartType = this.type;
     this.chartLegend = this.legend;
+    this.h = Math.random();
     if (this.data !== null) {
+
       // set up local array to be filled
       const _chartData: any[] = [];
       let _chartLabels: string[] = [];
@@ -66,6 +75,7 @@ export class GraphComponent implements OnInit, OnChanges {
             _chartLabels.push(key);
           }
         });
+
         label = false;
         _chartData.push({ data: _chartDataRow, label: chartMap.label });
       }
@@ -73,19 +83,17 @@ export class GraphComponent implements OnInit, OnChanges {
       // control look of chart based on type
       switch (this.chartType) {
         case 'radar':
-          this.chartColors = [
-            this.color('114, 164, 194'),
-            this.color('242, 105, 37'),
-            this.color('71, 76, 85'),
-            this.color('252, 180, 20'),
-            this.color('0, 160, 0')];
+          this.chartColors = [this.fillColor('114, 164, 194')];
+          for (let i = 1; i < _chartData.length; i++) {
+            this.chartColors.push(this.emptyColor(this.randColString()));
+          }
           this.chartOptions = this.chartOption(this.chartType);
           break;
         case 'bar':
           if (_chartData[0].data.length !== 1) {
             this.chartColors = [
-              this.color('114, 164, 194'),
-              this.color('252, 180, 20')
+              this.fillColor('114, 164, 194'),
+              this.fillColor('252, 180, 20')
             ];
             this.chartOptions = this.chartOption(this.chartType);
           } else {
@@ -100,7 +108,7 @@ export class GraphComponent implements OnInit, OnChanges {
             // color the bars
             this.chartColors = [
               this.benchMarkColor()
-              , this.color('114, 164, 194')
+              , this.fillColor('114, 164, 194')
             ];
             _chartLabels = [];
             this.chartMaps[1].data.forEach((value: number, key: string) => {
@@ -115,13 +123,13 @@ export class GraphComponent implements OnInit, OnChanges {
           break;
         case 'line':
           this.chartColors = [
-            this.color('114, 164, 194'),
-            this.color('252, 180, 20')
+            this.emptyColor('114, 164, 194'),
+            this.emptyColor('252, 180, 20')
           ];
           this.chartOptions = this.chartOption(this.chartType);
           break;
         case 'doughnut':
-          // doughnut colors are weird for some reason
+          // doughnut colors are set weirdly compared to the other charts
           const _chartColors: any[] = [{ backgroundColor: [] }];
           let doughnutColor = '114, 164, 194';
           _chartLabels.forEach(function (doughnutLabel) {
@@ -145,12 +153,31 @@ export class GraphComponent implements OnInit, OnChanges {
   }
   public ngOnChanges(changes) {
     if (changes['data']) {
+      // ngOnInit has a lot pretty much all that is needed to redraw the chart
       this.ngOnInit();
+
+      // just have to add the actual stuff to the chart
+      if (this.chart !== undefined && this.chart.chart !== undefined) {
+        // give the chart labels
+        this.chart.chart.config.data.labels = this.chartLabels;
+        // add the datasets to the chart
+        this.chart.chart.config.data.datasets = this.chartData;
+        // now those datasets need colors
+        for (let i = 0; i < this.chart.chart.config.data.datasets.length; i++) {
+          this.chart.chart.config.data.datasets[i] = Object.assign(this.chart.chart.config.data.datasets[i], this.chartColors[i]);
+        }
+      }
     }
   }
 
-  // returns an object for chart color info
-  color(input: string) {
+
+  /** returns an object for chart color info
+    * @param input is a string either 'r,g,b' where r , g, and b are rgb values or a hex value (#ffffff).
+  */
+  fillColor(input: string) {
+    if (input.charAt(0) === '#') {
+      input = this.convertHex(input);
+    }
     return {
       backgroundColor: 'rgba(' + input + ', .5)',
       pointBackgroundColor: 'rgba(' + input + ', .5)',
@@ -158,9 +185,126 @@ export class GraphComponent implements OnInit, OnChanges {
       borderWidth: 2,
       pointHoverBackgroundColor: 'rgba(' + input + ', .3)',
       pointHoverBorderColor: 'rgba(' + input + ', .3)',
-      pointBorderColor: '#fff'
+      pointBorderColor: '#fff',
+      fill: true
     };
   }
+  emptyColor(input: string) {
+    const output = this.fillColor(input);
+    output.fill = false;
+    return output;
+  }
+  /**
+   * generates nice looking pseudo-random colors.
+  */
+  randColString(): string {
+    this.h += this.golden_ratio_conjugate;
+    this.h %= 1;
+    const rgb = this.hsvToRgb(this.h * 360, 100, 100);
+    return (rgb[0] + ',' + rgb[1] + ',' + rgb[2]);
+  }
+
+  /**
+  * HSV to RGB color conversion
+  *
+  * H runs from 0 to 360 degrees
+  * S and V run from 0 to 100
+  *
+  * Function from
+  * https://gist.github.com/eyecatchup/9536706/#file-hsvtorgb-js
+  */
+  hsvToRgb(h, s, v) {
+    let r, g, b;
+    let i;
+    let f, p, q, t;
+
+    // Make sure our arguments stay in-range
+    h = Math.max(0, Math.min(360, h));
+    s = Math.max(0, Math.min(100, s));
+    v = Math.max(0, Math.min(100, v));
+
+    // We accept saturation and value arguments from 0 to 100 because that's
+    // how Photoshop represents those values. Internally, however, the
+    // saturation and value are calculated from a range of 0 to 1. We make
+    // That conversion here.
+    s /= 100;
+    v /= 100;
+
+    if (s === 0) {
+      // Achromatic (grey)
+      r = g = b = v;
+      return [
+        Math.round(r * 255),
+        Math.round(g * 255),
+        Math.round(b * 255)
+      ];
+    }
+
+    h /= 60; // sector 0 to 5
+    i = Math.floor(h);
+    f = h - i; // factorial part of h
+    p = v * (1 - s);
+    q = v * (1 - s * f);
+    t = v * (1 - s * (1 - f));
+
+    switch (i) {
+      case 0:
+        r = v;
+        g = t;
+        b = p;
+        break;
+
+      case 1:
+        r = q;
+        g = v;
+        b = p;
+        break;
+
+      case 2:
+        r = p;
+        g = v;
+        b = t;
+        break;
+
+      case 3:
+        r = p;
+        g = q;
+        b = v;
+        break;
+
+      case 4:
+        r = t;
+        g = p;
+        b = v;
+        break;
+
+      default: // case 5:
+        r = v;
+        g = p;
+        b = q;
+    }
+
+    return [
+      Math.round(r * 255),
+      Math.round(g * 255),
+      Math.round(b * 255)
+    ];
+  }
+  /**
+   * converts hex values to rgb values
+  */
+  convertHex(hex) {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    const result = r + ',' + g + ',' + b;
+    return result;
+  }
+  /**
+   * this returns the color for the benchmark line.
+  */
   benchMarkColor() {
     return {
       pointRadius: 0,
@@ -202,13 +346,18 @@ export class GraphComponent implements OnInit, OnChanges {
       yAxes: [{
         ticks: {
           beginAtZero: false,
-          fixedStepSize: 10,
+          fixedStepSize: 20,
           max: 100,
           suggestedMin: 40
         },
         scaleLabel: {
           display: true,
           labelString: 'Average'
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          autoSkip: false
         }
       }]
     };

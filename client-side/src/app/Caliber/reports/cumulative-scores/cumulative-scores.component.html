@@ -1,0 +1,13 @@
+<div class="container" id="cumulative-skills">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Cumulative Scores
+            <i (click)="downloadPDF()" class="fa fa-download"></i>
+        </div>
+        <div class="panel-body">
+            <br>
+            <app-graph *ngIf="chartData.length > 0" [data]="(chartData | graphData:dataSetLabels)" [legend]=false [type]="chartType"></app-graph>
+            <app-table *ngIf="chartData.length > 0" [data]="(chartData | graphData:dataSetLabels)" [type]="chartType"></app-table>
+        </div>
+    </div>
+</div>

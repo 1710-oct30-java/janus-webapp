@@ -1,9 +1,12 @@
+/*
 @font-face {
     font-family: 'Futura-Std-Book';
-    /* src: url('fonts/Futura-Std-Book.otf') format('opentype'); */
-	src: url('./fonts/Futura-Std-Book.otf') format('opentype');
+	src: url('../../../../../assets/fonts/Futura-Std-Book.otf') format('opentype');
 }
-
+*/
+#deactivate {
+    cursor: pointer;
+}
 .close {
     color: rgb(242, 105, 37);
 }
@@ -22,10 +25,6 @@
 div {
     display: block;
 }
-
-/* body {
-    font-family: Futura-Std-Book;
-} */
 
 .modal-title {
     margin: 0;
@@ -47,6 +46,7 @@ div {
     margin-bottom: 10px;
 }
 
+/*
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     font-family: inherit;
     font-weight: 500;
@@ -61,6 +61,7 @@ div {
 .h4, h4 {
     font-size: 18px;
 }
+*/
 
 h4 {
     display: block;
@@ -77,9 +78,9 @@ h3 {
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
 }
-
+/*
 body {
-    /* font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;  */
+   /*font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;  
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
@@ -89,14 +90,16 @@ body {
 body {
     font-family: 'Futura-Std-Book';
 }
-
+*/
 .glyphicon-remove {
-    color: rgb(255, 117, 117);
+    color: #ff3131;
     width: 100%;
 }
 
 .glyphicon {
     top: 0px;
+    font-weight: 1500;
+    cursor: pointer;
 }
 
 :after, :before {
@@ -169,4 +172,3 @@ input[type=submit] {
 .btn-default:hover {
     background-image: linear-gradient(to bottom,rgb(240, 239, 239) 0,#cccbcb 100%);
 }
-

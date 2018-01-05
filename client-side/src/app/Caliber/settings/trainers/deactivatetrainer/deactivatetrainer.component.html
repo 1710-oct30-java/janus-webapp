@@ -1,10 +1,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<button type="button" class="close" aria-label="Close" (click)="showModal(content)">
-    <span class="glyphicon glyphicon-remove" aria-hidden="true">
-        &times;
-    </span>
-</button>
+<i class="fa fa-times" style="color:#ff8e4d;" (click)="showModal(content)"></i>
 
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">

@@ -1,10 +1,10 @@
 <div class="dashboard-container">
 
-  <div class="card app-card" style="width: 20rem;" *ngFor="let app of apps" [routerLink]="app.homeUrl">
-    <img class="card-img-top" src="..." alt="Card image cap">
+  <div class="card app-card text-center" style="width: 20rem; border-color:white" *ngFor="let app of apps" [routerLink]="app.homeUrl">
     <div class="card-block">
-      {{app.name}}
-    </div>
+        <h1 class="card-title">{{app.name}}</h1>
+      </div>
+    <img class="card-img-bottom" src="{{app.imgUrl}}" alt="Card image cap">
   </div>
 
 </div>

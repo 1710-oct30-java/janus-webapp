@@ -1,0 +1,25 @@
+/* hr {
+
+    height: 1px;
+
+    background-color:rgb(180, 180, 180);
+
+    margin-top: 10px;
+
+    margin-bottom: 10px;
+
+    width: 80%;
+
+} */
+
+textarea {
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+.container {
+    padding: 10px;
+}

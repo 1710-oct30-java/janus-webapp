@@ -1,11 +1,5 @@
-import { Component } from '@angular/core';
+import { Address } from './Address';
 
-export class Location {
-        addressId: number;
-        street: String;
-        city: String;
-        state: String;
-        zipcode: String;
-        company: String;
-        active: boolean;
+export class Location extends Address {
+
 }

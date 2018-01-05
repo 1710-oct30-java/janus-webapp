@@ -20,6 +20,7 @@ import { Trainer } from './entities/Trainer';
 
 
 import { ReportingService } from './services/reporting.service';
+import { EvaluationService } from './services/evaluation.service';
 import { PDFService } from './services/pdf.service';
 import { CaliberModule } from './Caliber/caliber.module';
 import { TraineeTechSkillsComponent } from './Caliber/reports/trainee-tech-skills/trainee-tech-skills.component';
@@ -52,7 +53,7 @@ const routes: Routes = [
     NavModule,
     RouterModule.forRoot(routes, { useHash: true }),
     ChartsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   declarations: [
     AppComponent,
@@ -64,6 +65,7 @@ const routes: Routes = [
     ChuckNorrisService,
     ReportingService,
     PDFService,
+    EvaluationService,
   ],
   bootstrap: [AppComponent]
 })

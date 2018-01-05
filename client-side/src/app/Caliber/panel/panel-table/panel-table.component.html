@@ -1,0 +1,26 @@
+<div class="container">
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Trainee Name</th>
+        <th scope="col">Date</th>
+        <th scope="col">Panelist</th>
+        <th scope="col">Panel Status</th>
+        <th scope="col">Repeat Topics</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let panel of panelList">
+        <td>{{panel.trainee.name}}</td>
+        <td>{{panel.interviewDate}}</td>
+        <td>{{panel.panelist.name}}</td>
+        <td>{{panel.status}}</td>
+        <ng-container *ngFor="let feedback of panel.feedback">
+          <tr *ngIf="feedback.status == 'Repanel'">{{feedback.technology.skillCategory}}</tr>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>

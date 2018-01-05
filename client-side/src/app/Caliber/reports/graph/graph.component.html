@@ -1,4 +1,10 @@
 <div class="chart-container top5">
-  <canvas baseChart width="400" height="400" [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions"
-    [colors]="chartColors" [legend]="chartLegend" [chartType]="chartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+  <!-- Square graphs -->
+  <canvas *ngIf="chartType === 'radar' || chartType ==='doughnut'" baseChart #baseChart="base-chart" width="400" height="400"
+    [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [colors]="chartColors" [legend]="chartLegend" [chartType]="chartType"
+    (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+  <!-- Rectangle graphs -->
+  <canvas *ngIf="chartType === 'line' || chartType === 'bar'" baseChart #baseChart="base-chart" width="400" height="200" [datasets]="chartData"
+    [labels]="chartLabels" [options]="chartOptions" [colors]="chartColors" [legend]="chartLegend" [chartType]="chartType" (chartHover)="chartHovered($event)"
+    (chartClick)="chartClicked($event)"></canvas>
 </div>

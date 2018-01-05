@@ -1,0 +1,113 @@
+<!-- <div class="container"> -->
+<!--  <div class="toolbar-container">
+   <div class="row">
+      <div class="col">
+        <div ngbDropdown class="d-inline-block padding-right">
+          <button class="button" id="dropdownBasic1" ngbDropdownToggle>2017</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">2015</button>
+            <button class="dropdown-item">2016</button>
+            <button class="dropdown-item">2017</button>
+            <button class="dropdown-item">2018</button>
+          </div>
+        </div>
+        <div ngbDropdown class="d-inline-block padding-right">
+            <button class="button" id="dropdownBasic1" ngbDropdownToggle>Trainer</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">Trainer</button>
+            <button class="dropdown-item">Trainer 2</button>
+            <button class="dropdown-item">Trainer 3</button>
+            </div>
+        </div>
+        <div ngbDropdown class="d-inline-block padding-right">
+            <button class="button" id="dropdownBasic1" ngbDropdownToggle>Week (All)</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">Week 1</button>
+            <button class="dropdown-item">Week 2</button>
+            <button class="dropdown-item">Week (All)</button>
+            </div>
+        </div>
+        <div ngbDropdown class="d-inline-block padding-right">
+            <button class="button" id="dropdownBasic1" ngbDropdownToggle>Trainee (All)</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">Trainee 1</button>
+            <button class="dropdown-item">Trainee 2</button>
+            <button class="dropdown-item">Trainee (All)</button>
+            </div>
+        </div>
+    </div> -->
+
+<!-- <form class="search">
+                <input ng-model="chosenTrainee" list="traineeList" type="search" id="searchTextBox" placeholder="Search..." class="search"
+                    autocomplete="off"> -->
+<!-- <button type="submit" class="searchButton"><i class="fa fa-search"></i></button> -->
+<!-- <datalist id="traineeList"> -->
+<!-- ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Ahmed, Sadat">
+                Ahmed, Sadat | sadat.t.ahmed@gmail.com | sadat.t.ahmed
+            </option> -->
+<!-- end ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Ali, Fareed">
+                Ali, Fareed | fareed.ali37@qmail.cuny.edu | live:bassph
+            </option> -->
+<!-- end ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Cartagena, Michael">
+                Cartagena, Michael | mcartagenaez8@gmail.com | mcart5566
+            </option> -->
+<!-- end ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Connelly, Sean">
+                Connelly, Sean | connelsp@gmail.com | seanelly08
+            </option> -->
+<!-- end ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Duong, Jack">
+                Duong, Jack | son.jack0218@gmail.com | imrjack
+            </option> -->
+<!-- end ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Gluskin, Igor">
+                Gluskin, Igor | igorgluskin@yahoo.com | igor.gluskin
+            </option> -->
+<!-- end ngRepeat: trainee in allTrainees track by $index -->
+<!-- <option ng-repeat="trainee in allTrainees track by $index" ng-value="trainee.name" class="ng-binding ng-scope"
+                value="Guan, Kevin">
+                Guan, Kevin | guankev@gmail.com | live:kevguan
+            </option>
+        </datalist>
+
+        <div class="dropdown pull-right" ngbDropdown placement="bottom-right">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" ngbDropdownToggle>
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+                <li>
+                    <a href="" ng-click="downloadAllChartButton()"> Charts </a>
+                </li>
+                <li>
+                    <a href="" ng-click="generatePDF()"> Charts + Feedback </a>
+                </li>
+            </div>
+        </div>
+    </form>
+</div>
+
+</div> -->
+<!-- <hr> -->
+
+
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Cumulative Scores
+            <i (click)="downloadPDF()" class="fa fa-download"></i>
+        </div>
+        <div id="chart" class="panel-body">
+            <app-graph *ngIf="chartData" [data]="(chartData) | graphData:dataSetLabels" [legend]=true [type]="chartType"></app-graph>
+            <app-table *ngIf="chartData" [data]="(chartData) | graphData:dataSetLabels" [type]="chartType"></app-table>
+        </div>
+    </div>
+</div>

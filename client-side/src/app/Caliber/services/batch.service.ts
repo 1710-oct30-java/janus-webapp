@@ -9,9 +9,11 @@ import { Observable } from 'rxjs/Observable';
 // services
 import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 // entities
 import { Batch } from '../entities/Batch';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 
 
 /**
@@ -21,8 +23,8 @@ import { Batch } from '../entities/Batch';
 @Injectable()
 export class BatchService extends AbstractApiService<Batch> {
 
-    constructor(httpClient: HttpClient, envService: EnvironmentService) {
-      super(envService, httpClient);
+    constructor(httpClient: HttpClient, envService: EnvironmentService, alertService: AlertsService) {
+      super(envService, httpClient, alertService);
     }
 
     /*
@@ -40,8 +42,12 @@ export class BatchService extends AbstractApiService<Batch> {
      */
     public fetchAllByTrainer(): void {
       const url = 'trainer/batch/all';
+      const messages = {
+        success: 'Batch list retrieved successfully',
+        error: 'Batch list retrieval failed',
+      };
 
-      super.doGetList(url);
+      super.doGetList(url, {}, messages);
     }
 
     /**
@@ -52,8 +58,12 @@ export class BatchService extends AbstractApiService<Batch> {
      */
     public fetchAll(): void {
       const url = 'vp/batch/all';
+      const messages = {
+        success: 'Batch list retrieved successfully',
+        error: 'Batch list retrieval failed',
+      };
 
-      super.doGetList(url);
+      super.doGetList(url, {}, messages);
     }
 
     /**
@@ -83,8 +93,13 @@ export class BatchService extends AbstractApiService<Batch> {
     */
     public save(batch: Batch): void {
       const url = 'all/batch/create';
+      const messages = {
+        success: 'Batch saved successfully',
+        error: 'Batch save failed',
+      };
+      const clone = this.prepareForApi(batch);
 
-      super.doPost(batch, url);
+      super.doPost(clone, url, {}, messages);
     }
 
     /**
@@ -97,8 +112,13 @@ export class BatchService extends AbstractApiService<Batch> {
      */
     public update(batch: Batch): void {
       const url = 'all/batch/update';
+      const messages = {
+        success: 'Batch updated successfully',
+        error: 'Batch updated failed',
+      };
+      const clone = this.prepareForApi(batch);
 
-      super.doPut(batch, url);
+      super.doPut(clone, url, {}, messages);
     }
 
     /**
@@ -112,8 +132,30 @@ export class BatchService extends AbstractApiService<Batch> {
      */
     public delete(batch: Batch): void {
       const url = `all/batch/delete/${batch.batchId}`;
+      const messages = {
+        success: 'Batch deleted successfully',
+        error: 'Batch deleteion failed',
+      };
 
-      super.doDelete(batch, url);
+      super.doDelete(batch, url, {}, messages);
     }
 
+    /**
+     * produces a clone of the batch object that
+     * has changes required for the API in order
+     * to be processed
+     *
+     * @param batch: Batch
+     *
+     * @return any
+     */
+    protected prepareForApi(batch: Batch): any {
+      const output: any = {};
+      Object.assign(output, batch);
+
+      output.startDate = super.stringifyDate(batch.startDate);
+      output.endDate = super.stringifyDate(batch.endDate);
+
+      return output;
+    }
 }

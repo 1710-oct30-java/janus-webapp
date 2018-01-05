@@ -1,0 +1,37 @@
+<div>
+  <div class="container">
+    <header class="feedback-heading">Feedback for the week
+      <span class="pull-right">Week {{week}}</span>
+    </header>
+    <div class="feedback-body">
+      <div class="feedback-sub">
+        <strong>Categories covered this week: </strong>
+        <span *ngIf="weekTopics">{{weekTopics}}</span>
+      </div>
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <td>Trainee</td>
+            <td>Individual Feedback</td>
+            <td>Notes</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let note of (traineeNotes | orderBy:'trainee.name')" class="feedback-trainee">
+            <td>{{note.trainee.name}}</td>
+            <td>{{note.qcStatus}}</td>
+            <td>{{note.content}}</td>
+          </tr>
+          <tr>
+            <th>Overall Feedback:</th>
+            <td colspan="2">{{batchNote.qcStatus}}</td>
+          </tr>
+          <tr>
+            <th>Notes:</th>
+            <td colspan="2">{{batchNote.content}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>  

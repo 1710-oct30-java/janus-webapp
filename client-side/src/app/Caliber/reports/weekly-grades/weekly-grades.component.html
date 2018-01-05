@@ -1,0 +1,55 @@
+<div>
+  <div class="container">
+    <header class="feedback-heading">Feedback for the week
+      <span class="pull-right">Week {{week}}</span>
+    </header>
+    <div class="feedback-body">
+      <div class="feedback-sub">
+        <strong>Categories covered this week: </strong>
+        <span *ngIf="weekTopics">{{weekTopics}}</span>
+      </div>
+      <table class="table table-responsive table-sm">
+        <thead>
+          <tr>
+            <td>Trainee</td>
+            <td *ngFor="let assess of assessments">
+              {{assess.title}} ({{assess.rawScore}}%)
+            </td>
+            <td>Overall</td>
+          </tr>
+        </thead>
+        <tbody *ngFor="let trainee of (batch.trainees | orderBy:'name')">
+          <tr *ngIf="grades && assessments">
+            <th rowspan="2">{{trainee.name}}</th>
+            <td *ngFor="let grade of (grades | filterBy:'trainee.traineeId':trainee.traineeId)">
+              {{grade.score | number:'2.2-2'}}%
+            </td>
+            <th>
+              {{overallScore(trainee.traineeId) | number:'2.2-2'}}%
+            </th>
+          </tr>
+          <tr *ngIf="traineeNotes && traineeNotes.length > 0">
+            <td *ngIf="assessments" [colSpan]="assessments.length + 1">
+              <strong>Notes: </strong>{{noteContent(trainee.traineeId)}}
+            </td>
+          </tr>
+        </tbody>
+        <tbody>
+            <tr>
+              <th>Average</th>
+              <td *ngFor="let assess of assessments">
+                {{averageScore(assess.assessmentId) | number:'2.2-2'}}%
+              </td>
+              <th>
+                {{overallAverageScore() | number:'2.2-2'}}%
+              </th>
+            </tr>
+          </tbody>
+      </table>
+      <div class="feedback-sub">
+        <div><strong>Notes: </strong></div>
+        <div *ngIf="batchNote">{{batchNote.content}}</div>
+      </div>
+    </div>
+  </div>
+</div>

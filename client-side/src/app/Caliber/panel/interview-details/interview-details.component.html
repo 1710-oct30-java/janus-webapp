@@ -1,0 +1,92 @@
+<div class="border border-secondary">
+  <div class="container" id="interviewDetails">
+
+    <div class="row">
+      <div class="col">
+        <h3>Interview Details</h3>
+      </div>
+    </div>
+
+    <form [formGroup]="interviewForm">
+
+      <div class="row">
+
+        <div class="col">
+          <div class="form-group">
+            <label for="associateName">Associate Name</label>
+            <input class="form-control" id="associateName" formControlName="trainee" type="text" value="{{trainee.name}}" readonly>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group">
+            <label for="interviewDate">Interview Date</label>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" formControlName="interviewDate" name="dp" ngbDatepicker #d="ngbDatepicker">
+              <button class="input-group-addon" (click)="d.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <div class="form-group">
+            <label for="trainingTrack">Training Track</label>
+            <input class="form-control" id="trainingTrack" type="text" value="{{trainingTrack}}" readonly>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="form-group">
+            <label for="interviewTime">Interview Time</label>
+            <ngb-timepicker name="time" [meridian]="true" [spinners]="false"></ngb-timepicker>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <label for="panelRound">Panel Round</label>
+          <input class="form-control" id="panelRound" type="text" value="{{panelRound}}" readonly>
+        </div>
+
+        <div class="col">
+          <label for="interviewMode">Interview Mode</label>
+          <select class="form-control" formControlName="format" id="interviewMode">
+            <option>Skype</option>
+            <option>Phone</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <label for="recordingConsent">Recording Consent</label>
+          <select class="form-control" formControlName="recordingConsent" id="recordingConsent">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <label for="internetConnectivity">Internet Connectivity</label>
+          <select class="form-control" formControlName="internet" id="internetConnectivity">
+            <option>Stable</option>
+            <option>Unstable</option>
+          </select>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+</div>

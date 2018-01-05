@@ -1,0 +1,31 @@
+<div>
+  <div class="container">
+    <header class="feedback-heading">Overall Feedback</header>
+    <div class="table-responsive">
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <td>Week</td>
+            <td>Categories</td>
+            <td>Quality Audit</td>
+            <td>QC Feedback</td>
+          </tr>
+        </thead>
+        <tbody *ngFor="let topic of weekTopics; let week = index" class="row-border">
+          <tr>
+            <td>{{week+1}}</td>
+            <td>{{topic}}</td>
+            <td *ngIf="qcNotes">{{qcWeek(week+1).qcStatus}}</td>
+            <td *ngIf="qcNotes">{{qcWeek(week+1).content}}</td>
+          </tr>
+          <tr>
+            <th>Notes:</th>
+            <td class="align-left" colspan="3" *ngIf="allNotes">
+              {{allWeek(week+1).content}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

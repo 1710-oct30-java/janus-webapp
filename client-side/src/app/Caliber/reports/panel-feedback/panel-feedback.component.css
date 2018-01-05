@@ -1,0 +1,66 @@
+/* Tags */
+td {
+    text-align: center;
+}
+
+th {
+    text-align: center;
+    font-weight: 800;
+}
+
+/* Classes */
+.container {
+    padding-top: 8px;
+}
+
+.flex-grid {
+    display: flex;
+}
+
+.flex-col {
+    flex: 1;
+}
+
+.flex-container {
+    width: 100%;
+    padding-top: 8px;
+    display: flex;
+}
+
+.panel-heading {
+    background: rgb(242, 105, 37);
+    color: white;
+    padding: 1vmin;
+    border-top-left-radius: 2vmin;
+    border-top-right-radius: 2vmin;
+}
+
+.panel-body {
+    border: 1px solid rgb(221, 221, 221);
+    border-top: 0px;
+}
+
+.feedback-heading {
+    background: rgb(114, 164, 194);
+    color: white;
+    padding: 1vmin;
+    border-top-left-radius: 2vmin;
+    border-top-right-radius: 2vmin;
+}
+
+.overall-feedback-title {
+    font-weight: 500;
+    text-align: left;
+}
+
+.panel-status-failed {
+    color: red;
+}
+
+.panel-status-pass {
+    color: green;
+}
+
+.left {
+    text-align: left;
+}

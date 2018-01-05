@@ -1,0 +1,44 @@
+<div class="container">
+  <!-- <div class="row">
+    <div class="col">
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle></button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <ng-container *ngFor="let trainees of traineeList">
+            <button value="{{trainees.name}}" (click)="setTrainee(trainees)" class="dropdown-item">{{trainees.name}}</button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="row">
+    <div class="col-md-8">
+
+      <div class="input-group mb-3">
+        <div class="input-group">
+          <input id="typeahead-basic" type="text" class="form-control" (selectItem)="setTraineeBySearch($event)" [ngbTypeahead]="search"
+          />
+          <hr>
+          <div class="input-group-append">
+            <div class="row">
+              <div class="col">
+                <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle></button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <ng-container *ngFor="let trainees of traineeList">
+                      <button value="{{trainees.name}}" (click)="setTrainee(trainees)" class="dropdown-item">{{trainees.name}}</button>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <app-create-panel>  </app-create-panel>
+    </div>
+
+  </div>
+</div>

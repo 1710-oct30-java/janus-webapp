@@ -1,17 +1,19 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Http, Response } from '@angular/http';
 
 // rxjs
 import { BehaviorSubject } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 
-// entities
-import { Category } from '../entities/Category';
-
 // services
+import { environment } from '../../../environments/environment';
 import { EnvironmentService } from './environment.service';
 import { CategoryService } from './category.service';
+
+
+// entities
+import { Category } from '../entities/Category';
+import { AlertsService } from './alerts.service';
 
 /**
 * @deprecated
@@ -24,13 +26,10 @@ import { CategoryService } from './category.service';
 @Injectable()
 export class CategoriesService extends CategoryService {
 
-  /**
-  * @deprecated
-  */
-  categories$: Observable<any> = this.listSubject.asObservable(); // this is how components should access the data if you want to cache it
+  categories$ = this.listSubject.asObservable();
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient) {
-    super(envService, httpClient);
+  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
+    super(envService, httpClient, alertService);
 
     this.getAll();
   }

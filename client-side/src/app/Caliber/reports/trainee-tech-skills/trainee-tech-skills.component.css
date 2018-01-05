@@ -3,13 +3,6 @@
     text-align: center;
     width: 10%;
 }
-.panel-heading {
-    background: rgb(242, 105, 37);
-    color: white;
-    padding: 1vmin;
-    border-top-left-radius: 2vmin;
-    border-top-right-radius: 2vmin;
-}
 .chartContainer {
     padding: 0.5vmin;
     border: 1px solid lightgrey;
@@ -33,4 +26,11 @@ h2 {
 }
 .panel-body {
     border: 1px rgb(221, 221, 221) solid;
+}
+.modal-body-row{
+    border-bottom: 1px solid LightGrey;
+    margin-bottom   : 5px;
+}
+.fa {
+    cursor: pointer;
 }

@@ -1,0 +1,81 @@
+.panel-heading {
+    background: rgb(242, 105, 37);
+    color: white;
+    padding: 1vmin 2vmin;
+    border-top-left-radius: 2vmin;
+    border-top-right-radius: 2vmin;
+}
+
+.panel-body {
+    border: 1px rgb(221, 221, 221) solid;
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .container {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0;
+    }
+
+    .panel-body {
+        border: none;
+    }
+
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+/* You can add global styles to this file, and also import other style files */
+
+/* needed to unset the max with for a large modal on the manage component within caliber */
+.batch-trainee-modal-container > .modal > div {
+    max-width: unset;
+}
+/************************
+    Footer
+************************/
+.footer-margin {
+    margin-top: .85em;
+}
+.footer-img {
+    margin-top: 1.5em;
+}
+::-webkit-scrollbar {
+    display: none;
+    }
+/* Footer, set footer height to actual height of footer*/
+html, body {
+    height: 100%;
+}
+.img-responsive {
+    padding-bottom: 1em;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -128px;
+    padding-bottom: 128px;
+    max-width: 100%;
+}
+footer {
+    min-height: 128px;
+    padding: 10px;
+    background-color: #474C55;
+    font-size: .75em;
+    max-width: 100%;
+}
+.center {
+    text-align: center;
+}
+.contact-info {
+    color: #B9B9BA;
+}
+.fa-copyright {
+    padding-right: .5em;
+}
+footer a, footer a:hover {
+    color: #B9B9BA;
+}

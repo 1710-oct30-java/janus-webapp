@@ -1,24 +1,81 @@
 import { Injectable } from '@angular/core';
-import { LineChartData } from '../../entities/lineChartData';
-import { WeeklyProgress } from '../../entities/weeklyProgress';
-import { ChartData } from '../../entities/chartData';
+import { ChartDataEntity } from '../../entities/ChartDataEntity';
+import { DataSet } from '../../entities/DataSet';
 import { ColorService } from '../colors/color.service';
 
 @Injectable()
 export class VpHomeLineGraphService {
-  public lineChartData = new LineChartData();
+  public lineChartData = new ChartDataEntity();
   constructor(private cs: ColorService) {
     this.cs.setVPHomeLineColors([this.lineChartData.mainColor, this.lineChartData.secondaryColor]);
   }
 
-  public getLineChartData() {
-    return new LineChartData();
+  /**
+   * Factory for creating ChartDataEntity
+   * used for the line chart on Vp Home
+   *
+   * @returns ChartDataEntity
+   */
+
+  public getLineChartData(): ChartDataEntity {
+    const lineChartData = new ChartDataEntity();
+    lineChartData.colors = [lineChartData.mainColor, lineChartData.secondaryColor];
+    lineChartData.options = {
+      legend: {
+        display: true,
+        labels: {
+          boxWidth: 10
+        }
+      },
+      scales: {
+        xAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Week'
+          },
+          ticks: {
+            autoSkip: false,
+          }
+
+        }],
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Score'
+          },
+
+          ticks: {
+            suggestedMin: 40,
+            suggestedMax: 100,
+            stepSize: 20,
+          }
+        }]
+      },
+      datasetFill: false,
+      tooltips: {
+        mode: 'x',
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+    };
+    lineChartData.data = [];
+    lineChartData.type = 'line';
+    return lineChartData;
 
   }
 
-  public fillLineChartDate(results: Array<WeeklyProgress>, lcd: LineChartData, state: string, city: string) {
+  /**
+  * Populates and returns a ChartDataEntity.
+  * @param results: any
+  * @param barChartData: ChartDataEntity
+  * @param state: string
+  * @param city: string
+  * @return ChartDataEntity
+  */
+
+  public fillChartData(results: any, lineChartData: ChartDataEntity, state: string, city: string): ChartDataEntity {
     let holder;
-    lcd = this.clearLineChartData(lcd);
+    lineChartData = this.clearLineChartData(lineChartData);
     if (state !== '') {
       holder = results.filter(i => i.address.state === state);
       if (city !== '') {
@@ -30,7 +87,8 @@ export class VpHomeLineGraphService {
     let highestWeek = 0;
     for (const item of holder) {
       let currentWeek = 1;
-      const dataHolder = new ChartData();
+      const dataHolder = new DataSet();
+      dataHolder.fill = false;
       dataHolder.label = item.label;
       let iterator = 0;
       const keys = Object.keys(item.grades);
@@ -46,20 +104,25 @@ export class VpHomeLineGraphService {
         }
         iterator++;
       }
-      lcd.data.push(dataHolder);
+      lineChartData.data.push(dataHolder);
     }
     for (let i = 1; i < highestWeek; i++) {
-      lcd.labels.push('Week ' + i);
+      lineChartData.labels.push('Week ' + i);
     }
-    lcd.colors = this.cs.getLineColors(lcd.data.length);
-    console.log(lcd);
-    return lcd;
+    lineChartData.colors = this.cs.getLineColors(lineChartData.data.length);
+    return lineChartData;
   }
 
-  private clearLineChartData(lcd: LineChartData) {
-    lcd.data.length = 0;
-    lcd.labels.length = 0;
-    lcd.colors.length = 0;
-    return lcd;
+  /**
+ * Clears the arrays of a ChartDataEntity
+ * @param ChartDataEntity
+ * @returns ChartDataEntity
+ */
+
+  private clearLineChartData(lineChartData: ChartDataEntity): ChartDataEntity {
+    lineChartData.data.length = 0;
+    lineChartData.labels.length = 0;
+    lineChartData.colors = [];
+    return lineChartData;
   }
 }
