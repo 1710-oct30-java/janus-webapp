@@ -10,8 +10,8 @@ import { Http } from '@angular/http';
 import { PDFService } from '../../services/pdf.service';
 
 /**
- * This component display the weekly line chart. It also has a download
- * button that allows to save the graph as a PDF.
+ * This component displays the weekly line chart. It also has a download
+ * button that allows saving the graph as a PDF.
  * @author Edel Benavides
  * @author Robert Choboy
  */
