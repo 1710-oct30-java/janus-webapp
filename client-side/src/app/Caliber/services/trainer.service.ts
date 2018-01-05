@@ -47,6 +47,14 @@ export class TrainerService extends AbstractApiService<Trainer> {
 
   /**
   *
+  * sets current trainer
+  */
+  public changeCurrentTrainer(trainer: Trainer) {
+    this.trainerSource.next(trainer);
+  }
+
+  /**
+  *
   * fetches the data of the service initially and
   * bootstraps default responsive behavior with subscriptons
   */
@@ -82,13 +90,6 @@ export class TrainerService extends AbstractApiService<Trainer> {
     return this.tiersSubject.asObservable();
   }
 
-  /**
-  *
-  * sets current trainer
-  */
-  public changeCurrentTrainer(trainer: Trainer) {
-    this.trainerSource.next(trainer);
-  }
 
   /*
     =====================
@@ -285,4 +286,4 @@ export class TrainerService extends AbstractApiService<Trainer> {
     this.delete(trainer);
   }
 
- }
+}

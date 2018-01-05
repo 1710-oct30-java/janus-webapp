@@ -65,13 +65,16 @@ import { WeeklyLineChartComponent } from './reports/weekly-line-chart/weekly-lin
 import { TraineeTechSkillsComponent } from './reports/trainee-tech-skills/trainee-tech-skills.component';
 import { ToolbarComponent } from './reports/toolbar/toolbar.component';
 import { TestComponent } from './components/test/test.component';
-import { PanelComponent } from './panel/panel/panel.component';
 import { OverallFeedbackComponent } from './reports/overall-feedback/overall-feedback.component';
 import { TrainerProfilesComponent } from './settings/trainer-profile/trainer-profile.component';
 import { PanelTableComponent } from './panel/panel-table/panel-table.component';
 import { PanelSearchbarComponent } from './panel/panel-searchbar/panel-searchbar.component';
 import { InterviewDetailsComponent } from './panel/interview-details/interview-details.component';
 import { CreatePanelComponent } from './panel/create-panel/create-panel.component';
+
+import { AuthenticationService } from './services/authentication.service';
+
+
 import { VpBarGraphComponent } from './home/vp-bar-graph/vp-bar-graph.component';
 import { VpLineGraphComponent } from './home/vp-line-graph/vp-line-graph.component';
 import { VpPanelGraphComponent } from './home/vp-panel-graph/vp-panel-graph.component';
@@ -101,6 +104,7 @@ import { BarGraphModalComponent } from './home/vp-bar-graph/bar-graph-modal/barg
 import { ReportsService } from './services/reports.service';
 import { GeneralFeedbackComponent } from './panel/general-feedback/general-feedback.component';
 import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical-feedback.component';
+import { PanelComponent } from './panel/panel/panel.component';
 
 @NgModule({
   imports: [
@@ -139,7 +143,6 @@ import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical
     DeactivateLocationComponent,
     EditlocationComponent,
     CreatelocationComponent,
-    PanelComponent,
     QualityComponent,
     TraineeTechSkillsComponent,
     ToolbarComponent,
@@ -194,6 +197,8 @@ import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical
     PanelService,
     RouteService,
     GradeService,
+    AuthenticationService,
+
     HttpClient,
     NoteService,
     VpHomeLineGraphService,

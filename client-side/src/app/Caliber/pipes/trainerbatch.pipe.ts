@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Batch } from '../entities/Batch';
 /**
- *
+ * @author John Seymour
  */
 @Pipe({ name: 'batchByTrainer' })
 export class BatchByTrainerPipe implements PipeTransform {

@@ -31,6 +31,7 @@ export class AuthenticationService {
     * @return Observable<User>
     */
    public getAuthenticatedUser(): Observable<User> {
+     console.log('get auth user method' + this.userSubject.asObservable.toString);
       return this.userSubject.asObservable();
    }
 
@@ -45,8 +46,10 @@ export class AuthenticationService {
      */
     public fetchCurrentUser(): void {
       const url = '[unknown]';
+      console.log('in fetch current user. resp from get [url]: ');
 
       this.http.get<User>(url).subscribe( (user) => {
+          console.log('User: ' + user);
           this.userSubject.next(user);
         }, (error) => {
           this.userSubject.next(null);

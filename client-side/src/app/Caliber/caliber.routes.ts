@@ -14,7 +14,13 @@ import { DeactivateTrainerComponent } from './settings/trainers/deactivatetraine
 import { QualityComponent } from './quality/quality.component';
 import { PanelComponent } from './panel/panel/panel.component';
 import { TestComponent } from './components/test/test.component';
+<<<<<<< HEAD
 import { TrainerProfilesComponent } from './settings/trainer-profile/trainer-profile.component';
+=======
+import { TrainerProfileComponent } from './trainer-profile/trainer-profile.component';
+import { TrainerProfile2Component } from './trainer--profile/trainer--profile.component';
+import { TempJohnComponent } from './tempjohn/tempjohn.component';
+>>>>>>> 6c54b5686365e9eb702d5b8b501c67f0444bbe9f
 
 export const routes: Routes = [
   {
@@ -46,8 +52,21 @@ export const routes: Routes = [
         component: TestComponent,
       },
       {
+<<<<<<< HEAD
         path: 'panel',
         component: PanelComponent
+=======
+        path: 'trainer-profile',
+        component: TrainerProfileComponent,
+      },
+      {
+        path: 'trainer-dev',
+        component: TrainerProfile2Component,
+      },
+      {
+        path: 'tempjohn',
+        component: TempJohnComponent,
+>>>>>>> 6c54b5686365e9eb702d5b8b501c67f0444bbe9f
       },
       {
         path: 'settings',
