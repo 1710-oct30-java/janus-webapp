@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as jsPDF from 'jspdf';
 import { environment } from '../../../../environments/environment';
-import { Http } from '@angular/http';
+// import { Http } from '@angular/http';
 import { PDFService } from '../../../services/pdf.service';
 import { ReportingService } from '../../../services/reporting.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -33,11 +33,9 @@ export class QcDoughnutComponent implements OnInit {
       this.batchId = batch.batchId;
       this.dataSetLabels = [batch.trainingName];
       this.reportsService.fetchQcStatusDoughnutChart(batch.batchId);
-
     });
 
     this.dataSubscription = this.reportsService.qcStatusDoughnut$.subscribe((result) => {
-      console.log('debug');
       if (result) {
         console.log(result.data);
         this.chartData = [result.data];

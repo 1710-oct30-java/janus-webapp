@@ -78,11 +78,7 @@ import { WeeklyFeedbackComponent } from './reports/weekly-feedback/weekly-feedba
 import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.component';
 import { WeeklyAuditComponent } from './reports/weekly-audit/weekly-audit.component';
 import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative-scores.component';
-<<<<<<< HEAD
 import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component';
-=======
-import { DoughnutComponent } from './doughnut/doughnut.component';
->>>>>>> 5cabb147df2fe078ba8405c6fa070a6762b9a179
 
 @NgModule({
   imports: [
@@ -140,11 +136,7 @@ import { DoughnutComponent } from './doughnut/doughnut.component';
     PanelFeedbackComponent,
     WeeklyAuditComponent,
     CumulativeScoreComponent,
-<<<<<<< HEAD
     QcDoughnutComponent,
-=======
-    DoughnutComponent,
->>>>>>> 5cabb147df2fe078ba8405c6fa070a6762b9a179
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests
