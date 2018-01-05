@@ -77,6 +77,7 @@ import { WeeklyFeedbackComponent } from './reports/weekly-feedback/weekly-feedba
 import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.component';
 import { WeeklyAuditComponent } from './reports/weekly-audit/weekly-audit.component';
 import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative-scores.component';
+import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component';
 
 @NgModule({
   imports: [
@@ -133,6 +134,7 @@ import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative
     PanelFeedbackComponent,
     WeeklyAuditComponent,
     CumulativeScoreComponent,
+    QcDoughnutComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests

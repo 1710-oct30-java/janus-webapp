@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DoughnutComponent } from './doughnut.component';
+import { QcDoughnutComponent } from './qc-doughnut.component';
 
-describe('DoughnutComponent', () => {
-  let component: DoughnutComponent;
-  let fixture: ComponentFixture<DoughnutComponent>;
+describe('QcDoughnutComponent', () => {
+  let component: QcDoughnutComponent;
+  let fixture: ComponentFixture<QcDoughnutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DoughnutComponent ]
+      declarations: [ QcDoughnutComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DoughnutComponent);
+    fixture = TestBed.createComponent(QcDoughnutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
