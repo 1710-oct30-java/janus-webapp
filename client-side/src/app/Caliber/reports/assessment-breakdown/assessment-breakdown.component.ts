@@ -83,13 +83,28 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
       });
 
       this.batchIdSub = this.granularityService.currentBatch$.subscribe(
-          data => { this.batchId = data.batchId; this.tryFetch(); });
+          data => {
+            // Make sure batchId is not undefined
+            if (this.batchId) {
+              this.batchId = data.batchId; this.tryFetch();
+            }
+          });
 
       this.weekSub = this.granularityService.currentWeek$.subscribe(
-          data => { this.week = data; this.tryFetch(); });
+          data => {
+            // Make sure traineeId is not undefined
+            if (data) {
+              this.week = data; this.tryFetch();
+            }
+          });
 
       this.traineeIdSub = this.granularityService.currentTrainee$.subscribe(
-          data => { this.traineeId = data.traineeId; this.tryFetch(); });
+          data => {
+            // Make sure traineeId is not undefined
+            if (data) {
+              this.traineeId = data.traineeId; this.tryFetch();
+            }
+          });
   }
 
   tryFetch() {

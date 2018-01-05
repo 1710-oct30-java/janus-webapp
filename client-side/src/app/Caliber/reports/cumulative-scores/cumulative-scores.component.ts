@@ -18,13 +18,16 @@ import { Batch } from '../../entities/Batch';
 })
 export class CumulativeScoreComponent implements OnInit, OnDestroy {
 
+    // chart data sub
     private BatchWeekSortedBarChart: Subscription;
 
+    // relevent granularity subs
     private batchSubscription: Subscription;
     private weekSubscription: Subscription;
-    private traineeSubscription: Subscription;
 
+    // when batch or week change do this
     private BatchWeekChange: Subscription;
+
 
     public week: number;
     public trainee: Trainee;
@@ -79,6 +82,10 @@ export class CumulativeScoreComponent implements OnInit, OnDestroy {
         this.weekSubscription.unsubscribe();
         this.batchSubscription.unsubscribe();
     }
+    /**
+     * takes in the result dataset and returns a sorted version of the object
+     * @param result
+     */
     sortResult(result: any): any {
         const objArr = Object.entries(result);
         for (let i = 0; i < objArr.length; i++) {

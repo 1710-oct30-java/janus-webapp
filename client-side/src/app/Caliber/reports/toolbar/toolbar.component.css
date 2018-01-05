@@ -1,7 +1,3 @@
-.toolbar-container {
-    padding: 5px;
-}
-
 .button {
     background-color: rgb(255, 255, 255); /* Green */
     border: none;
@@ -14,3 +10,10 @@
     font-weight: bold;
 }
 
+select {
+    cursor: pointer;
+}
+
+.paddingRight {
+    padding-right: 25px;
+}

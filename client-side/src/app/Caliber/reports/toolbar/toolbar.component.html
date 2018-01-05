@@ -1,40 +1,70 @@
-<div class="toolbar-container">
-    <div class="row">
-      <div class="col">
-        <div ngbDropdown class="d-inline-block">
-          <button class="button" id="dropdownBasic1" ngbDropdownToggle>2017</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item">2015</button>
-            <button class="dropdown-item">2016</button>
-            <button class="dropdown-item">2017</button>
-            <button class="dropdown-item">2018</button>
+<div class="container">
+  <div class="col">
+    <select class="button" id="startDate" (change)="yearOnChange()" (click)="yearOnChange()">
+      <ng-container class="container" *ngFor="let year of yearList">
+        <option [ngValue]="year">{{ year }}</option>
+      </ng-container>
+    </select>
+
+    <span class="paddingRight"></span>
+
+    <span>
+      <select class="button" id="batch" (change)="batchOnChange()" (click)="batchOnChange()">
+        <ng-container class="container" *ngIf="latestBatch !== null && batchesBasedOnYearList.length === 0">
+          <option [value]="latestBatch.batchId">{{ latestBatch.trainer.name }} - {{ latestBatch.startDate }}</option>
+        </ng-container>
+        
+        <ng-container class="container" *ngIf="batchesBasedOnYearList.length > 0">
+          <ng-container class="container" *ngFor="let batch of getBatchesByYear()">
+            <option [value]="batch.batchId">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
+          </ng-container>
+        </ng-container>
+      </select>
+    
+      <span class="paddingRight"></span>
+  
+      <select class="button" id="week" (change)="weekOnChange()" (click)="weekOnChange()">
+        <ng-container class="container" *ngFor="let week of batchWeeksList; let i = index;">
+          <option [value]="i">{{ week }}</option>
+        </ng-container>
+      </select>
+    
+      <span class="paddingRight"></span>
+  
+      <select class="button" id="trainee" (change)="traineeOnChange()" (click)="traineeOnChange()">
+        <option [value]="0">Trainee (All)</option>
+        <ng-container class="container" *ngFor="let trainee of traineesList">
+          <option [value]="trainee.traineeId">{{ trainee.name }}</option>
+        </ng-container>
+      </select>
+
+      <form class="pull-right">
+        <input ng-model="chosenTrainee" list="traineeList" type="search" id="searchTextBox" placeholder="Search..." class="search"
+              autocomplete="off">
+
+        <button type="submit" class="searchButton"><i class="fa fa-search"></i></button>
+
+        <datalist id="traineeList">
+          <ng-container class="container" *ngFor="let trainee of traineesList">
+            <option [value]="trainee.name" class="ng-binding ng-scope">{{ trainee.name }} | {{ trainee.email }} | {{ trainee.skypeId }}</option>
+          </ng-container>
+        </datalist>
+
+        <span class="dropdown" ngbDropdown placement="bottom-right">
+          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" ngbDropdownToggle>
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+              <li>
+                <a ng-click="downloadAllChartButton()"> Charts </a>
+              </li>
+              <li>
+                <a ng-click="generatePDF()"> Charts + Feedback </a>
+              </li>
           </div>
-        </div>
-            <div ngbDropdown class="d-inline-block">
-              <button class="button" id="dropdownBasic1" ngbDropdownToggle>Trainer</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item">Trainer</button>
-                <button class="dropdown-item">Trainer 2</button>
-                <button class="dropdown-item">Trainer 3</button>
-              </div>
-            </div>
-            <div ngbDropdown class="d-inline-block">
-              <button class="button" id="dropdownBasic1" ngbDropdownToggle>Week (All)</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item">Week 1</button>
-                <button class="dropdown-item">Week 2</button>
-                <button class="dropdown-item">Week (All)</button>
-              </div>
-            </div>
-            <div ngbDropdown class="d-inline-block">
-              <button class="button" id="dropdownBasic1" ngbDropdownToggle>Trainee (All)</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item">Trainee 1</button>
-                <button class="dropdown-item">Trainee 2</button>
-                <button class="dropdown-item">Trainee (All)</button>
-              </div>
-            </div>
-            <button (click)="debug()">Debug</button>
-    </div>
+        </span>
+      </form>
+    </span>
   </div>
   <hr>
+</div>

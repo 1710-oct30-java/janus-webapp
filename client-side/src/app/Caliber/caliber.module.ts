@@ -75,6 +75,7 @@ import { PanelFeedbackComponent } from './reports/panel-feedback/panel-feedback.
 import { AssessmentBreakdownComponent } from './reports/assessment-breakdown/assessment-breakdown.component';
 import { WeeklyFeedbackComponent } from './reports/weekly-feedback/weekly-feedback.component';
 import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.component';
+import { WeeklyAuditComponent } from './reports/weekly-audit/weekly-audit.component';
 import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative-scores.component';
 
 @NgModule({
@@ -129,6 +130,8 @@ import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative
     AssessmentBreakdownComponent,
     WeeklyFeedbackComponent,
     WeeklyGradesComponent,
+    PanelFeedbackComponent,
+    WeeklyAuditComponent,
     CumulativeScoreComponent,
   ],
   providers: [
@@ -154,9 +157,6 @@ import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative
   ],
   bootstrap: [
     TrainersComponent
-  ],
-  exports: [
-    TraineeTechSkillsComponent,
   ]
 })
 export class CaliberModule { }
