@@ -201,6 +201,7 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
       if (this.week === 0 && this.trainee.traineeId === 0) {
         this.overallSetup();
       } else {
+
         this.weekSetup();
       }
     }
@@ -214,6 +215,7 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
       this.traineesList.push(this.batch.trainees[i].traineeId);
       this.traineesNames.push(this.batch.trainees[i].name);
     }
+
     this.reportsService.fetchBatchOverallRadarChart(this.batch.batchId);
     // create requests for radar data for each trainee in traineeList
     this.traineesData = new Array<any>(this.traineesList.length);
@@ -226,13 +228,16 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
    */
   weekSetup() {
     this.chartData = [];
-    this.dataSetLabels.push(this.trainee.name);
-    this.reportsService.fetchBatchOverallRadarChart(this.batch.batchId);
-    if (this.week === 0) {
-      console.log('debug');
-      this.reportsService.fetchTraineeOverallRadarChart(this.trainee.traineeId);
-    } else {
-      this.reportsService.fetchTraineeUpToWeekRadarChart(this.week, this.trainee.traineeId);
+    if (this.batch.batchId) {
+      this.dataSetLabels.push(this.trainee.name);
+
+      this.reportsService.fetchBatchOverallRadarChart(this.batch.batchId);
+      if (this.week === 0) {
+        console.log('debug');
+        this.reportsService.fetchTraineeOverallRadarChart(this.trainee.traineeId);
+      } else {
+        this.reportsService.fetchTraineeUpToWeekRadarChart(this.week, this.trainee.traineeId);
+      }
     }
   }
   /**
