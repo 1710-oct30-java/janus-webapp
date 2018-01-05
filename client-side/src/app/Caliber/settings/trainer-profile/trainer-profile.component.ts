@@ -27,7 +27,7 @@ export class TrainerProfilesComponent implements OnInit {
   currentBatch: Batch;
 
   /**
-  * create variables for subscribing and trainers
+  * create variables for subscribing, trainers
   * and storing form data
   */
   private trainerSubscription: Subscription;
@@ -176,5 +176,4 @@ export class TrainerProfilesComponent implements OnInit {
     // call trainerService to update
     this.trainerService.updateTrainer(this.currEditTrainer);
   }
-
 }
