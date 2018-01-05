@@ -10,6 +10,14 @@
     font-weight: bold;
 }
 
+.form-inline {
+    padding-top: 12px;
+}
+
+.input-group {
+    padding-right: 4px;
+}
+
 select {
     cursor: pointer;
 }
