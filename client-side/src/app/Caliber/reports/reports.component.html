@@ -1,5 +1,6 @@
 <!--<app-toolbar></app-toolbar>-->
-<div class="container" *ngIf="currentTrainee">
+<app-tools></app-tools>
+<div class="container" *ngIf="ready && currentTrainee">
     <div class="row reports-row">
         <div class="col-md-12">
             <app-weekly-line-chart *ngIf="currentTrainee.traineeId === 0 && weekId === 0"></app-weekly-line-chart>

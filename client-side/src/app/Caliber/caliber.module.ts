@@ -101,6 +101,7 @@ import { BarGraphModalComponent } from './home/vp-bar-graph/bar-graph-modal/barg
 import { ReportsService } from './services/reports.service';
 import { GeneralFeedbackComponent } from './panel/general-feedback/general-feedback.component';
 import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical-feedback.component';
+import { ToolsComponent } from './reports/tools/tools.component';
 
 @NgModule({
   imports: [
@@ -182,6 +183,7 @@ import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical
     BatchByTrainerPipe,
     GeneralFeedbackComponent,
     TechnicalFeedbackComponent,
+    ToolsComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests

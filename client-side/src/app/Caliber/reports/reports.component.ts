@@ -27,6 +27,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   traineeIdSub: Subscription;
   weekIdSub: Subscription;
+  readySub: Subscription;
 
   // This value should be null when no trainees are selected,
   //    and otherwise contain a trainee object
@@ -35,6 +36,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
   // When this has value 0, ALL TRAINEES is selected, otherwise it is a specific trainee
   weekId: number = null;
 
+  // Used to handle block view when multiple changes in the granularity
+  // service are being made.
+  ready = true;
   constructor(private granularityService: GranularityService) { }
 
   ngOnInit() {
@@ -51,6 +55,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.weekId = data;
       }
     });
+
+    this.readySub = this.granularityService.ready$
+          .subscribe((state) => this.ready);
   }
 
   ngOnDestroy() {

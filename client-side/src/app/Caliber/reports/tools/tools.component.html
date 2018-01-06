@@ -1,0 +1,32 @@
+<div class="container" *ngIf="selectedTrainee">
+
+  <!-- Year box -->
+  <div class="col">
+    <select class="button" id="startDate" [(ngModel)]="selectedYear" (ngModelChange)="yearChanged()">
+      <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
+    </select>
+  </div>
+
+  <!-- Batch box --> 
+  <div class="col">
+    <select class="button" id="batch" [(ngModel)]="selectedBatch" (ngModelChange)="batchChanged()">
+      <option *ngFor="let batch of batches.get(selectedYear)" [ngValue]="batch">{{batch.startDate + ' ' + batch.trainer.name}}</option>
+    </select>
+  </div>
+
+  <!-- Batch box --> 
+  <div class="col">
+    <select class="button" id="week" [(ngModel)]="selectedWeek" (ngModelChange)="weekChanged()">
+      <option [ngValue]="0">All</option>
+      <option *ngFor="let week of weekList" [ngValue]="week">Week {{week}}</option>
+    </select>
+  </div>
+
+  <!-- Batch box --> 
+  <div class="col">
+    <select class="button" id="trainee" [(ngModel)]="selectedTrainee" (ngModelChange)="traineeChanged()">
+      <option [ngValue]="defaultTrainee">All</option>
+      <option *ngFor="let trainee of selectedBatch.trainees" [ngValue]="trainee">{{trainee.name}}</option>
+    </select>
+  </div>
+</div>
