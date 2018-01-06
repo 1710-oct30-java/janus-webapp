@@ -75,6 +75,7 @@ export class ToolsComponent implements OnInit, OnDestroy {
 
   /************* Setup Methods ******************/
 
+  /** Sets up the years value  */
   private setupYears(batches: Array<Batch>) {
     const map: Map<number, Array<Batch>> = new Map();
 
@@ -107,8 +108,8 @@ export class ToolsComponent implements OnInit, OnDestroy {
 
 
 
+  /** Sets up the default state that one should expect on initial page load */
   public setDefaults(): void {
-    console.log('setting defaults');
     this.defaultTrainee.traineeId = 0;
 
     this.selectedYear = this.years[0];
@@ -124,7 +125,6 @@ export class ToolsComponent implements OnInit, OnDestroy {
    * Called when there has been a change to the year value selection.
    */
   public yearChanged() {
-    console.log('year been changed yo');
     this.selectedBatch = this.batches.get(this.selectedYear)[0];
     this.batchChanged();
   }
@@ -133,7 +133,6 @@ export class ToolsComponent implements OnInit, OnDestroy {
    * Called when there has been a change to the batch value selection.
    */
   public batchChanged() {
-    console.log('batch changed yo');
     this.generateWeekArray();
     this.selectedWeek = 0;
     this.selectedTrainee = this.defaultTrainee;
