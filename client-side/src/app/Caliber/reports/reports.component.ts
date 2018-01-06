@@ -64,5 +64,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
     // Unsubscribe from subscriptions
     this.weekIdSub.unsubscribe();
     this.traineeIdSub.unsubscribe();
+    this.readySub.unsubscribe();
   }
 }
