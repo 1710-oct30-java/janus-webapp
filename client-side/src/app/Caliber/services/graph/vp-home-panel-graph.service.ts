@@ -8,13 +8,12 @@ export class VpHomePanelGraphService {
 
   constructor(private cs: ColorService) { }
 
-    /**
+  /**
    * Factory for creating ChartDataEntity
    * used for the panel linechart on Vp Home
-   *
-   * @returns ChartDataEntity
+   * @returns {ChartDataEntity}
+   * @memberof VpHomePanelGraphService
    */
-
   public getPanelChartData(): ChartDataEntity {
     const panelChartData = new ChartDataEntity();
     panelChartData.options = {
@@ -57,13 +56,14 @@ export class VpHomePanelGraphService {
     return panelChartData;
   }
 
-  /**
-  * Populates and returns a ChartDataEntity.
-  * @param results: any
-  * @param barChartData: ChartDataEntity
-  * @return ChartDataEntity
-  */
 
+  /**
+   * Populates and returns a ChartDataEntity.
+   * @param {*} results
+   * @param {ChartDataEntity} panelChartData
+   * @returns {ChartDataEntity}
+   * @memberof VpHomePanelGraphService
+   */
   public fillPanelChartData(results: any, panelChartData: ChartDataEntity): ChartDataEntity {
     const today = new Date();
     for ( const result of results) {
@@ -91,11 +91,12 @@ export class VpHomePanelGraphService {
 
   /**
    * converts string to date
-   * @param year: number
-   * @param day: any
-   * @return Date
+   * @private
+   * @param {number} year
+   * @param {*} day
+   * @returns {Date}
+   * @memberof VpHomePanelGraphService
    */
-
   private dateFromDay(year: number, day: any): Date {
     const date = new Date(year, 0);
     return new Date(date.setDate(day));

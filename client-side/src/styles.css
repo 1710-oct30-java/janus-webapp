@@ -43,9 +43,7 @@
 .footer-img {
     margin-top: 1.5em;
 }
-::-webkit-scrollbar {
-    display: none;
-    }
+
 /* Footer, set footer height to actual height of footer*/
 html, body {
     height: 100%;

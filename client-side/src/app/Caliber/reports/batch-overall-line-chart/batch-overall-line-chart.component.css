@@ -26,7 +26,7 @@ thead {
 tr {
     border: 1px rgb(221, 221, 221) solid;
     border-bottom: none;
-    text-align: center;
+    text-align: left;
 }
 
 .trainee-name {

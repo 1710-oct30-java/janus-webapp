@@ -35,8 +35,10 @@ export class SpringInterceptor implements HttpInterceptor {
                 as a fallback to allow a service call to continue as if no data
                 was returned
                */
-                console.log('!!DETECTED XHR REQUEST ERRROR!!');
-                console.log(error);
+                if ( error.status !== 200 ) {
+                    console.log('!!DETECTED XHR REQUEST ERRROR!!');
+                    console.log(error);
+                }
 
                 // stub -> a generic user feedback hook can be placed here
                 return Observable.of(null);

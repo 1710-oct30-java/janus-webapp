@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
 import { AlertsService } from './alerts.service';
+import { environment } from '../../../environments/environment';
 
 
 /**
@@ -13,8 +13,8 @@ import { AlertsService } from './alerts.service';
 @Injectable()
 export class TrainingTypeService extends AbstractApiService<string> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
 
     this.initialize();
   }
@@ -38,13 +38,13 @@ export class TrainingTypeService extends AbstractApiService<string> {
   * spring-security: @PreAuthorize("hasAnyRole('VP', 'STAGING','TRAINER','QC','PANEL')")
   */
   public fetchAll(): void {
-    const url = 'types/training/all';
+    const url = environment.trainingType.fetchAll();
     const messages = {
       success: 'Training Types retrieved successfully',
       error: 'Training Types retrieval failed',
     };
 
-    super.doGetList(url, {}, messages);
+    super.doGetList(url, messages);
   }
 
 }

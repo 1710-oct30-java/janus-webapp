@@ -1,4 +1,45 @@
-container {
-    padding: 10px;
+textarea {
+    overflow-x: hidden;
 }
 
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+.fa.fa-plus {
+    margin-top: 40px;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #fa7427;
+    border-bottom: 1px solid #ebe8e8;
+    border-color: white;
+}
+.btn-secondary:hover:enabled {
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    color: #10009c;
+    transition: 1s;
+}
+
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ app-alerts {
+     position: absolute;
+     z-index: 99999;
+ }
+
+ h3 {
+    background-color: #F26925;
+    padding-left: 10px;
+ }
+
+ .container {
+    padding: 0px;
+    margin: 0px;
+    max-width: 1800px;
+}

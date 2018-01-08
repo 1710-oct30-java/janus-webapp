@@ -1,7 +1,7 @@
 .main-container {
     padding: 10%;
     padding-bottom: 0px;
-    padding-top: 0px;
+    padding-top: 3%;
 }
 
 .assessment-area {
@@ -10,18 +10,68 @@
     align-content: center;
 }
 
+.no-padding {
+    padding: 0px;
+    border: 0px;
+}
+
 .assessment-header {
+    min-width: 10%;
     width: 10%;
+    height: 10%;
     text-align: center;
     font-weight: bold;
 }
 
+.trainee-header {
+    min-width: 10%;
+    width: 10%;
+    height: 10%;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 50px;
+}
+
+.float-right {
+    float: right;
+}
+
 .revature-orange{
-    color: #F26925;
+    color: #fa7427;
+}
+
+.centered {
+    text-align: center;
+}
+
+.divider {
+    margin: 10px;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+.inline {
+    display: inline-block;
 }
 
 .revature-button {
-    background-color: #F26925;
+    background-color: #fa7427;
+}
+
+.revature-button:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    color: #10009c;
+    transition: 1s;
+}
+
+.batch-select{
+    color: #fa7427;
+    border: 0mm;
+    width: auto;
+    font-weight: bold;
 }
 
 .clickable {
@@ -30,4 +80,65 @@
 
 .note {
     width: 100%;
+    font-size: 15px;
 }
+
+.btn-update {
+    background-color: #ff8e4d;
+    color: white;
+}
+
+.btn-add {
+    background-color: #ff8e4d;
+    color: white;
+}
+
+.fa-pencil {
+    cursor: pointer;
+}
+
+.fa-user {
+    cursor: pointer;
+}
+
+#addTrainerButton {
+    padding: 10px;
+}
+
+.col-sm-2 {
+    padding-top: 10px;
+}
+/* #tier { 
+    width:100%; 
+} 
+#tier option { 
+    width:100%; 
+} */
+
+.btn-secondary {
+    background-color: white;
+    color: #fa7427;
+    border-bottom: 1px solid #ebe8e8;
+    border-color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    color: #10009c;
+    transition: 1s;
+}
+
+.btn-danger {
+    float: right;
+}
+
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ app-alerts {
+     position: absolute;
+     z-index: 99999;
+ }

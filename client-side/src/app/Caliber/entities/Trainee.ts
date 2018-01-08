@@ -1,3 +1,5 @@
+import { Batch } from './Batch';
+
 export class Trainee {
     traineeId: number;
     resourceId: number;
@@ -13,4 +15,5 @@ export class Trainee {
     major: string;
     techScreenerName: string;
     projectCompletion: string;
+    batch: Batch;
 }

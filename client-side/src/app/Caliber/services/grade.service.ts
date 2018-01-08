@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
+import { environment } from '../../../environments/environment';
 import { AlertsService } from './alerts.service';
 
 // entities
@@ -21,8 +21,8 @@ import { Grade } from '../entities/Grade';
 @Injectable()
 export class GradeService extends AbstractApiService<Grade> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
   }
 
   /*
@@ -45,7 +45,7 @@ export class GradeService extends AbstractApiService<Grade> {
  *
  */
   public fetchByBatchIdByWeek(batchId: number, week: number): void {
-    const url = this.envService.buildUrl(`all/grades/batch/${batchId}/week/${week}`);
+    const url = environment.grade.fetchByBatchIdByWeek(batchId, week);
 
     this.listSubject.next([]);
 
@@ -108,13 +108,14 @@ export class GradeService extends AbstractApiService<Grade> {
    * @param grade: Grade
    */
   public save(grade: Grade): void {
-    const url = 'trainer/grade/create';
+    const url = environment.grade.save();
     const messages = {
       success: 'Grade saved successfully',
       error: 'Grade save failed',
     };
+    const clone = this.prepareForApi(grade);
 
-    super.doPost(grade, url, {}, messages);
+    super.doPost(clone, url, messages);
   }
 
   /**
@@ -126,13 +127,33 @@ export class GradeService extends AbstractApiService<Grade> {
    * @param grade: Grade
    */
   public update(grade: Grade): void {
-    const url = 'trainer/grade/update';
+    const url = environment.grade.update();
     const messages = {
       success: 'Grade updated successfully',
       error: 'Grade update failed',
     };
+    const clone = this.prepareForApi(grade);
 
-    super.doPost(grade, url, {}, messages);
+    super.doPost(clone, url, messages);
+  }
+
+    /**
+     * produces a clone of the grade object that
+     * has changes required for the API in order
+     * to be processed
+     *
+     * @param batch: Batch
+     *
+     * @return any
+     */
+  protected prepareForApi(grade: Grade) {
+    const output: any = {};
+
+    Object.assign(output, grade);
+
+    output.dateReceived = super.stringifyDate(grade.dateReceived);
+
+    return output;
   }
 
 }

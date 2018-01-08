@@ -8,22 +8,24 @@
         <strong>Categories covered this week: </strong>
         <span *ngIf="weekTopics">{{weekTopics}}</span>
       </div>
-      <table class="table table-responsive">
-        <thead>
-          <tr>
-            <td>Trainer Feedback</td>
-            <td>Quality Audit</td>
-            <td>QC Feedback</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td *ngIf="trainerNote">{{trainerNote.content}}</td>
-            <td *ngIf="qcNote">{{qcNote.qcStatus}}</td>
-            <td *ngIf="qcNote">{{qcNote.content}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <td>Trainer Feedback</td>
+              <td>Quality Audit</td>
+              <td>QC Feedback</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td *ngIf="trainerNote">{{trainerNote.content}}</td>
+              <td *ngIf="qcNote">{{qcNote.qcStatus}}</td>
+              <td *ngIf="qcNote">{{qcNote.content}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

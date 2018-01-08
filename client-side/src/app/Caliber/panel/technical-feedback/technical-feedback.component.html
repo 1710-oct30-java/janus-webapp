@@ -1,28 +1,73 @@
-<div class="border border-secondary">
-    <div class="container">
-  
-      <div class="row">
-        <div class="col">
-          <h3>Technical Feedback</h3>
-        </div>
-      </div>
-  
-      <div class="row">
-        <hr>
-        <div class="col-3">
-          <strong>Technology</strong>
-        </div>
-        <div class="col-3">
-          <strong>Result</strong>
-        </div>
-        <div class="col-3">
-          <strong>Repanel</strong>
-        </div>
-        <div class="col-3">
-          <strong>Comment</strong>
-        </div>
-        <hr>
-      </div>
-  
+<div class="container">
+
+
+  <hr/>
+  <div class="row justify-content-center">
+    <div class="col-2">
+      <strong>Technology</strong>
+    </div>
+    <div class="col-2">
+      <strong>Result</strong>
+    </div>
+    <div class="col-2">
+      <strong>Repanel</strong>
+    </div>
+    <div class="col-2">
+      <strong>Comment</strong>
     </div>
   </div>
+
+  <div class="form-group" [formGroup]="technologyForm">
+
+    <div class="row justify-content-center">
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="technology"></label>
+          <select class="form-control" id="technology" formControlName="technology">
+            <option *ngFor="let technologies of filteredTechList" [ngValue]="technologies">{{technologies.skillCategory}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="result"></label>
+          <select formControlName="result" class="form-control" id="result">
+            <option value=0>0 - Very Poor</option>
+            <option value=1>1 - Moderately Poor</option>
+            <option value=2>2 - Fairly Poor</option>
+            <option value=3>3 - Poor</option>
+            <option value=4>4 - Below Average</option>
+            <option value=5>5 - Average</option>
+            <option value=6>6 - Above Average</option>
+            <option value=7>7 - Good</option>
+            <option value=8>8 - Very Good</option>
+            <option value=9>9 - Great</option>
+            <option value=10>10 - Excelllent</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="status"></label>
+          <select formControlName="status" class="form-control" id="status">
+            <option>Pass</option>
+            <option>Repanel</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="form-group">
+          <label for="technicalComments"></label>
+          <textarea formControlName="comment" class="form-control" id="technicalComments" rows="1" cols="30"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

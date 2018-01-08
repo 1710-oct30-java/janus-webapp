@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
+import { environment } from '../../../environments/environment';
 import { AlertsService } from './alerts.service';
 
 // entities
@@ -34,8 +34,8 @@ export class LocationService extends AbstractApiService<Location> {
   */
   locations$: Observable<any> = super.getList();
 
-  constructor( envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService ) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService ) {
+    super(httpClient, alertService);
 
     this.initializeSubscriptions();
   }
@@ -71,13 +71,13 @@ export class LocationService extends AbstractApiService<Location> {
   * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING', 'PANEL')")
   */
   public fetchAll(): void {
-    const url = 'all/location/all/';
+    const url = environment.location.fetchAll();
     const messages = {
       success: 'Locations retrieved successfully',
       error: 'Failed to retrieve locations',
     };
 
-    super.doGetList(url, {}, messages);
+    super.doGetList(url, messages);
   }
 
   /**
@@ -90,13 +90,13 @@ export class LocationService extends AbstractApiService<Location> {
   * @param location: Location
   */
   public save(location: Location): void {
-    const url = 'vp/location/create';
+    const url = environment.location.save();
     const messages = {
       success: 'Location saved successfully!',
       error: 'Location failed to save!',
     };
 
-    super.doPost(location, url, {}, messages);
+    super.doPost(location, url, messages);
   }
 
   /**
@@ -109,13 +109,13 @@ export class LocationService extends AbstractApiService<Location> {
   * @param location: Location
   */
   public update(location: Location): void {
-    const url = 'vp/location/update';
+    const url = environment.location.update();
     const messages = {
       success: 'Location saved successfully!',
       error: 'Location failed to save!',
     };
 
-    super.doPut(location, url, {}, messages);
+    super.doPut(location, url, messages);
   }
 
   /**
@@ -136,7 +136,7 @@ export class LocationService extends AbstractApiService<Location> {
   * @param location: Location
   */
   public delete(location: Location): void {
-    const url = 'vp/location/update';
+    const url = environment.location.update();
     const messages = {
       success: 'Location deactivated successfully!',
       error: 'Location failed to deactivate!',
@@ -144,7 +144,7 @@ export class LocationService extends AbstractApiService<Location> {
 
     location.active = false;
 
-    super.doPut(location, url, {}, messages);
+    super.doPut(location, url, messages);
 
     // @see savedSubscription in constructor for deletedSubject implementation
   }
@@ -164,7 +164,7 @@ export class LocationService extends AbstractApiService<Location> {
   * @param location: Location
   */
   public reactivate(location: Location) {
-    const url = 'vp/location/update';
+    const url = environment.location.update();
     const messages = {
       success: 'Location reactivated successfully!',
       error: 'Location failed to reactivate!',
@@ -172,7 +172,7 @@ export class LocationService extends AbstractApiService<Location> {
 
     location.active = true;
 
-    super.doPut(location, url, {}, messages);
+    super.doPut(location, url, messages);
   }
 
   /*

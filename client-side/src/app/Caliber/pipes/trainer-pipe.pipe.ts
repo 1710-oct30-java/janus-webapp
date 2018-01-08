@@ -4,12 +4,17 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'trainerPipe'
 })
 export class TrainerPipePipe implements PipeTransform {
-
+  /**
+   * Logic to filter out Active/Inactive Trainers
+   * @param {*} trainers
+   * @param {String} status
+   * @returns {*}
+   * @memberof TrainerPipePipe
+   */
   transform(trainers: any, status: String): any {
-    console.log(trainers);
     if (status === 'ROLE_INACTIVE') {
       return trainers.filter(trainer => trainer.tier === status);
-    }else {
+    } else {
       return trainers.filter(trainer => trainer.tier !== 'ROLE_INACTIVE');
     }
   }

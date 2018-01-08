@@ -44,12 +44,17 @@ export class TrainersComponent implements OnInit, OnDestroy {
     this.initFormControl();
   }
 
+  /**
+   * initialize form control for validations
+   * 
+   * @memberof TrainersComponent
+   */
   initFormControl() {
     this.addForm = this.fb.group({
       'name': ['', Validators.required],
-      'email': ['', Validators.required],
-      'title': [''],
-      'tier': [''],
+      'email': ['', Validators.email],
+      'title': ['', Validators.required],
+      'tier': ['', Validators.required],
     });
   }
 
@@ -66,6 +71,7 @@ export class TrainersComponent implements OnInit, OnDestroy {
       this.trainerService.fetchAll();
     });
     // this.trainers.push(this.newTrainer);
+    this.initFormControl();
   }
 
   open(content) {
@@ -83,9 +89,9 @@ export class TrainersComponent implements OnInit, OnDestroy {
     this.newTitle = modalTrainer.title;
     this.rForm = this.fb.group({
       'name': [this.currEditTrainer.name, Validators.required],
-      'email': [this.currEditTrainer.email, Validators.required],
-      'title': [this.newTitle],
-      'tier': [this.newTier],
+      'email': [this.currEditTrainer.email, Validators.email],
+      'title': [this.newTitle, Validators.required],
+      'tier': [this.newTier, Validators.required],
     });
     this.modalService.open(content, { size: 'lg' });
   }
@@ -118,6 +124,11 @@ export class TrainersComponent implements OnInit, OnDestroy {
   newTitleChange(newTitle) {
     this.model.title = newTitle;
   }
+
+  /**
+   * Changes param passed for Active/Inactive Buttons
+   * @param status: status value
+   */
   buttonChange(status: String) {
     this.activeStatus = status;
   }
@@ -142,7 +153,14 @@ export class TrainersComponent implements OnInit, OnDestroy {
       this.trainerService.fetchAll();
     });
   }
-
+  /**
+   * get the cause for modal dismissal
+   * 
+   * @private
+   * @param {*} reason 
+   * @returns {string} 
+   * @memberof TrainersComponent
+   */
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -152,13 +170,21 @@ export class TrainersComponent implements OnInit, OnDestroy {
       return `with: ${reason}`;
     }
   }
-
-  // clean up subscriptions
+  /**
+   * clean up subscriptions
+   * 
+   * @memberof TrainersComponent
+   */
   ngOnDestroy() {
     this.trainerSubscription.unsubscribe();
   }
 
-  // sets current trainer to clicked trainer and navigates to trainer profile page
+  /**
+   * set current trainer to clicked  trainer and navigates to trainer profile page
+   * 
+   * @param {any} trainer 
+   * @memberof TrainersComponent
+   */
   goToProfile(trainer) {
     this.trainerService.changeCurrentTrainer(trainer);
     this.route.navigate(['Caliber/settings/trainer-profile']);

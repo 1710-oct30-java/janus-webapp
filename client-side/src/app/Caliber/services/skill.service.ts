@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
 import { AlertsService } from './alerts.service';
+import { environment } from '../../../environments/environment';
 
 
 /**
@@ -13,8 +13,8 @@ import { AlertsService } from './alerts.service';
 @Injectable()
 export class SkillService extends AbstractApiService<string> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
 
     this.initialize();
   }
@@ -38,12 +38,12 @@ export class SkillService extends AbstractApiService<string> {
   * spring-security: @PreAuthorize("hasAnyRole('VP', 'STAGING','TRAINER','QC','PANEL')")
   */
   public fetchAll(): void {
-    const url = 'types/skill/all';
+    const url = environment.skill.fetchAll();
     const messages = {
       success: 'Skills retrieved successfully',
       error: 'Skills retrieval failed',
     };
 
-    super.doGetList(url, {}, messages);
+    super.doGetList(url, messages);
   }
 }

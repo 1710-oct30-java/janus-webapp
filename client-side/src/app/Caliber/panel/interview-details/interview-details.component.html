@@ -7,18 +7,18 @@
       </div>
     </div>
 
-    <form [formGroup]="interviewForm">
+    <div class="form-group" [formGroup]="interviewForm">
 
-      <div class="row">
+      <div class="row justify-content-center">
 
-        <div class="col">
+        <div class="col-5">
           <div class="form-group">
             <label for="associateName">Associate Name</label>
-            <input class="form-control" id="associateName" formControlName="trainee" type="text" value="{{trainee.name}}" readonly>
+            <input class="form-control" id="associateName" type="text" value="{{trainee.name}}" readonly>
           </div>
         </div>
 
-        <div class="col">
+        <div class="col-5">
           <div class="form-group">
             <label for="interviewDate">Interview Date</label>
             <div class="input-group">
@@ -32,32 +32,32 @@
 
       </div>
 
-      <div class="row">
+      <div class="row justify-content-center">
 
-        <div class="col">
+        <div class="col-5">
           <div class="form-group">
             <label for="trainingTrack">Training Track</label>
             <input class="form-control" id="trainingTrack" type="text" value="{{trainingTrack}}" readonly>
           </div>
         </div>
 
-        <div class="col">
+        <div class="col-5">
           <div class="form-group">
             <label for="interviewTime">Interview Time</label>
-            <ngb-timepicker name="time" [meridian]="true" [spinners]="false"></ngb-timepicker>
+            <ngb-timepicker formControlName="interviewTime" name="time" [meridian]="true" [spinners]="false"></ngb-timepicker>
           </div>
         </div>
 
       </div>
 
-      <div class="row">
+      <div class="row justify-content-center">
 
-        <div class="col">
+        <div class="col-5">
           <label for="panelRound">Panel Round</label>
-          <input class="form-control" id="panelRound" type="text" value="{{panelRound}}" readonly>
+          <input class="form-control" formControlName="panelRound" id="panelRound" type="text" value="{{panelRound}}" readonly>
         </div>
 
-        <div class="col">
+        <div class="col-5">
           <label for="interviewMode">Interview Mode</label>
           <select class="form-control" formControlName="format" id="interviewMode">
             <option>Skype</option>
@@ -67,17 +67,17 @@
 
       </div>
 
-      <div class="row">
+      <div class="row justify-content-center">
 
-        <div class="col">
+        <div class="col-5">
           <label for="recordingConsent">Recording Consent</label>
           <select class="form-control" formControlName="recordingConsent" id="recordingConsent">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
           </select>
         </div>
 
-        <div class="col">
+        <div class="col-5">
           <label for="internetConnectivity">Internet Connectivity</label>
           <select class="form-control" formControlName="internet" id="internetConnectivity">
             <option>Stable</option>
@@ -86,7 +86,6 @@
         </div>
 
       </div>
-    </form>
-
+    </div>
   </div>
 </div>

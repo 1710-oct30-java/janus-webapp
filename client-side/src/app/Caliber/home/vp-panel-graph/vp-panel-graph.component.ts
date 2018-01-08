@@ -20,6 +20,10 @@ export class VpPanelGraphComponent implements OnInit {
     private environmentService: EnvironmentService, private alertService: AlertsService,
     private reportsService: ReportsService) { }
 
+  /**
+   * Hanldes the API calls
+   * @memberof VpPanelGraphComponent
+   */
   ngOnInit() {
     this.panelChartData = this.vpHomePanelGraphService.getPanelChartData();
     this.reportsService.fetchReportsBiWeeklyPanel()

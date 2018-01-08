@@ -11,10 +11,9 @@ export class VpHomeBarGraphService {
   /**
    * Factory for creating ChartDataEntity
    * used for the stacked barchart on Vp Home
-   *
-   * @returns ChartDataEntity
+   * @returns {ChartDataEntity}
+   * @memberof VpHomeBarGraphService
    */
-
   public getBarChartData(): ChartDataEntity {
     const barChartData = new ChartDataEntity();
     barChartData.options = {
@@ -51,15 +50,15 @@ export class VpHomeBarGraphService {
     return barChartData;
   }
 
-      /**
-     * Populates and returns a ChartDataEntity.
-     * @param results: any
-     * @param barChartData: ChartDataEntity
-     * @param state: string
-     * @param city: string
-     * @return ChartDataEntity
-     */
-
+  /**
+   * Populates and returns a ChartDataEntity.
+   * @param {*} results
+   * @param {ChartDataEntity} barChartData
+   * @param {string} state
+   * @param {string} city
+   * @returns {ChartDataEntity}
+   * @memberof VpHomeBarGraphService
+   */
   public fillChartData(results: any, barChartData: ChartDataEntity, state: string, city: string): ChartDataEntity {
     let holder;
     barChartData = this.clearBarChartData(barChartData);
@@ -73,7 +72,6 @@ export class VpHomeBarGraphService {
     }
     for (const result of holder) {
       barChartData.labels.push(result.label);
-      // barChartData.id.push(result.id);
       let i;
       for (const key of Object.keys(result.qcStatus)) {
         if (key === 'Poor') {
@@ -104,14 +102,15 @@ export class VpHomeBarGraphService {
     return barChartData;
   }
 
-
   /**
    * Clears the arrays of a ChartDataEntity
    * without this the chart won't redraw
-   * @param ChartDataEntity
-   * @returns ChartDataEntity
+   * @private
+   * @param {ChartDataEntity} barChartData
+   * @returns {ChartDataEntity}
+   * @memberof VpHomeBarGraphService
    */
-
+  
   private clearBarChartData(barChartData: ChartDataEntity): ChartDataEntity {
     barChartData.colors = [];
     barChartData.data.length = 0;

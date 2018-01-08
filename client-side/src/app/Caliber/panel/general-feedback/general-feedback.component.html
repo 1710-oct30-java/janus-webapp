@@ -17,14 +17,14 @@
     </div>
     <hr/>
 
-    <form class="form">
+    <div class="form-group" [formGroup]="generalFeedback">
 
       <div class="row justify-content-center">
         <div class="col-5">
           <label for="associateIntroduction">Associate Introduction</label>
         </div>
         <div class="col-5">
-          <textarea class="form-control" id="associateIntroduction" rows="1" cols="30"></textarea>
+          <textarea formControlName="associateIntro" class="form-control" id="associateIntroduction" rows="1" cols="30"></textarea>
         </div>
       </div>
 
@@ -32,21 +32,10 @@
 
       <div class="row justify-content-center">
         <div class="col-5">
-          <label for="projOne">Project One Introduction</label>
+          <label for="projOne">Project One Explanation</label>
         </div>
         <div class="col-5">
-          <textarea class="form-control" id="projOne" rows="1" cols="30"></textarea>
-        </div>
-      </div>
-
-      <hr/>
-
-      <div class="row justify-content-center">
-        <div class="col-5">
-          <label for="projTwo">Project Two Introduction</label>
-        </div>
-        <div class="col-5">
-          <textarea class="form-control" id="projTwo" rows="1" cols="30"></textarea>
+          <textarea formControlName="projectOneDescription" class="form-control" id="projOne" rows="1" cols="30"></textarea>
         </div>
       </div>
 
@@ -54,10 +43,21 @@
 
       <div class="row justify-content-center">
         <div class="col-5">
-          <label for="projThree">Project Three Introduction</label>
+          <label for="projTwo">Project Two Explanation</label>
         </div>
         <div class="col-5">
-          <textarea class="form-control" id="projThree" rows="1" cols="30"></textarea>
+          <textarea formControlName="projectTwoDescription" class="form-control" id="projTwo" rows="1" cols="30"></textarea>
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="row justify-content-center">
+        <div class="col-5">
+          <label for="projThree">Project Three Explanation</label>
+        </div>
+        <div class="col-5">
+          <textarea formControlName="projectThreeDescription" class="form-control" id="projThree" rows="1" cols="30"></textarea>
         </div>
       </div>
 
@@ -68,11 +68,11 @@
           <label for="communicationSkills">Communication Skills</label>
         </div>
         <div class="col-5">
-          <textarea class="form-control" id="communicationSKills" rows="1" cols="30"></textarea>
+          <textarea formControlName="communicationSkills" class="form-control" id="communicationSKills" rows="1" cols="30"></textarea>
         </div>
       </div>
 
-    </form>
+    </div>
 
   </div>
 </div>

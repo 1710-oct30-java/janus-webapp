@@ -1,142 +1,72 @@
 
-<div class="row">
-  <div class="col">
-    
+<div id="manage" class="container">
+
+  <div class="row mb-3">
+    <!-- Select year dropdown -->
+    <div ngbDropdown class="d-inline-block mr-3">
+      <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle><strong>Select Year</strong></button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <div *ngFor="let year of getBatchListYears(batches)">
+          <button class="dropdown-item" (click)="setCurrentYear(year)">{{ year }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group" role="group">
+      <button class="btn btn-secondary" (click)="openBatchModal(null)"><strong>Create Batch</strong></button>
+      <button class="btn btn-secondary" (click)="openImportBatchModal(importBatch)"><strong>Import Batch</strong></button>
     </div>
   </div>
 
-  <div id="manage">
-    <div class="container">
-      <div class="row">
+  <!-- Displays batches by year on the manage batch landing page -->
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <table class="table table-hover">
+  
+        <thead>
+          <tr>
+            <th>Training Name</th>
+            <th>Training Type</th>
+            <th>Skill Type</th>
+            <th>Trainer</th>
+            <th>Location</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Good Grade</th>
+            <th>Passing Grade</th>
+            <th></th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <tr *ngFor="let batch of batches | DisplayBatchByYear:currentYear">
+            <td>{{batch.trainingName}}</td>
+            <td>{{batch.trainingType}}</td>
+            <td>{{batch.skillType}}</td>
+            <td>{{batch.trainer.name}}</td>
+            <td>{{batch.address | addressToString }}</td>
+            <td>{{batch.startDate | date:'MM/dd/yyyy'}}</td>
+            <td>{{batch.endDate | date:'MM/dd/yyyy'}}</td>
+            <td>{{batch.goodGradeThreshold}}</td>
+            <td>{{batch.borderlineGradeThreshold}}</td>
+            <td>
+                <i class="fa fa-users" style="color:#fa7427 ;"  (click)="openViewBatchTraineesModal(traineesInBatch, batch)" [title]="batch.trainees.length + ' Trainees'"></i>
+                </td>
+                <td>
+                <i class="fa fa-pencil" style="color:#fa7427 ;"  (click)="openUpdateBatchModal(batch)"></i>
+                </td>
+                <td>
+                <i class="fa fa-times" style="color:#fa7427 ;"  (click)="deleteBatchFunction(batch)"></i>
+            </td>
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+  </div>
 
-        <!-- Select year dropdown -->
-
-            <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-outline-primary" style="color:#ff8e4d ;" id="dropdownBasic1" ngbDropdownToggle>Select Year</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <div *ngFor="let year of batchYearsNoDuplicates">
-                <button class="dropdown-item" (click)="updateYear(year)">{{year}}</button>
-              </div>
-              </div>
-      </div>
-
-
-      <!-- Create batch modal -->
-
-      <ng-template #createBatch let-c="close" let-d="dismiss">
-        <div class="modal-header">
-          <h4 class="modal-title">Create New Batch</h4>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <div class="form-group col-md-6 col-sm-6">
-                  <label for="trainingName">Training Name:</label> <input
-                    [(ngModel)]="createNewBatch.trainingName" type="text" class="form-control"
-                    id="trainingName" placeholder="1611 Jul11 Java"
-                    ng-required="true">
-                </div>
-                <div class="form-group col-md-6 col-sm-6">
-                    <label for="trainingType">Training Type</label> <select
-                    [(ngModel)]="createNewBatch.trainingType" class="form-control" id="trainer"
-                    placeholder="Select Training Type">
-                    <option value="" disabled>Select Training Type</option>
-                    <option *ngFor="let trainType of trainingTypes">{{trainType}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6 col-sm-6">
-                    <label for="skills">Skills</label> <select
-                    [(ngModel)]="createNewBatch.skillType" class="form-control" id="skills">
-                    <option value="" disabled>Select Skill Type</option>
-                    <option *ngFor="let skill of skills">{{skill}}</option>
-                  </select>
-                </div>
-                <!-- Dropdown for location -->
-                <div class="form-group col-md-6 col-sm-6">
-                    <label for="location">Location</label>
-                    <select #selectLocation (change)="onCreateBatchLocationSelect(selectLocation.value)" class="form-control" id="trainer">
-                        <option value="" disabled>Select Location</option>
-                      <option *ngFor="let location of locations" [value]="location.addressId">{{location.city}}, {{location.state}}</option>
-                    </select>
-                </div>
-              </div>
-                <!-- Dropdown ends -->
-          <div class="row">
-              <div class="form-group col-md-6 col-sm-6">
-                  <label for="trainer">Trainer:</label>
-                  <select #selectCreateBatchTrainer (change)="onCreateBatchTrainerSelect(selectCreateBatchTrainer.value)" class="form-control" id="trainer">
-                      <option value="">Select Trainer</option>
-                    <option *ngFor="let trainer of trainers" [value]="trainer.trainerId">{{trainer.name}}</option>
-                  </select>
-              </div>
-              <div class="form-group col-md-6 col-sm-6">
-                  <label for="trainer">Co-Trainer:</label>
-                  <select #selectCreateBatchCoTrainer (change)="onCreateBatchCoTrainerSelect(selectCreateBatchCoTrainer.value)" class="form-control" id="trainer">
-                      <option value="">Select Co-Trainer</option>
-                    <option *ngFor="let trainer of trainers" [value]="trainer.trainerId">{{trainer.name}}</option>
-                  </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-6 col-sm-6"
-                moment-picker="startDate.model" format="YYYY-MM-DD">
-                <label for="start-date">Start Date:</label>
-                <div class="input-group" id="start-date" data-datepicker="true">
-                    <input class="form-control" placeholder="Start Date"
-                    name="dp" [(ngModel)]="createNewBatch.startDate" ngbDatepicker #d="ngbDatepicker">
-             <button class="input-group-addon" (click)="d.toggle()" type="button">
-                <i class="fa fa-calendar" style="color:#ff8e4d ;" aria-hidden="true"></i>
-             </button>
-                </div>
-              </div>
-              <div class="form-group col-md-6 col-sm-6"
-              moment-picker="endDate.model" format="YYYY-MM-DD">
-              <label for="end-date">End Date:</label>
-              <div class="input-group" id="end-date" data-datepicker="true">
-                  <input class="form-control" placeholder="End Date"
-                  name="dp2" [(ngModel)]="createNewBatch.endDate" ngbDatepicker #d2="ngbDatepicker">
-           <button class="input-group-addon" (click)="d2.toggle()" type="button">
-              <i class="fa fa-calendar" style="color:#ff8e4d ;" aria-hidden="true"></i>
-           </button>
-              </div>
-            </div>
-            </div>
-            <div class="row">
-              <div class="form-group col-md-6 col-sm-6">
-                <label for="goodGrade">Good Grade: <span
-                  title="The minimum acceptable grade."
-                  alt="The minimum acceptable grade."
-                  class="glyphicon glyphicon-question-sign"></span></label> <input
-                  [(ngModel)]="createNewBatch.goodGradeThreshold" ng-change="setMinGrade()"
-                  type="number" min="0" step="1" class="form-control"
-                  id="goodGrade" placeholder="80" ng-required="true">
-              </div>
-              <div class="form-group col-md-6 col-sm-6">
-                <label for="borderlineGrade">Passing Grade: <span
-                  title="The minimum grade required to pass. Falling below this grade will likely result in disciplinary action."
-                  alt="The minimum grade required to pass. Falling below this grade will likely result in disciplinary action."
-                  class="glyphicon glyphicon-question-sign"></span></label> <input
-                  [(ngModel)]="createNewBatch.borderlineGradeThreshold"
-                  ng-change="lowerMinGrade()" type="number" min="0" step="1"
-                  class="form-control" id="borderlineGrade" placeholder="50"
-                  ng-required="true">
-              </div>
-            </div>
-            
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-          <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="createNewBatchFunction()">Create Batch</button>
-        </div>
-      </ng-template>
-
-      
-      
-      
-      
-      
-      
+</div>
+  
       <!-- Import batch modal -->
       
       <ng-template #importBatch let-c="close" let-d="dismiss">
@@ -155,16 +85,10 @@
                   </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-            <input type="submit" value="Import" class="btn btn-primary" />
+            <input type="submit" value="Import" class="btn btn-secondary" style="color:#fa7427 ;" />
           </div>
         </ng-template>
 
-        
-        
-        
-        
-        
-        
         
         
         <!-- Batch trainee modal
@@ -175,7 +99,8 @@
           <div class = "bigmodal">
             <div class="modal-header">
               <h4 class="modal-title">View/Add Trainees</h4>
-              <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="openBatchModal(createTrainee)">Add Trainee+</button>
+              <button class="btn btn-secondary" style="color:#fa7427 ;" (click)="deleteAllTraineesFunction(currentBatch)"><strong>Delete All Trainees</strong></button>
+              <button class="btn btn-secondary" style="color:#fa7427 ;" (click)="openCreateTraineeModal(createTrainee)"><strong>Add Trainee+</strong></button>
             </div>
             <!-- <div class="col-md-12 col-lg-12"> -->
             <div class="modal-body">
@@ -206,8 +131,7 @@
                                 <td>{{trainee.phoneNumber}}</td>
                                 <td>{{trainee.skypeId}}</td>
                                 <td>
-                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    <a [href]="trainee.profileUrl">Profile</a>
+                                    <a *ngIf="trainee.profileUrl" [href]="trainee.profileUrl"><i class="fa fa-file-text-o" aria-hidden="true"></i></a>
                                 </td>
                                 <td>{{trainee.recruiterName}}</td>
                                 <td>{{trainee.college}}</td>
@@ -215,7 +139,10 @@
                                 <td>{{trainee.major}}</td>
                                 <td>{{trainee.techScreenerName}}</td>
                                 <td>{{trainee.projectCompletion}}</td>
-                                <td><i class="fa fa-times" style="color:#ff8e4d ;" aria-hidden="true" (click)="deleteTraineeFunction(trainee)"></i></td>
+                                <td>
+                                    <i class="fa fa-pencil" style="color:#fa7427 ;" aria-hidden="true" (click)="openUpdateTraineeModal(createTrainee, trainee)"></i>
+                                </td>
+                                <td><i class="fa fa-times" style="color:#fa7427 ;" aria-hidden="true" (click)="deleteTraineeFunction(trainee)"></i></td>
                             </tr>      
                           </tbody>
                         </table>
@@ -223,73 +150,11 @@
                     </div>
           </ng-template>
       
-      <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="openBatchModal(createBatch)">Create Batch+</button>
-      <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="openBatchModal(importBatch)">Import Batch+</button>
-
-    </div>
+     
 
 
 
 
-
-<!-- Displays batches by year on the manage batch landing page -->
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 col-lg-12">
-      <table class="table table-hober">
-        <thead>
-          <tr>
-            <th>Training Name</th>
-            <th>Training Type</th>
-            <th>Skill Type</th>
-            <th>Trainer</th>
-            <th>Location</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Good Grade</th>
-            <th>Passing Grade</th>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let batch of batches | DisplayBatchByYear:currentYear">
-              <td>{{batch.trainingName}}</td>
-              <td>{{batch.trainingType}}</td> 
-              <td>{{batch.skillType}}</td>
-              <td>{{batch.trainer.name}}</td>
-              <td>{{batch.location}}</td>
-              <td>{{batch.startDate | date}}</td>
-              <td>{{batch.endDate | date}}</td>
-              <td>{{batch.goodGradeThreshold}}</td>
-              <td>{{batch.borderlineGradeThreshold}}</td>  
-              
-              <td> 
-                  <i class="fa fa-users" style="color:#ff8e4d ;" aria-hidden="true" (click)="openViewBatchTraineesModal(traineesInBatch, batch)"> {{batch.trainees.length}}</i>
-              </td>
-              <td>
-                  <i class="fa fa-pencil" style="color:#ff8e4d ;" aria-hidden="true" (click)="openUpdateBatchModal(updateBatch, batch)"></i>
-                  </td>
-                  <td>
-                  <i class="fa fa-times" style="color:#ff8e4d ;" aria-hidden="true" (click)="deleteBatchFunction(batch)"></i>
-							</td>
-							<td><a role="button" class="pull-right"
-								ng-click="populateBatch(batch);selectCurrentBatch($index)"
-								data-toggle="modal" data-target="#createBatchModal"><span
-									class="glyphicon glyphicon-pencil" aria-hidden="true"> </span></a></td>
-							<td><a role="button" class="pull-right"
-								ng-click="selectCurrentBatch($index)" data-toggle="modal"
-								data-target="#deleteBatchModal"><span
-									class="glyphicon glyphicon-remove" aria-hidden="true"> </span></a></td>
-          </tr>      
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
 
 
 
@@ -358,7 +223,7 @@
                 <input class="form-control" placeholder="Start Date"
                 name="dp" [(ngModel)]="batchToUpdate.startDate" ngbDatepicker #d="ngbDatepicker">
          <button class="input-group-addon" (click)="d.toggle()" type="button">
-            <i class="fa fa-calendar" style="color:#ff8e4d ;" aria-hidden="true"></i>
+            <i class="fa fa-calendar" style="color:#fa7427 ;" aria-hidden="true"></i>
          </button>
             </div>
           </div>
@@ -369,7 +234,7 @@
               <input class="form-control" placeholder="End Date"
               name="dp2" [(ngModel)]="batchToUpdate.endDate" ngbDatepicker #d2="ngbDatepicker">
        <button class="input-group-addon" (click)="d2.toggle()" type="button">
-          <i class="fa fa-calendar" style="color:#ff8e4d ;" aria-hidden="true"></i>
+          <i class="fa fa-calendar" style="color:#fa7427 ;" aria-hidden="true"></i>
        </button>
           </div>
         </div>
@@ -399,11 +264,9 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-      <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="updateBatchFunction()">Update Batch</button>
+      <button class="btn btn-xs btn-outline-primary" style="color:#fa7427 ;" (click)="updateBatchFunction()">Update Batch</button>
     </div>
   </ng-template>
-
-
 
 
 
@@ -414,7 +277,8 @@
 
    <ng-template #createTrainee let-c="close" let-d="dismiss">
       <div class="modal-header">
-        <h4 class="modal-title">Add Trainee</h4>
+        <h4 *ngIf="isNew" class="modal-title">Add Trainee</h4>
+        <h4 *ngIf="!isNew" class="modal-title">Update Trainee</h4>
       </div>
       <div class="modal-body">
           <div class="row">
@@ -492,18 +356,24 @@
           <div class ="row">
               <div class="form-group col-md-6 col-sm-6">
                   <label for="trainingStatus">Training Status</label> <select
-                  [(ngModel)]="createNewBatch.trainingStatus" class="form-control" id="trainer"
+                  [(ngModel)]="createNewTrainee.trainingStatus" class="form-control" id="trainer"
                   placeholder="Select Status">
                   <option value="" disabled>Select Status</option>
+                  <option *ngFor="let status of statuses">{{status}}</option>
                 </select>
               </div>
           </div>
 
-
-          
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-        <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="createNewTraineeFunction()">Add Trainee</button>
+        <button class="btn btn-secondary" *ngIf="isNew" style="color:#fa7427 ;" (click)="createNewTraineeFunction()"><strong>Add Trainee</strong></button>
+        <button class="btn btn-secondary" *ngIf="!isNew" style="color:#fa7427 ;" (click)="updateTraineeFunction()"><strong>Update Trainee</strong></button>
+
       </div>
     </ng-template>
+
+
+
+
+    

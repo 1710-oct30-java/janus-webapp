@@ -1,77 +1,84 @@
-<div class="container">
-  <div class="col">
-    <select class="button" id="startDate" (change)="yearOnChange()" (click)="yearOnChange()">
-      <ng-container class="container" *ngFor="let year of yearList">
-        <option [ngValue]="year">{{ year }}</option>
-      </ng-container>
-    </select>
+<div class="container" *ngIf="batchList">
 
-    <span>
-      <select class="button" id="batch" (change)="batchOnChange()" (click)="batchOnChange()">
-        <ng-container class="container" *ngIf="latestBatch !== null && batchesBasedOnYearList.length === 0">
-          <option [value]="latestBatch.batchId">{{ latestBatch.trainer.name }} - {{ latestBatch.startDate }}</option>
-        </ng-container>
-        
-        <ng-container class="container" *ngIf="batchesBasedOnYearList.length > 0">
-          <ng-container class="container" *ngFor="let batch of getBatchesByYear()">
-            <option [value]="batch.batchId">{{ batch.trainer.name }} - {{ batch.startDate }}</option>
-          </ng-container>
-        </ng-container>
-      </select>
-    
-      <span class="paddingRight"></span>
-  
-      <select class="button" id="week" (change)="weekOnChange()" (click)="weekOnChange()">
-        <ng-container class="container" *ngFor="let week of batchWeeksList; let i = index;">
-          <option [value]="i">{{ week }}</option>
-        </ng-container>
-      </select>
-    
-      <span class="paddingRight"></span>
-  
-      <select class="button" id="trainee" (change)="traineeOnChange()" (click)="traineeOnChange()">
-        <option [value]="0">Trainee (All)</option>
+  <span class="col">
+    <div ngbDropdown class="d-inline-block">
+      <button ngbDropdownToggle class="button" id="year" [value]="yearSelect">{{yearSelect}}</button>
+      <div ngbDropdownMenu aria-labelledby="year">
+        <div *ngFor="let year of yearList">
+          <button class="dropdown-item" [value]="year" (click)="yearOnClick(year)">{{year}}</button>
+        </div>
+      </div>
+    </div>
+  </span>
+
+  <span class="col">
+    <div ngbDropdown class="d-inline-block">
+      <button ngbDropdownToggle class="button" id="batch" [value]="batchSelect">{{currentBatch.trainer.name}} - {{ currentBatch.startDate | date: 'MM/dd/yyyy'}}</button>
+      <div ngbDropdownMenu aria-labelledby="batch">
+        <div *ngFor="let batch of batchYearList">
+          <button class="dropdown-item" [value]="batch.batchId" (click)="batchOnClick(batch.batchId)">{{ batch.trainer.name }} - {{ batch.startDate | date: 'MM/dd/yyyy'}}</button>
+        </div>
+      </div>
+    </div>
+  </span>
+
+  <span class="col">
+    <div ngbDropdown class="d-inline-block">
+      <button ngbDropdownToggle class="button" id="week" [value]="weekSelect" *ngIf="weekSelect === 0">Week (All)</button>
+      <button ngbDropdownToggle class="button" id="week" [value]="weekSelect" *ngIf="weekSelect > 0">Week {{ weekSelect }}</button>
+      <div ngbDropdownMenu aria-labelledby="week">
+        <div *ngFor="let week of weekList">
+          <button class="dropdown-item" [value]="week" (click)="weekOnClick(week)" *ngIf="week === 0">All</button>
+          <button class="dropdown-item" [value]="week" (click)="weekOnClick(week)" *ngIf="week > 0">Week {{ week }}</button>
+        </div>
+      </div>
+    </div>
+  </span>
+
+  <span class="col">
+    <div ngbDropdown class="d-inline-block">
+      <button ngbDropdownToggle class="button" id="trainee" [value]="traineeSelect" *ngIf="traineeSelect === 0">Trainee (All)</button>
+      <button ngbDropdownToggle class="button" id="trainee" [value]="traineeSelect" *ngIf="traineeSelect > 0">{{ currentTrainee.name }}</button>
+      <div ngbDropdownMenu aria-labelledby="trainee">
+        <button class="dropdown-item" [value]="0" (click)="traineeOnClick(0)">All</button>
+        <div *ngFor="let trainee of traineesList">
+          <button class="dropdown-item" [value]="trainee.traineeId" (click)="traineeOnClick(trainee.traineeId)">{{ trainee.name }}</button>
+        </div>
+      </div>
+    </div>
+  </span>
+
+  <span class="search">
+    <form>
+      
+      <input ng-model="chosenTrainee" list="traineeList" type="search" id="searchTextBox" placeholder="Search..." class="search"
+            autocomplete="off">
+      <span class="fa fa-search" (click)="searchTrainees()"></span>
+      <input type="submit" (click)="searchTrainees()" style="display: none">
+
+      <datalist id="traineeList">
         <ng-container class="container" *ngFor="let trainee of traineesList">
-          <option [value]="trainee.traineeId">{{ trainee.name }}</option>
+          <option [value]="trainee.name" class="ng-binding ng-scope">{{ trainee.name }}</option>
         </ng-container>
-      </select>
+      </datalist>
+    
 
-      <span class="pull-right">
-        <form class="form-inline">
-          <div class="input-group">
-            <input ng-model="chosenTrainee" list="traineeList" type="search" id="searchTextBox" 
-              placeholder="Search..." class="form-control search" autocomplete="off">
-
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-default searchButton">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-            
-          </div>
-
-          <datalist id="traineeList">
-            <ng-container class="container" *ngFor="let trainee of traineesList">
-              <option [value]="trainee.name" class="ng-binding ng-scope">{{ trainee.name }} | {{ trainee.email }} | {{ trainee.skypeId }}</option>
-            </ng-container>
-          </datalist>
-
-          <span class="dropdown" ngbDropdown placement="bottom-right">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" ngbDropdownToggle>
-              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownConfig">
-                <li>
-                  <a ng-click="downloadAllChartButton()"> Charts </a>
-                </li>
-                <li>
-                  <a ng-click="generatePDF()"> Charts + Feedback </a>
-                </li>
-            </div>
+      <span>
+        <div ngbDropdown class="d-inline-block" placement="bottom-right">
+          <span ngbDropdownToggle id="downloadCharts" class="downloadCharts">
+            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
           </span>
-        </form>
+          <div ngbDropdownMenu aria-labelledby="downloadCharts">
+            <button class="dropdown-item" (click)="downloadCharts()"><b>Charts</b></button>
+            <button class="dropdown-item"><b>Charts + Feedback</b></button>
+          </div>
+        </div>
       </span>
-    </span>
-  </div>
+    </form>
+  </span>
+
+</div>
+
+<div class="container">
   <hr>
 </div>

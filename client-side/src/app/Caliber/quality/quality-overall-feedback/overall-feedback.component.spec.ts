@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DoughnutComponent } from './doughnut.component';
+import { OverallFeedbackComponent } from './overall-feedback.component';
 
-describe('DoughnutComponent', () => {
-  let component: DoughnutComponent;
-  let fixture: ComponentFixture<DoughnutComponent>;
+describe('OverallFeedbackComponent', () => {
+  let component: OverallFeedbackComponent;
+  let fixture: ComponentFixture<OverallFeedbackComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DoughnutComponent ]
+      declarations: [ OverallFeedbackComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DoughnutComponent);
+    fixture = TestBed.createComponent(OverallFeedbackComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

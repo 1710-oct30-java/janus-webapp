@@ -7,26 +7,69 @@
   </div>
 
   <div class="modal-body">
-    <div class="row">
-      <div class="col-6">
-        <app-interview-details></app-interview-details>
+    <form [formGroup]="panelForm" (ngSubmit)="Submit()">
+      <div class="row">
+        <div class="col-6">
+          <app-interview-details [interviewForm]="panelForm.controls.interviewForm"></app-interview-details>
+        </div>
+        <div class="col-6">
+          <app-general-feedback [generalFeedback]="panelForm.controls.generalFeedback"></app-general-feedback>
+        </div>
       </div>
-      <div class="col-6">
-        <app-general-feedback></app-general-feedback>
+
+      <div class="top-buffer">
+
       </div>
-    </div>
-    <div class="row top-buffer">
-      <div class="col-12">
-        <app-technical-feedback></app-technical-feedback>
+
+      <div class="border border-secondary">
+        <div class="row">
+          <div class="col-12">
+            <h3>Technical Feedback</h3>
+          </div>
+
+
+          <div class="col-11">
+            <div formArrayName="feedback">
+              <div *ngFor="let app-technical-feedback of panelForm.controls.feedback.controls; let i=index">
+                <app-technical-feedback [technologyForm]="panelForm.controls.feedback.controls[i]"></app-technical-feedback>
+
+
+                <button class="btn btn-secondary" id="deleteFeedback" (click)="deleteFeedback(i)">
+                  <i class="fa fa-minus" aria-hidden="true"></i>
+                </button>
+
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-center">
+            <div class="col-1 align-self-end">
+              <button type="button" class="btn btn-secondary" id="addFeedback" (click)="addFeedback()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+
+      <div class="row top-buffer">
+        <div class="col-12">
+          <app-panel-overall-feedback [overallFeedback]="panelForm.controls.overallFeedback"></app-panel-overall-feedback>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-secondary">Save</button>
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+      </div>
+    </form>
   </div>
 
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-default" (click)="onSubmit">Save</button>
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-  </div>
+
 </ng-template>
 
-<button class="btn btn-lg btn-outline-primary" [disabled]="trainee==null" (click)="open(content)">Create Panel</button>
-<hr>
+<button class="btn btn-lg btn-secondary" [disabled]="trainee==null" (click)="open(content)">
+  Create Panel <i class="fa fa-plus" aria-hidden="true"></i>
+</button>

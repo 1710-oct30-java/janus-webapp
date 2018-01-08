@@ -4,31 +4,42 @@ import { EnvironmentService } from './environment.service';
 import { HttpClient } from '@angular/common/http/';
 import { AlertsService } from './alerts.service';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class ReportsService extends AbstractApiService<any> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
   }
 
+  /**
+   * Retrieves information for the vp-home-bar-chart
+   * @returns {Observable<any[]>}
+   * @memberof ReportsService
+   */
   public fetchReportsStackedBarCurrentWeek(): Observable<any[]> {
-    const url = 'all/reports/batch/week/stacked-bar-current-week';
 
-    return super.doGetListObservable(url);
+    return super.doGetListObservable(environment.reportsStackedBarCurrentWeek);
   }
 
+  /**
+   * Retrieves all information for the vp-home-line-chart
+   * @returns {Observable<any[]>}
+   * @memberof ReportsService
+   */
   public fetchReportsDashboard(): Observable<any[]> {
-    const url = 'all/reports/dashboard';
 
-    return super.doGetListObservable(url);
+    return super.doGetListObservable(environment.reportsDashBoard);
   }
 
+  /**
+   * Retrieves all information for the vp-home-panel-line-chart
+   * @returns {Observable<any[]>}
+   * @memberof ReportsService
+   */
   public fetchReportsBiWeeklyPanel(): Observable<any[]> {
-    const url = 'all/reports/biweeklyPanelResults';
 
-    return super.doGetListObservable(url);
+    return super.doGetListObservable(environment.reportsBiWeeklyPanel);
   }
-
-
 }

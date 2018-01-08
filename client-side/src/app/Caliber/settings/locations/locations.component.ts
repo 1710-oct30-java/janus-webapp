@@ -18,14 +18,20 @@ export class LocationsComponent implements OnInit, OnDestroy {
   constructor(private locationService: LocationService,
     private modalService: NgbModal) { }
 
+  /**
+   * get all locations on page load
+   */
   ngOnInit() {
-    this.locationService.getAll();
+    this.locationService.fetchAll();
     this.locationSubscription = this.locationService.locations$.subscribe((resp) => {
       this.locations = resp;
     });
   }
 
-  // clean up subscriptions
+
+  /**
+   * clean up subscription
+   */
   ngOnDestroy() {
     this.locationSubscription.unsubscribe();
   }

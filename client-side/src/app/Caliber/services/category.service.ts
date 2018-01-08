@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
 import { AlertsService } from './alerts.service';
+import { environment } from '../../../environments/environment';
 
 // entities
 import { Category } from '../entities/Category';
@@ -21,8 +21,8 @@ import { Category } from '../entities/Category';
 @Injectable()
 export class CategoryService extends AbstractApiService<Category> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
   }
 
  /*
@@ -38,13 +38,13 @@ export class CategoryService extends AbstractApiService<Category> {
  *
  */
  public fetchAll(): void {
-   const url = 'vp/category';
+   const url = environment.category.fetchAll();
    const messages = {
       success: 'Categories retrieved successfully',
       error: 'Category retrieval failed',
    };
 
-   super.doGetList(url, {}, messages);
+   super.doGetList(url, messages);
  }
 
  /**
@@ -54,13 +54,14 @@ export class CategoryService extends AbstractApiService<Category> {
  *
  */
  public fetchAllActive(): void {
-   const url = 'category/all'; const messages = {
+   const url = environment.category.fetchAllActive(); 
+   const messages = {
      success: 'ACTIVE Categories retrieved successfully',
      error: 'ACTIVE Category retrieval failed',
    };
 
 
-   super.doGetList(url, {}, messages);
+   super.doGetList(url, messages);
  }
 
   /**
@@ -73,7 +74,7 @@ export class CategoryService extends AbstractApiService<Category> {
  * @return Observable<Category>
  */
  public fetchById(id: number): Observable<Category> {
-   const url = `category/${id}`;
+   const url = environment.category.fetchById(id);
 
    return super.doGetOneObservable(url);
  }
@@ -87,13 +88,13 @@ export class CategoryService extends AbstractApiService<Category> {
   * @param category: Category
   */
   public save(category: Category): void {
-    const url = 'vp/category';
+    const url = environment.category.save();
     const messages = {
       success: 'Category saved successfully',
       error: 'Category save failed',
     };
 
-    super.doPost(category, url, {}, messages);
+    super.doPost(category, url, messages);
   }
 
   /**
@@ -105,13 +106,13 @@ export class CategoryService extends AbstractApiService<Category> {
    * @param category: Category
    */
   public update(category: Category): void {
-    const url = 'vp/category/update';
+    const url = environment.category.update();
     const messages = {
       success: 'Categories updated successfully',
       error: 'Category updated failed',
     };
 
-    super.doPut(category, url, {}, messages);
+    super.doPut(category, url, messages);
   }
 
 }
