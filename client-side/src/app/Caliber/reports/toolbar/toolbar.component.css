@@ -17,9 +17,19 @@
 }
 
 .search {
+    margin: 0px;
+    margin-left: 98px;
     display: inline-block;
     position: relative;
 }   
+
+.fa-search {
+    margin-left: 90px;
+}
+
+hr {
+    margin: 0px;
+}
 
 .search input {
     width: 275px;
@@ -49,20 +59,24 @@
     padding-right: 25px;
 }
 
-option {
-    color: black;
-    background-color: white;
+.dropdown-item {
     font-weight: bold;
-    padding: 12px 16px;
+    font-size: 80%;
 }
 
-select option:hover {
-    background-color: grey;
+.dropdown-item:hover {
+    background-color: #eee;
+}
+
+.button {
+    margin: 0px;
+    margin-top: 20px;
+    height: 40px;
 }
 
 .button:hover,
 .button:focus {
-    color: #2a69a0;
+    color: #337ab7;
     background-color: #f3f3f1;
     transition: all 500ms linear;
     transition-delay: 0.25s;
