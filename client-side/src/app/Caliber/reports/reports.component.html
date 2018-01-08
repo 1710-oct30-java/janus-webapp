@@ -9,11 +9,14 @@
     </div>
     <div class="row reports-row"> 
         <div class="col-md-4">
-            <app-trainee-tech-skills></app-trainee-tech-skills>
+            <!-- <app-quality-audit *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-quality-audit>-->
+            <app-trainee-tech-skills *ngIf="!(weekId !== 0 && currentTrainee.traineeId === 0)"></app-trainee-tech-skills>
         </div>
         <div class="col-md-8">
             <app-batch-overall-line-chart></app-batch-overall-line-chart>
             <app-panel-batch-all-trainees></app-panel-batch-all-trainees>
         </div>
     </div>
+<!--     <app-overall-feedback *ngIf="currentTrainee.traineeId > 0"></app-overall-feedback> -->
+<!--     <app-panel-feedback *ngIf="currentTrainee.traineeId > 0"></app-panel-feedback> -->
 </div>

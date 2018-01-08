@@ -30,7 +30,7 @@ export class ReportingService {
   public batchOverallRadar$ = this.batchOverallRadar.asObservable();
 
   private qcStatusDoughnut = new BehaviorSubject<CacheData>(null);
-  public qcStatusDoughnut$ = this.batchOverallRadar.asObservable();
+  public qcStatusDoughnut$ = this.qcStatusDoughnut.asObservable();
 
   // Bar chart used for the Cumulative Scores Graph
   private batchOverallBar = new BehaviorSubject<CacheData>(null);
@@ -56,8 +56,6 @@ export class ReportingService {
   public BatchWeekSortedBarChart$ = this.BatchWeekSortedBarChart.asObservable();
 
   /*  Reports Charts */
-
-
   constructor(private httpClient: HttpClient) { }
 
   /**
@@ -130,15 +128,34 @@ export class ReportingService {
   fetchBatchWeekPieChart(batchId: Number, weekId: Number) {
     const endpoint = environment.apifetchBatchWeekPieChart(batchId, weekId);
 
-    // TODO: Implement API call and subject push logic
+    // Params object for refresh check
+    const params = {
+      batchId: batchId,
+      weekId: weekId
+    };
+
+    // call backend API if data is not fresh
+    if (this.needsRefresh(this.qcStatusDoughnut, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.qcStatusDoughnut.next({ params: params, data: success }));
+    }
 
   }
 
 
   fetchPieChartCurrentWeekQCStatus(batchId: Number) {
     const endpoint = environment.apiPieChartCurrentWeekQCStatus(batchId);
-    // TODO: Implement API call and subject push logic
 
+    // Params object for refresh check
+    const params = {
+      batchId: batchId,
+    };
+
+    // call backend API if data is not fresh
+    if (this.needsRefresh(this.qcStatusDoughnut, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.qcStatusDoughnut.next({ params: params, data: success }));
+    }
   }
 
   /* Stacked Bar Charts */
@@ -358,6 +375,7 @@ export class ReportingService {
    */
   fetchTechnologiesForTheWeek(batchId: Number, weekId: Number) {
     const endpoint = environment.apiTechnologiesForTheWeek(batchId, weekId);
+    console.log(endpoint);
 
     // Params object for refresh check
     const params = {

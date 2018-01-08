@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-
 export class Trainer {
+    public static ROLE_INACTIVE = 'ROLE_INACTIVE';
+
     trainerId: number;
-    name: String;
-    title: String;
-    email: String;
-    tier: String;
+    name: string;
+    title: string;
+    email: string;
+    tier: string;
 }

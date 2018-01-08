@@ -1,10 +1,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<button type="button" class="close" aria-label="Close" (click)="showModal(content)">
-    <span class="glyphicon glyphicon-remove" aria-hidden="true">
-        &times;
-    </span>
-</button>
+<i class="fa fa-times" id="deactivate" style="color:#ff8e4d;" (click)="showModal(content)"></i>
 
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
@@ -15,11 +11,11 @@
     </div>
     <div class="modal-body">
         <h3 class="ng-binding">
-            Are you sure you want to deactivate {{trainer?.name}}?
+            Are you sure you want to deactivate {{location?.company}}?
         </h3>
     </div>
     <div class="modal-footer">
-        <input type="submit" (click)="d('Confirmed'); deactivateTrainer();" value="Deactivate" class="btn btn-lg btn-danger">
+        <input type="submit" (click)="d('Confirmed'); deactivateLocation();" value="Deactivate" class="btn btn-lg btn-danger">
         <button type="button" class="btn btn-default" (click)="d('cancel')">Cancel</button>
     </div>
 </ng-template>

@@ -17,4 +17,11 @@ export class App {
    *  '/AssignForce'
    */
   baseUrl: string;
+
+  /**
+   * The url for the image file used for Caliber
+   * For example:
+   *  '../../assets/caliber.png'
+   */
+  imgUrl: string;
 }

@@ -1,0 +1,12 @@
+.top-buffer {
+    margin-top: 20px;
+}
+
+/*
+* custom size for NgModal
+*/
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 80% !important;
+    }
+}

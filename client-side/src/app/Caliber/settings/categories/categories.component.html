@@ -1,12 +1,15 @@
+<app-alerts></app-alerts>
 <!-- Create Assessment Categories and Edit assessment Categories including making it active or inactive -->
 <div class="container">
     <div class="row">
         <div class="col-md-12 col-lg-12 tab-panes">
             <br>
             <ul class="nav nav-tabs justify-content-end">
-                <li class="nav-item tab-pane fade show" id="addButton" role="button" (click)="open(addCategory)" style="color:#F26925">
-                    <button type="button" class="btn btn-change" style="background-color:#F26925; color:white">Create Category
-                        <span class="fa fa-plus" aria-hidden="true"></span>
+                <li id="addButton" role="button" (click)="open(addCategory)">
+                    <button type="button" class="btn btn-secondary pointer">
+                        <strong>Create Category
+                          <i class="fa fa-plus" aria-hidden="true"></i>
+                        </strong>
                     </button>
                 </li>
             </ul>
@@ -15,77 +18,29 @@
 </div>
 <br>
 <!-- Display all assessment categories -->
-<div class="container" id="trainer-assess-table" ng-if="categories[0]">
+<div class="container centered" id="trainer-assess-table" *ngIf="categories[0]">
     <div class="row">
-        <!-- Col 1 -->
-        <div class="col-md-3 col-lg-3 top5">
+        <!-- Col Start -->
+        <div class="col top5" *ngFor='let column of columns;let c=index;'>
             <!-- Accordian table -->
             <table class="table table-responsive" style="border-collapse: collapse;">
-                <thead class='text-center'>
+                <thead>
                     <tr>
                         <th>Category</th>
-                        <th>Active</th>
+                        <th class='text-right'>Active</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Load all categories -->
-                    <tr *ngFor="let category of categories; let i=index">
-                        <td *ngIf='(i < categories.length / 3)' (click)='editopen(editCategory,category)'>
+                    <tr *ngFor="let category of categories; let i=index;" class='table-hover'>
+                        <td *ngIf='nextColumn(c,i)' (click)='editopen(editCategory,category);' class='pointer'>
                             {{category.skillCategory}}
                         </td>
-                        <!-- Check for active condition -->
-                        <td *ngIf='category.active === false && (i < categories.length / 3)'>
+                        <!-- Display active condition -->
+                        <td class='text-center' *ngIf='!category.active && nextColumn(c,i)'>
                             <span style="color: #ff7575" class="fa fa-times fa-2x" aria-hidden="true"></span>
                         </td>
-                        <td *ngIf='category.active === true && (i < categories.length / 3)'>
-                            <span style="color: #81f575" class="fa fa-check fa-2x" aria-hidden="true"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- Col 2 -->
-        <div class="col-md-3 col-lg-3 top5">
-            <table class="table table-responsive" style="border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Active</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor='let category of categories; let i=index'>
-                        <td *ngIf='(i > categories.length / 3) && (i < ((categories.length / 3) * 2))' (click)="editopen(editCategory,category)">
-                            {{category.skillCategory}}
-                        </td>
-                        <td *ngIf='category.active === false && ((i > categories.length / 3) && (i < ((categories.length / 3) * 2)))'>
-                            <span style="color: #ff7575" class="fa fa-times fa-2x align-right" aria-hidden="true"></span>
-                        </td>
-                        <td *ngIf='category.active === true && ((i > categories.length / 3) && (i < ((categories.length / 3) * 2)))'>
-                            <span style="color: #81f575" class="fa fa-check fa-2x align-right" aria-hidden="true"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- Col 3 -->
-        <div class="col-md-3 col-lg-3 top5">
-            <table class="table table-responsive" style="border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Active</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let category of categories; let i=index">
-                        <td *ngIf='(i > ((categories.length / 3) * 2))' (click)="editopen(editCategory,category)">
-                            {{category.skillCategory}}
-                        </td>
-                        <td *ngIf='category.active === false && (i > ((categories.length / 3) * 2))'>
-                            <span style="color: #ff7575" class="fa fa-times fa-2x" aria-hidden="true"></span>
-                        </td>
-                        <td *ngIf='category.active === true && (i > ((categories.length / 3) * 2))'>
+                        <td class='text-center' *ngIf='category.active && nextColumn(c,i)'>
                             <span style="color: #81f575" class="fa fa-check fa-2x" aria-hidden="true"></span>
                         </td>
                     </tr>
@@ -98,7 +53,7 @@
 
 <!-- Add category modal -->
 <ng-template #addCategory let-c="close" let-d="dismiss">
-    <form #myForm="ngForm" class="form-control">
+    <form #myForm="ngForm" [formGroup]="addForm">
         <div class="modal-header">
             <h4 class="modal-title">Add Category</h4>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -109,13 +64,13 @@
             <div class="row">
                 <div class="form-group col-md-6 col-sm-6">
                     <label for="categoryName">Category:</label>
-                    <input [(ngModel)]='model.skillCategory' name="category" type="text" class="form-control" id="categoryName" placeholder="Category"
-                        required>
+                    <input formControlName= "name" name="category" type="text" class="form-control" id="categoryName" placeholder="Category"
+                        required/>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button (click)="addNewCategory(); c();" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+            <button (click)="addNewCategory(myForm.value); c();" type="button" [disabled]="!myForm.valid" class="btn btn-primary" data-dismiss="modal">Submit</button>
             <button type="button" class="btn btn-outline-dark" (click)="c()">Close</button>
         </div>
     </form>
@@ -127,14 +82,14 @@
         <div class="modal-header">
             <h4 class="modal-title">Edit Category</h4>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" class='fa fa-times-circle-o'></span>
             </button>
         </div>
         <div class="modal-body">
             <div class="row">
                 <div class="form-group col-md-6 col-sm-6">
                     <label for="categoryName">Category:</label>
-                    <input  name="skillCategory" type="text" class="form-control" [ngModel]="currentCategory.skillCategory" id="editCategory"
+                    <input  name="skillCategory" type="text" class="form-control" #name='ngModel' [ngModel]="currentCategory.skillCategory" id="editCategory"
                         placeholder="Category" required>
                 </div>
             </div>
@@ -149,7 +104,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button (click)="editCurrentCategory(); c()" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+            <button (click)="editCurrentCategory(myForm); c()" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
             <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
         </div>
     </form>

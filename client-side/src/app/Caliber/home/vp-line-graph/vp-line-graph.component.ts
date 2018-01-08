@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { Http } from '@angular/http';
-import { WeeklyProgress } from '../../entities/weeklyProgress';
-import { LineChartData } from '../../entities/lineChartData';
-import { ChartData } from '../../entities/chartData';
+import { HttpClient } from '@angular/common/http';
 import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
 import { VpHomeLineGraphService } from '../../services/graph/vp-home-line-graph.service';
 import { VpHomeSelectorService } from '../../services/selector/vp-home-selector.service';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-import { ColorService } from '../../services/colors/color.service';
+import { ChartDataEntity } from '../../entities/ChartDataEntity';
+import { environment } from '../../../../environments/environment';
+import { EnvironmentService } from '../../services/environment.service';
+import { AlertsService } from '../../services/alerts.service';
+import { ReportsService } from '../../services/reports.service';
 
 @Component({
   selector: 'app-vp-line-graph',
   templateUrl: './vp-line-graph.component.html',
-  styleUrls: ['./vp-line-graph.component.css']
+  styleUrls: ['../homeCSS/vpHomeCharts.css']
 })
 export class VpLineGraphComponent implements OnInit {
-  public results: Array<WeeklyProgress>;
+  public results: any;
   public addresses = [];
-  public lineChartData: LineChartData;
+  public lineChartData: ChartDataEntity;
   public hasData = false;
   public selectedLineState = '';
   public selectedLineCity = '';
@@ -25,45 +26,57 @@ export class VpLineGraphComponent implements OnInit {
   public cities: Set<string>;
   public selectedState = false;
 
-  constructor(private http: Http,
-    private vhlgs: VpHomeLineGraphService,
-    private vhss: VpHomeSelectorService,
-    private cs: ColorService) { }
+  constructor(private http: HttpClient,
+    private vpHomeLineGraphService: VpHomeLineGraphService,
+    private vpHomeSelectorService: VpHomeSelectorService,
+    private alertService: AlertsService,
+    private environmentService: EnvironmentService,
+    private reportsService: ReportsService) { }
 
   ngOnInit() {
-    this.lineChartData = this.vhlgs.getLineChartData();
-    console.log('grabbing batches');
-    this.http.get('http://localhost:8080/all/reports/dashboard', { withCredentials: true })
-      .subscribe(
+    this.lineChartData = this.vpHomeLineGraphService.getLineChartData();
+    this.reportsService.fetchReportsDashboard().subscribe(
       (resp) => {
-        this.results = resp.json();
-        console.log(this.results);
+        this.results = resp;
         this.results.sort();
-        this.lineChartData = this.vhlgs.fillLineChartDate(this.results, this.lineChartData, '', '');
-        this.addresses = this.vhss.populateAddresses(this.results);
-        this.states = this.vhss.populateStates(this.addresses);
+        this.lineChartData = this.vpHomeLineGraphService.fillChartData(this.results, this.lineChartData, '', '');
+        this.addresses = this.vpHomeSelectorService.populateAddresses(this.results);
+        this.states = this.vpHomeSelectorService.populateStates(this.addresses);
         this.hasData = true;
-      });
+        this.alertService.success('Successfully fetched Weekly Progress!');
+      },
+      (err) => {
+        this.alertService.error('Failed to fetch Weekly Progress!');
+      }
+    );
   }
-  // after a state is selected, find the cities that are part of that state
+
+  /**
+  * called when a state is selected to get cities for the cities drop down
+  * as well as re-populate the chartData
+  */
+
   findCities(state) {
     this.hasData = false;
     this.selectedLineCity = '';
     if (state === '') {
       this.selectedState = false;
-      this.lineChartData = this.vhlgs.fillLineChartDate(this.results, this.lineChartData, '', '');
     } else {
       this.selectedState = true;
-      this.cities = this.vhss.populateCities(this.selectedLineState, this.addresses);
+      this.cities = this.vpHomeSelectorService.populateCities(this.selectedLineState, this.addresses);
     }
-    this.lineChartData = this.vhlgs.fillLineChartDate(this.results, this.lineChartData, this.selectedLineState, '');
+    this.lineChartData = this.vpHomeLineGraphService.fillChartData(this.results, this.lineChartData, this.selectedLineState, '');
     this.hasData = true;
-    console.log(this.lineChartData);
   }
-  // after a city is selected, update the graph to reflect the selected city
+
+  /**
+  *  after a city is selected, update the graph to reflect the selected city
+  */
+
   hasCity(city) {
     if (this.cities.size > 1) {
-      this.lineChartData = this.vhlgs.fillLineChartDate(this.results, this.lineChartData, this.selectedLineState, this.selectedLineCity);
+      this.lineChartData = this.vpHomeLineGraphService
+        .fillChartData(this.results, this.lineChartData, this.selectedLineState, this.selectedLineCity);
       this.hasData = true;
     }
   }

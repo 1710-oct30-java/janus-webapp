@@ -1,0 +1,157 @@
+<!-- 
+**************************************************************************************************************
+    Current Trainer Profile Card
+**************************************************************************************************************
+-->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-sm-20">
+            <div class="card hovercard">
+                <div class="info">
+                    <div class="title">
+                        {{ currentTrainer.name }}
+                    </div>
+                    <div class="desc">{{ currentTrainer.title }}</div>
+                    <div class="desc">{{ currentTrainer.email }}</div>
+                    <div class="desc">{{ currentTrainer.tier | displayTier: currentTrainer.tier}}</div>
+                </div>
+                <div class="bottom">
+                    <i class="fa fa-pencil" style="color:#ff8e4d;" (click)="editTrainer(content, currentTrainer)"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- 
+**************************************************************************************************************
+    Current Trainer Batches Table
+**************************************************************************************************************
+ -->
+    {{currentTrainer.name}}'s Batches:
+    <div>
+        <div id="trainers-table">
+            <table class="table table-hover">
+                <th>Training Name</th>
+                <th>Training Type</th>
+                <th>Skill Type</th>
+                <th>Co-Trainer</th>
+                <th>Location</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <tr *ngFor='let batch of batches | batchByTrainer: currentTrainer.name'>
+                    <td>{{batch.trainingName}}</td>
+                    <td>{{batch.trainingType}}</td>
+                    <td>{{batch.skillType}}</td>
+                    <td>{{batch.conTrainer}}</td>
+                    <td>{{batch.address.city}}, {{batch.address.state}}</td>
+                    <td>{{batch.startDate}}</td>
+                    <td>{{batch.endDate}}</td>
+                    <td>
+                        <i class="fa fa-users" style="color:#ff8e4d;" aria-hidden="true" (click)="setCurrentBatch(batch); openLarge(showBatch)"></i>
+                    </td>
+                    <td>
+                        <i class="fa fa-area-chart" style="color:#ff8e4d;" aria-hidden="true" (click)="navReports()"></i>
+                    </td>
+                    <td>
+                        <i class="fa fa-cog" style="color:#ff8e4d;" aria-hidden="true" (click)="navManage()"></i>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- 
+**************************************************************************************************************
+    End Table Content & Begin Modals
+**************************************************************************************************************
+ -->
+
+
+
+<!-- 
+**************************************************************************************************************
+   Modal for updating current trainer profile
+**************************************************************************************************************
+ -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Edit Trainer</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #editTrainer="ngForm" [formGroup]="rForm">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Field for Trainer name -->
+                        <label class="col-sm-2 control-label text-nowrap" for="name">Trainer Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" formControlName="name" placeholder="Trainer Name" />
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Field for email -->
+                        <label class="col-sm-2 control-label text-nowrap" for="email">Email:</label>
+                        <input type="text" class="form-control" formControlName="email" id="email" name="email" placeholder="Email" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- dropdown/filter for Trainer Title -->
+                        <!-- Datalist to display titles -->
+                        <label class="col-sm-2 control-label text-nowrap" for="title">Enter Title</label>
+                        <input class="form-control" formControlName="title" (ngModelChange)="titleChange($event)" list="browsers" name="browser">
+                        <datalist id="browsers">
+                            <option [value]="title" *ngFor="let title of titles">
+                        </datalist>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Dropdown for Trainer tier/role -->
+                        <label class="col-sm-2 control-label text-nowrap" for="tier">Tier</label>
+                        <select class="form-control" formControlName="tier" (ngModelChange)="tierChange($event)" name="tier">
+                            <option [value]="tier" *ngFor="let tier of tiers">{{tier | slice:5}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" data-dismiss="modal" class="btn btn-update" [disabled]="!rForm.valid" (click)="updateTrainer(editTrainer.value); c('Close click')">Update</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c()">Close</button>
+    </div>
+</ng-template>
+
+<!-- 
+**************************************************************************************************************
+   Modal for showing the trainees in a batch 
+**************************************************************************************************************
+ -->
+<ng-template #showBatch let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Trainees</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body modal-lg">
+        <div id="trainers-table">
+            <table class="table table-hover">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Training Status</th>
+                <tr *ngFor='let trainee of currentBatch.trainees'>
+                    <td>{{trainee.name}}</td>
+                    <td>{{trainee.email}}</td>
+                    <td>{{trainee.phoneNumber}}</td>
+                    <td>{{trainee.trainingStatus}}</td>
+                </tr>
+            </table>
+        </div>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+    </div>
+</ng-template>

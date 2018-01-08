@@ -10,10 +10,10 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./locations.component.css']
 })
 export class LocationsComponent implements OnInit, OnDestroy {
+
   private locationSubscription: Subscription;
   locations: Array<Location>;
   currEditLocation: Location;
-
 
   constructor(private locationService: LocationService,
     private modalService: NgbModal) { }
@@ -24,8 +24,6 @@ export class LocationsComponent implements OnInit, OnDestroy {
       this.locations = resp;
     });
   }
-
-
 
   // clean up subscriptions
   ngOnDestroy() {

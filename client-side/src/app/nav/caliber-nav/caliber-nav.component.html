@@ -1,23 +1,23 @@
 <ul class="navbar-nav ml-auto" style="padding-right:15px">
   <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/home">Home</a>
+    <a class="nav-link" routerLink="/Caliber/home" routerLinkActive="activeLink">Home</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/manage">Manage Batch</a>
+    <a class="nav-link" routerLink="/Caliber/manage" routerLinkActive="activeLink">Manage Batch</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/assess">Assess Batch</a>
+    <a class="nav-link" routerLink="/Caliber/assess" routerLinkActive="activeLink">Assess Batch</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/quality">Quality Audit</a>
+    <a class="nav-link" routerLink="/Caliber/quality" routerLinkActive="activeLink">Quality Audit</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/panel">Panel</a>
+    <a class="nav-link" routerLink="/Caliber/panel" routerLinkActive="activeLink">Panel</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" routerLink="/Caliber/reports">Reports</a>
+    <a class="nav-link" routerLink="/Caliber/reports" routerLinkActive="activeLink">Reports</a>
   </li>
-  <li class="nav-item" (click)="$event.stopPropagation()">
+  <li class="nav-item" (click)="$event.stopPropagation()" routerLinkActive="activeLink">
       <ul class="navbar-nav mr-auto">
         <li #myDrop = "ngbDropdown" ngbDropdown class="d-inline-block">
           <a class="nav-link dropdown-toggle" id="settingsMenu" ngbDropdownToggle>Settings</a>

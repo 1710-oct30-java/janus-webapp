@@ -1,0 +1,62 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">Quality Audit Report</h4>
+        <button type="button" class="close close2" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="col-sm-12 col-md-12 col-lg-12 top5">
+            <strong>
+                Categories covered this week:
+            </strong>
+            <span class="ng-binding ng-scope">
+                {{this.tech}}
+            </span>
+        </div>
+        <table class="table table-responsive" style="border-collapse: collapse;" ng-show="currentView">
+            <tr></tr>
+            <tr>
+                <th>Trainee</th>
+                <th>Individual Feedback</th>
+                <th>Notes</th>
+            </tr>
+            <tbody>
+                <tr *ngFor="let trainee of (trainees | orderBy: 'trainee.name')">
+                    <td class="ng-binding">{{trainee?.trainee.name}}</td>
+                    <td class="ng-binding">{{trainee?.qcStatus}}</td>
+                    <td class="ng-binding">{{trainee?.content}}</td>
+                    <td>
+                        <ul class="nav nav-tabs">
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td class="text-weight-bold">
+                        <strong>
+                            Overall Feedback:
+                        </strong>
+                    </td>
+                    <td class="ng-binding">
+                        {{batchNotes?.qcStatus}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-weight-bold">
+                        <strong>Notes:</strong>
+                    </td>
+                    <td class="ng-binding">
+                        {{batchNotes?.content}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="activeModal.dismiss('close')">Close</button>
+    </div>
+</div>

@@ -5,9 +5,11 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/merge';
 
 // services
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 export abstract class AbstractApiService<T> {
   protected envService: EnvironmentService;
@@ -18,9 +20,12 @@ export abstract class AbstractApiService<T> {
   protected updatedSubject: Subject<T>;
   protected deletedSubject: Subject<T>;
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient) {
+  private alertService: AlertsService;
+
+  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
     this.envService = envService;
     this.http = httpClient;
+    this.alertService = alertService;
 
     this.listSubject = new BehaviorSubject([]);
     this.savedSubject = new Subject();
@@ -59,6 +64,16 @@ export abstract class AbstractApiService<T> {
   }
 
   /**
+   * returns a publication observable of an object
+   * saved or updated
+   *
+   * @return Observable<T>
+   */
+  public getSavedOrUpdated(): Observable<T> {
+    return Observable.merge( this.getSaved(), this.getUpdated() );
+  }
+
+  /**
    * returns a publication observable of the last
    * object deleted
    *
@@ -81,13 +96,16 @@ export abstract class AbstractApiService<T> {
    *
    * @param apiUrl: string
    */
-  protected doGetList(apiUrl: string, params: any = {}): void {
+  protected doGetList(apiUrl: string, params: any = {}, messages: any = {}): void {
     const url = this.envService.buildUrl(apiUrl, params);
 
     this.listSubject.next([]);
 
     this.http.get<T[]>(url).subscribe((data) => {
         this.listSubject.next(data);
+        this.pushAlert('success', messages);
+      }, (error) => {
+        this.pushAlert('error', messages);
       });
   }
 
@@ -117,7 +135,6 @@ export abstract class AbstractApiService<T> {
    */
   protected doGetListObservable(apiUrl: string, params: any = {}): Observable<T[]> {
     const url = this.envService.buildUrl(apiUrl, params);
-
     return this.http.get<T[]>(url);
   }
 
@@ -128,13 +145,18 @@ export abstract class AbstractApiService<T> {
  * @param apiUrl: string
  * @param object: T
  */
-  protected doPost(object: T, apiUrl: string, params: any = {}): void {
+  protected doPost(object: T, apiUrl: string, params: any = {}, messages: any = {}): void {
     const url = this.envService.buildUrl(apiUrl, params);
     const body = JSON.stringify(object);
 
+    console.log(body);
+
     this.http.post<T>(url, body).subscribe((data) => {
-        this.savedSubject.next(data);
-      });
+      this.savedSubject.next(data);
+      this.pushAlert('success', messages);
+    }, (error) => {
+      this.pushAlert('error', messages);
+    });
   }
 
   /**
@@ -144,14 +166,17 @@ export abstract class AbstractApiService<T> {
  * @param apiUrl: string
  * @param object: T
  */
-  protected doPut(object: T, apiUrl: string, params: any = {}): void {
+  protected doPut(object: T, apiUrl: string, params: any = {}, messages: any = {}): void {
     const url = this.envService.buildUrl(apiUrl, params);
     const body = JSON.stringify(object);
 
     this.http.put<T>(url, body).subscribe((data) => {
-        this.updatedSubject.next(data);
-      });
-  }
+      this.updatedSubject.next(data);
+      this.pushAlert('success', messages);
+    }, (error) => {
+      this.pushAlert('error', messages);
+    });
+ }
 
  /**
  * performs a DELETE request and places the passed
@@ -162,11 +187,35 @@ export abstract class AbstractApiService<T> {
  * @param apiUrl: string
  * @param object: T
  */
-  protected doDelete(object: T, apiUrl: string, params: any = {}): void {
+  protected doDelete(object: T, apiUrl: string, params: any = {}, messages: any = {}): void {
     const url = this.envService.buildUrl(apiUrl, params);
 
     this.http.delete(url).subscribe(() => {
-        this.deletedSubject.next(object);
-      });
+      this.deletedSubject.next(object);
+      this.pushAlert('success', messages);
+    }, (error) => {
+      this.pushAlert('error', messages);
+    });
+  }
+
+  /**
+   * pushes a message to the AlertsSerivce
+   * with the type specified
+   *
+   * @param type: string
+   */
+  protected pushAlert(type: string, messages: any) {
+    if ( messages.hasOwnProperty(type) ) {
+      const message = messages[type];
+
+      switch (type) {
+        case 'success':
+          this.alertService.success(message);
+          break;
+        case 'error' :
+          this.alertService.error(message);
+          break;
+      }
+    }
   }
 }

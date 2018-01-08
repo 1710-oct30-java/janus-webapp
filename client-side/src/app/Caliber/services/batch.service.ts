@@ -7,10 +7,13 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 
 // services
+import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
-// batches
+// entities
 import { Batch } from '../entities/Batch';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-date';
 
 
 /**
@@ -18,51 +21,10 @@ import { Batch } from '../entities/Batch';
  * for Batch objects
  */
 @Injectable()
-export class BatchService {
-    private http: HttpClient;
-    private envService: EnvironmentService;
+export class BatchService extends AbstractApiService<Batch> {
 
-    private listSubject: BehaviorSubject<Batch[]>;
-    private savedSubject: Subject<Batch>;
-    private deletedSubject: Subject<Batch>;
-
-    constructor(httpClient: HttpClient, envService: EnvironmentService) {
-      this.http = httpClient;
-      this.envService = envService;
-
-      this.listSubject = new BehaviorSubject([]);
-      this.savedSubject = new Subject();
-      this.deletedSubject = new Subject();
-    }
-
-    /**
-     * returns a behavior observable of the current
-     * batch list
-     *
-     * @return Observable<Batch[]>
-     */
-    public getList(): Observable<Batch[]> {
-      return this.listSubject.asObservable();
-    }
-
-    /**
-     * returns a publication observable of the last
-     * saved batch object
-     *
-     * @return Observable<Batch>
-     */
-    public getSaved(): Observable<Batch> {
-      return this.savedSubject.asObservable();
-    }
-
-    /**
-     * returns a publication observable of the last
-     * batch object deleted
-     *
-     * @return Observable<Batch>
-     */
-    public getDeleted(): Observable<Batch> {
-      return this.deletedSubject.asObservable();
+    constructor(httpClient: HttpClient, envService: EnvironmentService, alertService: AlertsService) {
+      super(envService, httpClient, alertService);
     }
 
     /*
@@ -79,9 +41,13 @@ export class BatchService {
      * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'PANEL')")
      */
     public fetchAllByTrainer(): void {
-      const url = this.envService.buildUrl('trainer/batch/all');
+      const url = 'trainer/batch/all';
+      const messages = {
+        success: 'Batch list retrieved successfully',
+        error: 'Batch list retrieval failed',
+      };
 
-      this.fetch(url);
+      super.doGetList(url, {}, messages);
     }
 
     /**
@@ -91,9 +57,29 @@ export class BatchService {
      * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'STAGING', 'PANEL')")
      */
     public fetchAll(): void {
-      const url = this.envService.buildUrl('vp/batch/all');
+      const url = 'vp/batch/all';
+      const messages = {
+        success: 'Batch list retrieved successfully',
+        error: 'Batch list retrieval failed',
+      };
 
-      this.fetch(url);
+      super.doGetList(url, {}, messages);
+    }
+
+    /**
+    * @overloade
+    * @see save()
+    *
+    * transmits a batch to be saved in persistent
+    * storage on the server and pushes the saved
+    * object on the saved subject
+    *
+    * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'PANEL')")
+    *
+    * @param batch: Batch
+    */
+    public create(batch: Batch): void {
+      this.save(batch);
     }
 
     /**
@@ -105,13 +91,17 @@ export class BatchService {
     *
     * @param batch: Batch
     */
-    public create(batch: Batch): void {
-      const url = this.envService.buildUrl('all/batch/create');
-      const data = JSON.stringify(batch);
+    public save(batch: Batch): void {
+      const url = 'all/batch/create';
+      const messages = {
+        success: 'Batch list saved successfully',
+        error: 'Batch list save failed',
+      };
+      const clone = this.stringifyDates(batch);
 
-      this.http.post<Batch>(url, data).subscribe((savedBatch) => {
-          this.savedSubject.next(savedBatch);
-        });
+      console.log(clone);
+
+      super.doPost(clone, url, {}, messages);
     }
 
     /**
@@ -123,12 +113,13 @@ export class BatchService {
      * @param batch: Batch
      */
     public update(batch: Batch): void {
-      const url = this.envService.buildUrl('all/batch/update');
-      const data = JSON.stringify(batch);
+      const url = 'all/batch/update';
+      const messages = {
+        success: 'Batch list updated successfully',
+        error: 'Batch list updated failed',
+      };
 
-      this.http.put<Batch>(url, data ).subscribe( (updatedBatch) => {
-          this.savedSubject.next(updatedBatch);
-        });
+      super.doPut(batch, url, {}, messages);
     }
 
     /**
@@ -141,34 +132,36 @@ export class BatchService {
      * @param batch: Batch
      */
     public delete(batch: Batch): void {
-      const url = this.envService.buildUrl(`all/batch/delete/${batch.batchId}`);
+      const url = `all/batch/delete/${batch.batchId}`;
+      const messages = {
+        success: 'Batch list deleted successfully',
+        error: 'Batch list deleteion failed',
+      };
 
-      this.http.delete(url).subscribe( () => {
-          this.deletedSubject.next(batch);
-        });
+      super.doDelete(batch, url, {}, messages);
     }
 
+    protected stringifyDates(batch: Batch): any {
+      const output: any = {};
+      Object.assign(output, batch);
 
-    /*
-      ============================
-      BEGIN: helper functions
-      ============================
-     */
+      output.startDate = this.stringifyDate(batch.startDate);
+      output.endDate = this.stringifyDate(batch.endDate);
 
-    /**
-     * retrieves a list of batches using the url passed
-     * and pushes them on the list subject
-     *
-     * @param url: string
-     */
-    private fetch(url: string) {
+      return output;
+    }
 
-      this.listSubject.next([]);
+    protected stringifyDate(date: any): string {
+      const dateString =  [
+        date.year,
+        date.month,
+        date.day,
+      ].join('-');
 
-      this.http.get<Batch[]>(url).subscribe((batches) => {
-          this.listSubject.next(batches);
-        });
-
+      return [
+        dateString,
+        'T00:00:00.0',
+      ].join('');
     }
 
 }

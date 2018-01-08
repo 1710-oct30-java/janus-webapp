@@ -4,10 +4,12 @@ import { HttpClient } from '@angular/common/http';
 // rxjs
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/merge';
+import 'rxjs/add/observable/merge';
 
 // services
 import { EnvironmentService } from './environment.service';
 import { AbstractApiService } from './abstract-api.service';
+import { AlertsService } from './alerts.service';
 
 // entities
 import { Note } from '../entities/Note';
@@ -20,8 +22,8 @@ import { Trainee } from '../entities/Trainee';
 @Injectable()
 export class NoteService extends AbstractApiService<Note> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient) {
-    super(envService, httpClient);
+  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
+    super(envService, httpClient, alertService);
   }
 
   /*
@@ -57,8 +59,13 @@ export class NoteService extends AbstractApiService<Note> {
       .subscribe( (notes) => {
           results = results.concat(notes); // merge all results into one array
         },
-        (error) => {}, // errors are already handled in the SpringInterceptor
-        () => this.listSubject.next(results) // send the merged results
+        (error) => {
+          super.pushAlert('error', 'Notes retrieval failed');
+        }, // errors are already sent to the console in the SpringInterceptor
+        () => {
+          this.listSubject.next(results); // send the merged results
+          super.pushAlert('success', 'Notes retrieved successfully');
+        }
       );
   }
 
@@ -151,8 +158,24 @@ export class NoteService extends AbstractApiService<Note> {
    */
   public update(note: Note): void {
     const url = 'note/update';
+    const messages = {
+      success: 'Note updated successfully',
+      error: 'Note update failed',
+    };
 
-    super.doPost(note, url); // yes, the API implemented this as a POST method: @see EvaluationController
+    super.doPost(note, url, {}, messages); // yes, the API implemented this as a POST method: @see EvaluationController
+  }
+
+  /**
+ * transmits a note to be saved and pushes the
+ * saved note on the savedSubject
+ *
+ * @param note: Note
+ *
+ * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER','PANEL')")
+ */
+  public create(note: Note): void {
+    this.save(note);
   }
 
   /**
@@ -163,10 +186,14 @@ export class NoteService extends AbstractApiService<Note> {
    *
    * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER','PANEL')")
    */
-  public create(note: Note): void {
+  public save(note: Note): void {
     const url = 'note/create';
+    const messages = {
+      success: 'Note saved successfully',
+      error: 'Note save failed',
+    };
 
-    super.doPost(note, url);
+    super.doPost(note, url, {}, messages);
   }
 
 }

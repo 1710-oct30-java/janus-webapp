@@ -15,10 +15,9 @@ export const environment = {
   editCurrentCategory: 'http://localhost:8080/vp/category/update',
   editLocation: 'http://localhost:8080/vp/location/update',
   deleteLocation: 'http://localhost:8080/vp/location/delete',
+  reactivateLocation: 'http://localhost:8080/vp/location/reactivate',
   addLocation: 'http://localhost:8080/vp/location/create',
   deleteTrainer: 'http://localhost:8080/vp/trainer/delete',
-  getAllLocations: 'http://localhost:8080/all/location/all/',
-  getAllTrainers: 'http://localhost:8080/all/trainer/all',
   getAllTitles: 'http://localhost:8080/vp/trainer/titles/',
   getAllTiers: 'http://localhost:8080/types/trainer/role/all',
   editTrainer: 'http://localhost:8080/vp/trainer/update',
@@ -44,7 +43,7 @@ export const environment = {
     environment.context + `all/reports/batch/${batchId}/week/${weekId}/pie`,
 
   apiPieChartCurrentWeekQCStatus: (batchId: Number) =>
-    environment.context + `all/reports/batch/{batchId}/chart`,
+    environment.context + `all/reports/batch/${batchId}/pie`,
 
   apiAllBatchesCurrentWeekQCStackedBarChart: (batchId: Number, week: Number) =>
     environment.context + `all/reports/batch/${batchId}/week/${week}/bar-batch-week-avg`,
@@ -96,4 +95,11 @@ export const environment = {
 
   apiPanelBatchAllTrainees: (batchId: Number) =>
     environment.context + `all/reports/batch/${batchId}/panel-batch-all-trainees`,
+
+  /* Evaluation service API endpoints */
+  apiFetchAllQCTraineeNotes: (batchId: Number, weekId: Number) =>
+    environment.context + `qc/note/trainee/${batchId}/${weekId}`,
+
+  apiFetchAllQCBatchNotes: (batchId: Number, weekId: Number) =>
+    environment.context + `qc/note/batch/${batchId}/${weekId}`,
 };

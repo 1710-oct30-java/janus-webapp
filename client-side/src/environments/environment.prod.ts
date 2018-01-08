@@ -9,6 +9,7 @@ export const environment = {
   editCurrentCategory: 'http://localhost:8080/vp/category/update',
   editLocation: 'http://localhost:8080/vp/location/update',
   deleteLocation: 'http://localhost:8080/vp/location/delete',
+  reactivateLocation: 'http://localhost:8080/vp/location/reactivate',
   addLocation: 'http://localhost:8080/vp/location/create',
   deleteTrainer: 'http://localhost:8080/vp/trainer/delete',
   getAllLocations: 'http://localhost:8080/all/location/all/',
@@ -90,4 +91,11 @@ export const environment = {
 
   apiPanelBatchAllTrainees: (batchId: Number) =>
     environment.context + `all/reports/batch/${batchId}/panel-batch-all-trainees`,
+
+    /* Evaluation service API endpoints */
+  apiFetchAllQCTraineeNotes: (batchId: Number, weekId: Number) =>
+  environment.context + `qc/note/trainee/${batchId}/${weekId}`,
+
+apiFetchAllQCBatchNotes: (batchId: Number, weekId: Number) =>
+  environment.context + `qc/note/batch/${batchId}/${weekId}`,
 };

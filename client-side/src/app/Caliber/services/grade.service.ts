@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 // services
 import { AbstractApiService } from './abstract-api.service';
 import { EnvironmentService } from './environment.service';
+import { AlertsService } from './alerts.service';
 
 // entities
 import { Grade } from '../entities/Grade';
@@ -20,8 +21,8 @@ import { Grade } from '../entities/Grade';
 @Injectable()
 export class GradeService extends AbstractApiService<Grade> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient) {
-    super(envService, httpClient);
+  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
+    super(envService, httpClient, alertService);
   }
 
   /*
@@ -75,6 +76,9 @@ export class GradeService extends AbstractApiService<Grade> {
         }
 
         this.listSubject.next(extractedGrades);
+        super.pushAlert('success', 'Grades retrieved successfully');
+      }, (error) => {
+        super.pushAlert('error', 'Grade list retrieval failed');
       });
   }
 
@@ -105,8 +109,12 @@ export class GradeService extends AbstractApiService<Grade> {
    */
   public save(grade: Grade): void {
     const url = 'trainer/grade/create';
+    const messages = {
+      success: 'Grade saved successfully',
+      error: 'Grade save failed',
+    };
 
-    super.doPost(grade, url);
+    super.doPost(grade, url, {}, messages);
   }
 
   /**
@@ -119,8 +127,12 @@ export class GradeService extends AbstractApiService<Grade> {
    */
   public update(grade: Grade): void {
     const url = 'trainer/grade/update';
+    const messages = {
+      success: 'Grade updated successfully',
+      error: 'Grade update failed',
+    };
 
-    super.doPut(grade, url);
+    super.doPost(grade, url, {}, messages);
   }
 
 }

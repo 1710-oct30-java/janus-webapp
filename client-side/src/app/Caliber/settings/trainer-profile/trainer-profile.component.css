@@ -1,0 +1,56 @@
+.card {
+    padding-top: 30px;
+    margin: 20px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 5px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.card.hovercard {
+    position: relative;
+    padding-top: 10px;
+    overflow: hidden;
+    text-align: center;
+}
+.card.hovercard .cardheader {
+    background-color: #F26925;
+    background-size: cover;
+    height: 60px;
+}
+.card.hovercard .info {
+    padding: 4px 8px 10px;
+}
+.card.hovercard .info .title {
+    margin-bottom: 4px;
+    font-size: 24px;
+    line-height: 1;
+    color: #262626;
+    vertical-align: middle;
+}
+.card.hovercard .info .desc {
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+}
+.card.hovercard .bottom {
+    padding: 0 20px;
+    margin-bottom: 17px;
+}
+.btncust{ 
+    border-radius: 50%; 
+    width:32px; 
+    height:32px; 
+    line-height:18px;
+}
+.modal-lg{
+    overflow-x: scroll; 
+}

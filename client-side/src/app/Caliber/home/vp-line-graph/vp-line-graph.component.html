@@ -18,12 +18,14 @@
       </div>
       <div class="panel-body">
         <div class="chart-container top5">
-          <canvas baseChart class="chart chart-line" *ngIf="hasData" [datasets]="lineChartData.data" [options]="lineChartData.options" [labels]="lineChartData.labels"
-            [colors]="lineChartData.colors" [chartType]="lineChartData.type" (chartHover)="onHover">
+          <canvas baseChart
+           class="chart chart-line"
+            *ngIf="hasData" [datasets]="lineChartData.data" [options]="lineChartData.options" [labels]="lineChartData.labels"
+            [colors]="lineChartData.colors" [chartType]="lineChartData.type">
           </canvas>
         </div>
-        <div>
-          <table class="table table-responsive" style="border-collapse: collapse;">
+        <div class = "table-responsive">
+          <table class="table" style="border-collapse: collapse;">
             <tbody>
               <tr>
                 <th class="col-sm-1 col-md-1 col-lg-1" scope = "col"></th>
