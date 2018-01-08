@@ -1,8 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+/**
+ * @export
+ * @class TierPipe
+ * @implements {PipeTransform}
+ */
 @Pipe({
     name: 'displayTier'
 })
+
 // pipe to properly display the tier of a trainer
 export class TierPipe implements PipeTransform {
     transform(tier: String) {
