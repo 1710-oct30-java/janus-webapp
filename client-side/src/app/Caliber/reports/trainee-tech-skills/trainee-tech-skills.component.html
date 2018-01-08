@@ -8,7 +8,6 @@
         <i class="fa fa-user-circle-o fa-lg"></i>
       </div>
     </div>
-
     <div *ngIf="week === 0 && trainee.traineeId === 0" class="panel-body">
       <app-graph *ngIf="chartData && chartData.length === trainees.length + 1" [data]="(chartData | graphData:dataSetLabels)" [legend]=true
         [type]="chartType"></app-graph>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WeeklyLineChartComponent } from './weekly-line-chart.component';
+import { AllCumulativeScoresComponent } from './all-cumulative-scores.component';
 
 describe('WeeklyLineChartComponent', () => {
-  let component: WeeklyLineChartComponent;
-  let fixture: ComponentFixture<WeeklyLineChartComponent>;
+  let component: AllCumulativeScoresComponent;
+  let fixture: ComponentFixture<AllCumulativeScoresComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WeeklyLineChartComponent ]
+      declarations: [ AllCumulativeScoresComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WeeklyLineChartComponent);
+    fixture = TestBed.createComponent(AllCumulativeScoresComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

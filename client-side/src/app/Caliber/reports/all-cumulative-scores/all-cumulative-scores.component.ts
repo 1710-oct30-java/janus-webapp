@@ -1,25 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReportingService } from '../../../services/reporting.service';
 import { PDFService } from '../../../services/pdf.service';
 import { Subscription } from 'rxjs/Subscription';
 import { GranularityService } from '../services/granularity.service';
 
 /**
- * This component display the weekly line chart. It also has a download
- * button that allows to save the graph as a PDF.
+ * This component displays the batch overall chart shows as the 'Cumulative Scores'.
+ * It displays the chart as a bar chart. It also has a download button that allows
+ * to save the graph as a PDF.
  * @author Edel Benavides
  */
 
 @Component({
-  selector: 'app-weekly-line-chart',
-  templateUrl: './weekly-line-chart.component.html',
-  styleUrls: ['./weekly-line-chart.component.css']
+  selector: 'app-all-cumulative-scores',
+  templateUrl: './all-cumulative-scores.component.html',
+  styleUrls: ['./all-cumulative-scores.component.css']
 })
-export class WeeklyLineChartComponent implements OnInit {
+export class AllCumulativeScoresComponent implements OnInit {
 
-  // @Input()
   public batchId = 0;
-
+  public traineeId = -1;
   public chartData: any = [];
   public scoresAverage = 0;
 
@@ -41,13 +41,28 @@ export class WeeklyLineChartComponent implements OnInit {
   public chartType = 'bar';
 
   ngOnInit() {
+    this.createBatchArray();
+  }
+
+  /**
+   * Fills the batch array with data. Called every time to populate chart information.
+   * @param input - Data for the batch array.
+   */
+  createBatchArray() {
     this.dataSubscription = this.reportsService.batchOverallBar$.subscribe((result) => {
       if (!result) {
         // console.log('data not received');
         this.chartData = null;
-        this.reportsService.fetchBatchOverallBarChart(this.getBatchId());
+        this.granularityService.currentBatch$.subscribe(response => {
+          if (response) {
+            this.reportsService.fetchBatchOverallBarChart(response.batchId);
+          }
+        });
       } else {
         // console.log('data received');
+
+        // Empty the current batch
+        this.batch = [];
 
         // Adds batch information (trainee and overallScore) to the batch array
         for (const trainee of Object.entries(result.data)) {
@@ -58,11 +73,6 @@ export class WeeklyLineChartComponent implements OnInit {
         const sortedBatchArray = this.sortByHighestScore(result.data);
         const newbatch = {};
 
-        // for (let i = 0; i < sortedBatchArray.length; i++) {
-        //   newbatch[sortedBatchArray[i][0]] = sortedBatchArray[i][1];
-        // }
-        // console.log(newbatch);
-
         for (let i = 0; i < sortedBatchArray.length; i++) {
           newbatch[sortedBatchArray[i][0]] = sortedBatchArray[i][1];
         }
@@ -70,6 +80,11 @@ export class WeeklyLineChartComponent implements OnInit {
       }
     });
 
+    this.granularityService.currentTrainee$.subscribe(response => {
+      if (response) {
+        this.traineeId = response.traineeId;
+      }
+    });
   }
 
     /**
@@ -103,27 +118,9 @@ export class WeeklyLineChartComponent implements OnInit {
   }
 
   /**
-   * Sets current batch ID and returns it.
-   * Access current batch from granularity to retrieve batch ID.
-   */
-  getBatchId(): number {
-    this.granularityService.currentBatch$.subscribe(response => {
-      if (response) {
-        this.batchId = response.batchId;
-      }
-    });
-    return this.batchId;
-  }
-
-  getBatch() {
-
-  }
-
-  /**
    * Sorts the batch array by highest scores and
    * returns the new ordered batch array.
-   * Based on Mozilla example of Array.prototype.sort():
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+   * Based on Mozilla example of Array.prototype.sort()
    * @param array
    */
   sortByHighestScore(array) {
@@ -142,10 +139,21 @@ export class WeeklyLineChartComponent implements OnInit {
   }
 
   /**
-   * Downloads weekly chart as a PDF file.
+   * Downloads cumulative scores chart as a PDF file.
    */
   public downloadPDF(): void {
     this.pdfService.downloadPDF('chart');
+  }
+
+  /**
+   * Downloads cumulative scores chart as a PDF file with a specified name.
+   */
+  public downloadPDFwithFilename(filename): void {
+    this.pdfService.downloadPDFwithFilename('chart', filename);
+  }
+
+  public downloadPDFwithFeedback() {
+    this.pdfService.downloadPDFwithFeedback();
   }
 
 }

@@ -1,4 +1,3 @@
-// TODO: more/better commenting
 import { Component, OnInit, Input, OnChanges, sequence } from '@angular/core';
 /**
  * @author John Hudson
@@ -54,11 +53,18 @@ export class TableComponent implements OnInit, OnChanges {
         // creates a sequence of numbers for iterating in ngFor
 
     }
+    /**
+     * do this when the data changes
+     * @param changes
+     */
     public ngOnChanges(changes) {
         if (changes['data']) {
             this.ngOnInit();
         }
     }
+    /**
+     * tells html how to display things
+     */
     typeCheck() {
         if (this.tableType === 'bar') {
             if (this.tableData[0].data.length === 1 && this.tableData[1] !== undefined) {
@@ -75,6 +81,10 @@ export class TableComponent implements OnInit, OnChanges {
         }
         return 0;
     }
+    /**
+     * @param step number of steps for sequence
+     * @returns indexSequence; and array based in length of labels for ngFor iterating
+     */
     indexSequence(step: number) {
         const indexSequence = [];
         for (let i = 0; i < this.tableLabels.length; i += step) {
@@ -82,6 +92,10 @@ export class TableComponent implements OnInit, OnChanges {
         }
         return indexSequence;
     }
+    /**
+     * @param n number of steps for sequence
+     * @returns indexSequence; and array length n for ngFor iterating
+     */
     numberSequence(n: number) {
         const iSequence = [];
         for (let i = 0; i < n; i++) {
