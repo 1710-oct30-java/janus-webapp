@@ -27,7 +27,7 @@
     "@ng-bootstrap/ng-bootstrap": "1.0.0-beta.6",
     "@types/jquery": "^3.2.17",
     "angular2-notifications-lite": "^0.1.2",
-    "bootstrap": "^4.0.0-beta.2",
+    "bootstrap": "4.0.0-beta.2",
     "chart.js": "^2.7.1",
     "clean": "^4.0.2",
     "core-js": "^2.5.3",
