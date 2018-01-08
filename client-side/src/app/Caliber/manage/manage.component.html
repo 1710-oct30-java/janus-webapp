@@ -4,7 +4,7 @@
   <div class="row mb-3">
     <!-- Select year dropdown -->
     <div ngbDropdown class="d-inline-block mr-3">
-      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Select Year</button>
+      <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle><strong>Select Year</strong></button>
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
         <div *ngFor="let year of getBatchListYears(batches)">
           <button class="dropdown-item" (click)="setCurrentYear(year)">{{ year }}</button>
@@ -13,8 +13,8 @@
     </div>
 
     <div class="btn-group" role="group">
-      <button class="btn btn-outline-primary" (click)="openBatchModal(null)">Create Batch</button>
-      <button class="btn btn-outline-primary" (click)="openBatchModal(null)">Import Batch</button>
+      <button class="btn btn-secondary" (click)="openBatchModal(null)"><strong>Create Batch</strong></button>
+      <button class="btn btn-secondary" (click)="openImportBatchModal(importBatch)"><strong>Import Batch</strong></button>
     </div>
   </div>
 
@@ -50,17 +50,13 @@
             <td>{{batch.goodGradeThreshold}}</td>
             <td>{{batch.borderlineGradeThreshold}}</td>
             <td>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" (click)="openViewBatchTraineesModal(traineesInBatch, batch)" [title]="batch.trainees.length + ' Trainees'">
-                  <span class="fa fa-users"></span>
-                </button>
-                <button type="button" class="btn btn-primary" (click)="openViewBatchTraineesModal(traineesInBatch, batch)">
-                  <span class="fa fa-pencil"></span>
-                </button>
-                <button type="button" class="btn btn-primary" (click)="deleteBatchFunction(batch)">
-                  <span class="fa fa-times"></span>
-                </button>
-              </div>
+                <i class="fa fa-users" style="color:#fa7427 ;"  (click)="openViewBatchTraineesModal(traineesInBatch, batch)" [title]="batch.trainees.length + ' Trainees'"></i>
+                </td>
+                <td>
+                <i class="fa fa-pencil" style="color:#fa7427 ;"  (click)="openUpdateBatchModal(batch)"></i>
+                </td>
+                <td>
+                <i class="fa fa-times" style="color:#fa7427 ;"  (click)="deleteBatchFunction(batch)"></i>
             </td>
           </tr>
         </tbody>
@@ -89,7 +85,7 @@
                   </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-            <input type="submit" value="Import" class="btn btn-primary" />
+            <input type="submit" value="Import" class="btn btn-secondary" style="color:#fa7427 ;" />
           </div>
         </ng-template>
 
@@ -103,7 +99,8 @@
           <div class = "bigmodal">
             <div class="modal-header">
               <h4 class="modal-title">View/Add Trainees</h4>
-              <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="openBatchModal(createTrainee)">Add Trainee+</button>
+              <button class="btn btn-secondary" style="color:#fa7427 ;" (click)="deleteAllTraineesFunction(currentBatch)"><strong>Delete All Trainees</strong></button>
+              <button class="btn btn-secondary" style="color:#fa7427 ;" (click)="openCreateTraineeModal(createTrainee)"><strong>Add Trainee+</strong></button>
             </div>
             <!-- <div class="col-md-12 col-lg-12"> -->
             <div class="modal-body">
@@ -134,8 +131,7 @@
                                 <td>{{trainee.phoneNumber}}</td>
                                 <td>{{trainee.skypeId}}</td>
                                 <td>
-                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    <a [href]="trainee.profileUrl">Profile</a>
+                                    <a *ngIf="trainee.profileUrl" [href]="trainee.profileUrl"><i class="fa fa-file-text-o" aria-hidden="true"></i></a>
                                 </td>
                                 <td>{{trainee.recruiterName}}</td>
                                 <td>{{trainee.college}}</td>
@@ -143,7 +139,10 @@
                                 <td>{{trainee.major}}</td>
                                 <td>{{trainee.techScreenerName}}</td>
                                 <td>{{trainee.projectCompletion}}</td>
-                                <td><i class="fa fa-times" style="color:#ff8e4d ;" aria-hidden="true" (click)="deleteTraineeFunction(trainee)"></i></td>
+                                <td>
+                                    <i class="fa fa-pencil" style="color:#fa7427 ;" aria-hidden="true" (click)="openUpdateTraineeModal(createTrainee, trainee)"></i>
+                                </td>
+                                <td><i class="fa fa-times" style="color:#fa7427 ;" aria-hidden="true" (click)="deleteTraineeFunction(trainee)"></i></td>
                             </tr>      
                           </tbody>
                         </table>
@@ -224,7 +223,7 @@
                 <input class="form-control" placeholder="Start Date"
                 name="dp" [(ngModel)]="batchToUpdate.startDate" ngbDatepicker #d="ngbDatepicker">
          <button class="input-group-addon" (click)="d.toggle()" type="button">
-            <i class="fa fa-calendar" style="color:#ff8e4d ;" aria-hidden="true"></i>
+            <i class="fa fa-calendar" style="color:#fa7427 ;" aria-hidden="true"></i>
          </button>
             </div>
           </div>
@@ -235,7 +234,7 @@
               <input class="form-control" placeholder="End Date"
               name="dp2" [(ngModel)]="batchToUpdate.endDate" ngbDatepicker #d2="ngbDatepicker">
        <button class="input-group-addon" (click)="d2.toggle()" type="button">
-          <i class="fa fa-calendar" style="color:#ff8e4d ;" aria-hidden="true"></i>
+          <i class="fa fa-calendar" style="color:#fa7427 ;" aria-hidden="true"></i>
        </button>
           </div>
         </div>
@@ -265,7 +264,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-      <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="updateBatchFunction()">Update Batch</button>
+      <button class="btn btn-xs btn-outline-primary" style="color:#fa7427 ;" (click)="updateBatchFunction()">Update Batch</button>
     </div>
   </ng-template>
 
@@ -278,7 +277,8 @@
 
    <ng-template #createTrainee let-c="close" let-d="dismiss">
       <div class="modal-header">
-        <h4 class="modal-title">Add Trainee</h4>
+        <h4 *ngIf="isNew" class="modal-title">Add Trainee</h4>
+        <h4 *ngIf="!isNew" class="modal-title">Update Trainee</h4>
       </div>
       <div class="modal-body">
           <div class="row">
@@ -356,9 +356,10 @@
           <div class ="row">
               <div class="form-group col-md-6 col-sm-6">
                   <label for="trainingStatus">Training Status</label> <select
-                  [(ngModel)]="createNewBatch.trainingStatus" class="form-control" id="trainer"
+                  [(ngModel)]="createNewTrainee.trainingStatus" class="form-control" id="trainer"
                   placeholder="Select Status">
                   <option value="" disabled>Select Status</option>
+                  <option *ngFor="let status of statuses">{{status}}</option>
                 </select>
               </div>
           </div>
@@ -366,6 +367,13 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-        <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="createNewTraineeFunction()">Add Trainee</button>
+        <button class="btn btn-secondary" *ngIf="isNew" style="color:#fa7427 ;" (click)="createNewTraineeFunction()"><strong>Add Trainee</strong></button>
+        <button class="btn btn-secondary" *ngIf="!isNew" style="color:#fa7427 ;" (click)="updateTraineeFunction()"><strong>Update Trainee</strong></button>
+
       </div>
     </ng-template>
+
+
+
+
+    

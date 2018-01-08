@@ -17,10 +17,6 @@ import { TraineeService } from '../../services/trainee.service';
 import { BatchService } from '../../services/batch.service';
 import { PanelService } from '../../services/panel.service';
 
-
-
-
-
 @Component({
   selector: 'app-panel-searchbar',
   templateUrl: './panel-searchbar.component.html',
@@ -33,7 +29,6 @@ export class PanelSearchbarComponent implements OnInit, OnDestroy {
   traineeList = [];
   traineeNameList: any = [];
   batchSubscription: Subscription;
-  // traineeSubscription: Subscription;
   closeResult: string;
 
   protected traineeSubject: BehaviorSubject<Trainee>;
@@ -48,19 +43,28 @@ export class PanelSearchbarComponent implements OnInit, OnDestroy {
     this.traineeSubject = new BehaviorSubject(this.trainee);
   }
 
+  /**
+   * fetch all batches
+   */
   ngOnInit() {
     this.batchService.fetchAll();
     this.setBatchList();
   }
 
+  /**
+   * @function setBatchList
+   */
   setBatchList() {
     this.batchSubscription = this.batchService.getList().subscribe(batchList => {
       this.batchList = batchList;
       this.getTrainees(this.batchList);
-      console.log(this.batchList);
     });
   }
 
+  /**
+   * @function getTrainees
+   * @param batchList
+   */
   getTrainees(batchList) {
     for (let i = 0; i < batchList.length; i++) {
       this.traineeList = this.traineeList.concat(batchList[i].trainees);
@@ -70,12 +74,20 @@ export class PanelSearchbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @function setTrainee
+   * @param trainee
+   */
   setTrainee(trainee) {
     this.trainee = trainee;
     this.panelService.fetchAllByTrainee(trainee);
     this.traineeSubject.next(this.trainee);
   }
 
+  /**
+   * @function setTraineeBySearch
+   * @param traineeName
+   */
   setTraineeBySearch(traineeName) {
     for (let i = 0; i < this.traineeList.length; i++) {
       if (traineeName.item === this.traineeList[i].name) {
@@ -86,10 +98,16 @@ export class PanelSearchbarComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @function getTraineeSubject
+   */
   public getTraineeSubject(): Observable<Trainee> {
     return this.traineeSubject.asObservable();
   }
 
+  /**
+   * @function search
+   */
   search = (text$: Observable<string>) =>
     text$
       .debounceTime(200)

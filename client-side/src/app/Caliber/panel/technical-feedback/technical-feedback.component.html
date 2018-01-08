@@ -2,42 +2,35 @@
 
 
   <hr/>
-  <div class="row">
-    <div class="col-3">
+  <div class="row justify-content-center">
+    <div class="col-2">
       <strong>Technology</strong>
     </div>
-    <div class="col-3">
+    <div class="col-2">
       <strong>Result</strong>
     </div>
-    <div class="col-3">
+    <div class="col-2">
       <strong>Repanel</strong>
     </div>
-    <div class="col-3">
+    <div class="col-2">
       <strong>Comment</strong>
     </div>
   </div>
-  <hr/>
-  <!-- 
-    <ng-container *ngFor="let feedback of feedbacks">
-      <div class="row">
-        <div class="col">
-        </div>
-      </div>
-    </ng-container> -->
+
   <div class="form-group" [formGroup]="technologyForm">
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-      <div class="col-3">
+      <div class="col-2">
         <div class="form-group">
           <label for="technology"></label>
           <select class="form-control" id="technology" formControlName="technology">
-            <option *ngFor="let technology of filteredTechList">{{technology.skillCategory}}</option>
+            <option *ngFor="let technologies of filteredTechList" [ngValue]="technologies">{{technologies.skillCategory}}</option>
           </select>
         </div>
       </div>
 
-      <div class="col-3">
+      <div class="col-2">
         <div class="form-group">
           <label for="result"></label>
           <select formControlName="result" class="form-control" id="result">
@@ -56,7 +49,7 @@
         </div>
       </div>
 
-      <div class="col-3">
+      <div class="col-2">
         <div class="form-group">
           <label for="status"></label>
           <select formControlName="status" class="form-control" id="status">
@@ -66,7 +59,7 @@
         </div>
       </div>
 
-      <div class="col-3">
+      <div class="col-2">
         <div class="form-group">
           <label for="technicalComments"></label>
           <textarea formControlName="comment" class="form-control" id="technicalComments" rows="1" cols="30"></textarea>

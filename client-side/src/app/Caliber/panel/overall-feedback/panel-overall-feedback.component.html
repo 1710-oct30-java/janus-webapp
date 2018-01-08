@@ -1,0 +1,38 @@
+<div class="border border-secondary">
+  <div class="container">
+
+    <div class="row">
+      <div class="col">
+        <h3>Overall Feedback</h3>
+      </div>
+    </div>
+
+    <div class="form-group" [formGroup]="overallFeedback">
+
+      <div class="row justify-content-center">
+        <div class="col-2">
+          <label for="interviewDuration">Interview Duration</label>
+          <textarea formControlName="duration" class="form-control" id="duration" rows="1" cols="30"></textarea>
+        </div>
+        <div class="col-8">
+          <label for="recordingLink">Recording Link</label>
+          <textarea formControlName="recordingLink" class="form-control" id="recordingLink" rows="1" cols="30"></textarea>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-2">
+          <label for="panelStatus">Panel Status</label>
+          <input formControlName="status" class="form-control" id="panelStatus" type="text" readonly>
+        </div>
+        <div class="col-8">
+          <label for="overall">Overall</label>
+          <textarea formControlName="overall" class="form-control" id="overall" rows="1" cols="30"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

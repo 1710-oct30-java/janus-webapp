@@ -1,6 +1,3 @@
-<button class="btn btn-lg btn-outline-primary pointer" (click)="open(addAssessmentContent)">Add Assessment</button>
-
-
 <!--ADD WEEK MODAL **START** -->
   <ng-template #addWeekContent let-c="close" let-d="dismiss" id ="addWeek">
     <div class="modal-header">
@@ -11,10 +8,10 @@
     </div>
     <div class="modal-body">
       <p>Are you sure you wish to create a new week? (This cannot be undone.)</p>
-      <button (click)="this.addWeek(); c('Close click')">Confirm</button>
+     
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+      <button type="button" class="btn btn-primary revature-button clickable" (click)="addWeek(); c('Close click');">Confirm</button>
     </div>
   </ng-template>
 <!--ADD WEEK MODAL **END**  -->
@@ -47,10 +44,9 @@
                           <option>Other</option>
                         </select>
                 </div>
-          <button (click)="this.addAssessment(); c('Close click')">Confirm</button>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+          <button class = "btn btn-primary revature-button clickable" (click)="this.addAssessment(); c('Close click')">Confirm</button>
         </div>
       </ng-template>
 <!--ADD ASSESSMENT MODAL **END**  -->
@@ -87,36 +83,41 @@
   <div class="modal-footer">
       <button type="button" class="btn btn-danger clickable" (click)="deleteAssessment(); c('Close click');">Delete</button>
       <button type="button" class="btn btn-primary revature-button clickable" (click)="updateAssessment(); c('Close click');">Update</button>
-    <button type="button" class="btn btn-outline-dark clickable" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>
 <!--EDIT ASSESSMENT MODAL **END**  -->
 
 <!-- TABS **START** -->
 <div class = "main-container">
+    <div class = "buttons">
+      <select #bat class="form-control batch-select clickable inline" (change)="switchBatch(bat.value)">
+          <option [value]="batch.batchId" *ngFor="let batch of batches">{{batch.trainer.name}} {{batch.startDate}}</option>
+      </select>
+        <button class="btn btn-secondary clickable strong inline float-right" (click)="open(addAssessmentContent)">Add Assessment  <span class = "fa fa-plus"></span></button>
+    </div>
+  <hr class ="divider" />
     <ngb-tabset (tabChange)="fetchNews($event)">
         <ngb-tab id="{{i+1}}" *ngFor="let in of counter(this.selectedBatch.weeks); let i = index">
                 <ng-template ngbTabTitle>
                     <div class="revature-orange"><b>Week {{i+1}}</b></div> </ng-template>
                 <ng-template ngbTabContent></ng-template>
         </ngb-tab>
-        <ngb-tab id="+">
-            <ng-template ngbTabTitle>
-                <div class="revature-orange"><b>+</b></div> </ng-template>
+        <ngb-tab id="+" [disabled]="true" (click)="open(addWeek)" class = "no-padding">
+            <ng-template ngbTabTitle class = "no-padding">
+                <a href="#" class = "clickable revature-orange" (click)="open(addWeekContent)"><span class="fa fa-plus"></span></a></ng-template>
             <ng-template ngbTabContent></ng-template>
     </ngb-tab>
       </ngb-tabset>
-      <button  (click)="open(addWeekContent)">+</button>
 <!-- TABS **END** -->
 
     <table class="table table-responsive" style="border-collapse: collapse;">
       <thead>
         <tr>
-          <th>
-            Trainee
+          <th class ="clickable trainee-header">
+            <div class ="clickable trainee-header">Trainee</div>
           </th>
-          <th class ="clickable" *ngFor="let assessment of this.assessments" (click)="editAssessment(editAssessmentContent, assessment);">
-            <div class = "assessment-header">{{assessment.category.skillCategory}} {{assessment.type}}</div>
+          <th class ="clickable assessment-header" *ngFor="let assessment of this.assessments" (click)="editAssessment(editAssessmentContent, assessment);">
+            <div class = "assessment-header">{{assessment.category.skillCategory}} {{assessment.type}} ({{getPercentage(assessment)}}%)</div>
           </th>
           <th class = "note">
             Notes
@@ -127,16 +128,21 @@
         <td>
           {{trainee.name}}
         </td>
-        <td *ngFor="let assessment of this.assessments">
+        <td *ngFor="let assessment of assessments">
             <input #inputGradeScore class="form-control assessment-area" type="text" [value]="getGrade(trainee, assessment).score"
-            (change)="updateGrade(this.getGrade(trainee, assessment), inputGradeScore)">
-            <div *ngIf="checkGradeLoading(getGrade(trainee, assessment))">loading thing</div>
+            (change)="updateGrade(trainee, assessment, inputGradeScore)">
         </td>
         <td>
-            <textarea *ngIf="trainee" class="form-control note" id="exampleTextarea" rows="2" [value]="getNote(trainee)"></textarea>
+            <textarea #inputNote *ngIf="trainee" class="form-control note" id="exampleTextarea" rows="2" [value]="getNote(trainee).content" (change)="updateNote(getNote(trainee), inputNote)"></textarea>
         </td>
+      </tr>
+      <tr>
+        <td><strong>Average</strong></td>
+        <td *ngFor="let assessment of assessments" class = "centered">{{getAssessmentAverage(assessment) | number:'1.2-2'}}%</td>
+        <td><strong>Weekly Batch Average: </strong>{{getOverallAverage() | number:'1.2-2'}}%</td>
       </tr>
     </table>
 </div>
+
 
 

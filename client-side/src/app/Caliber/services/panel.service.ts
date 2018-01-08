@@ -68,7 +68,7 @@ export class PanelService extends AbstractApiService<Panel> {
   *
   * @param panel: Panel
   */
-  public create(panel: Panel): void {
+  public create(panel: any): void {
     this.save(panel);
   }
 

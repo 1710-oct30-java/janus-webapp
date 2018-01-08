@@ -41,6 +41,7 @@ import { VpHomePanelGraphService } from './services/graph/vp-home-panel-graph.se
 import { AlertsService } from './services/alerts.service';
 import { EvaluationService } from './services/evaluation.service';
 import { QCStatusService } from './services/qcstatus.service';
+import { TraineeStatusService } from './services/trainee-status.service';
 
 // pipes
 import { GradeByTraineeByAssessmentPipe } from './pipes/grade-by-trainee-by-assessment.pipe';
@@ -106,9 +107,9 @@ import { BatchModalComponent } from './manage/batch/batch-modal.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { ReactivateLocationComponent } from './settings/locations/reactivatelocation/reactivatelocation.component';
 import { BarGraphModalComponent } from './home/vp-bar-graph/bar-graph-modal/bargraphmodal.component';
+import { PanelOverallFeedbackComponent } from './panel/overall-feedback/panel-overall-feedback.component';
 import { FeedbackIconComponent } from './quality/feedback-icon/feedback-icon.component';
 import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedback/quality-overall-feedback.component';
-
 
 @NgModule({
   imports: [
@@ -194,6 +195,8 @@ import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedb
     BatchModalComponent,
     GeneralFeedbackComponent,
     TechnicalFeedbackComponent,
+  
+    PanelOverallFeedbackComponent,
     FeedbackIconComponent,
     QualityOverallFeedbackComponent,
 
@@ -210,6 +213,7 @@ import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedb
     OrderByPipe,
     GradeByTraineeByAssessmentPipe,
     BatchByTrainerPipe,
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests
@@ -240,6 +244,7 @@ import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedb
     TrainingTypeService,
     ReportsService,
     QCStatusService,
+    TraineeStatusService,
   ],
   bootstrap: [
     TrainersComponent

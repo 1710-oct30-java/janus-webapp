@@ -1,9 +1,11 @@
 <ul *ngIf="batch">
-  <li *ngFor="let week of getBatchWeeks()" (click)="changeWeek(week)">
-    <button>Week {{ week }}</button>
-  </li>
+  <ng-container *ngFor="let week of getBatchWeeks()">
+    <li>
+      <button class="btn btn-primary" (change)="changeWeek(week)">Week {{ week }}</button>
+    </li>
+  </ng-container>
   <li>
-    <button (click)="addWeekToBatch()">Add Week</button>
+    <button class="btn btn-primary" (click)="addWeekToBatch()">Add Week</button>
   </li>
 </ul>
 
@@ -16,21 +18,23 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let trainee of batch?.trainees">
-      <td>{{ trainee?.name }}</td>
-      <td>
-        <select #statusSelect (change)="updateQcStatusOnTraineeNote(statusSelect.value, trainee)">
-          <option *ngFor="let status of qcStatuses" [value]="status" [selected]="getQcStatusOnTrainee(trainee) === status">{{ status }}</option>
-        </select>
-        <p class="mx-auto">
-          <app-feedback-icon [status]="statusMap[trainee.traineeId]" css="text-orange"></app-feedback-icon>
-        </p>  
-      </td>
-      <td class="col-sm-9 col-md-9 col-lg-9">
-        <textarea #newContent [ngModel]="getNoteOnTrainee(trainee)?.content" id="noteTextArea" cols="75" rows="3" maxlength="4000"
-          placeholder="Note on {{ trainee.name }}" (blur)="updateTraineeNoteContent(newContent.value, trainee)"></textarea>
-      </td>
-    </tr>
+    <ng-container *ngFor="let trainee of batch?.trainees">
+      <tr>
+        <td>{{ trainee?.name }}</td>
+        <td>
+          <select #statusSelect (change)="updateQcStatusOnTraineeNote(statusSelect.value, trainee)">
+            <option *ngFor="let status of qcStatuses" [value]="status" [selected]="getQcStatusOnTrainee(trainee) === status">{{ status }}</option>
+          </select>
+          <p class="mx-auto">
+            <app-feedback-icon [status]="statusMap[trainee.traineeId]" css="fa-2x text-orange"></app-feedback-icon>
+          </p>  
+        </td>
+        <td class="col-sm-9 col-md-9 col-lg-9">
+          <textarea #newContent [ngModel]="getNoteOnTrainee(trainee)?.content" id="noteTextArea" cols="75" rows="3" maxlength="4000"
+            placeholder="Note on {{ trainee.name }}" (blur)="updateTraineeNoteContent(newContent.value, trainee)"></textarea>
+        </td>
+      </tr>
+    </ng-container>
   </tbody>
 </table>
 <div class="row">

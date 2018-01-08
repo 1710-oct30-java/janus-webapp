@@ -65,7 +65,7 @@ export class QualityComponent implements OnInit, OnDestroy {
    public setCurrentYear(currentYear: number): void {
      this.currentYear = currentYear;
 
-     console.log(currentYear);
+     // console.log(currentYear);
    }
 
    getTrackedYears(): number[] {
@@ -80,7 +80,7 @@ export class QualityComponent implements OnInit, OnDestroy {
    }
 
    onBatchSelect(batchId: number) {
-    console.log(batchId);
+    // console.log(batchId)f;
     const selectedBatches = this.batches.filter( (batch) => ( Number(batch.batchId) === Number(batchId) ) );
 
     if ( selectedBatches.length === 1 ) {

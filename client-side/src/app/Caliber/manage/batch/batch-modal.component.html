@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Create New Batch</h4>
+  <h4 class="modal-title">{{batchType}}</h4>
   <button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -40,7 +40,7 @@
       <label for="location">Location</label>
       <select #selectLocation (change)="onLocationSelect(selectLocation.value)" class="form-control" id="trainer">
         <option value="" disabled>Select Location</option>
-        <option *ngFor="let location of locations" [value]="location.addressId">{{location.city}}, {{location.state}}</option>
+        <option *ngFor="let location of locations" [value]="location.addressId">{{location.street}}, {{location.city}}, {{location.state}}</option>
       </select>
     </div>
 
@@ -118,5 +118,6 @@
 
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="close('Closed Modal')">Close</button>
-  <button class="btn btn-xs btn-outline-primary" style="color:#ff8e4d ;" (click)="save()">Create Batch</button>
+  <button *ngIf= "!isNewBatch" class="btn btn-secondary" style="color:#ff8e4d ;" (click)="save()"><strong>{{batchType}}</strong></button>
+  <button *ngIf= "isNewBatch" class="btn btn-secondary" style="color:#ff8e4d ;" (click)="create()"><strong>{{batchType}}</strong></button>
 </div>

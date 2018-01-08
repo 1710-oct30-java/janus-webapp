@@ -1,26 +1,40 @@
 <div class="container">
-<div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Trainee Name</th>
-        <th scope="col">Date</th>
-        <th scope="col">Panelist</th>
-        <th scope="col">Panel Status</th>
-        <th scope="col">Repeat Topics</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let panel of panelList">
-        <td>{{panel.trainee.name}}</td>
-        <td>{{panel.interviewDate}}</td>
-        <td>{{panel.panelist.name}}</td>
-        <td>{{panel.status}}</td>
-        <ng-container *ngFor="let feedback of panel.feedback">
-          <tr *ngIf="feedback.status == 'Repanel'">{{feedback.technology.skillCategory}}</tr>
-        </ng-container>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div class="row">
+    <div class="col">
+      <h3>Panel Feedback</h3>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Trainee Name</th>
+          <th scope="col">Date</th>
+          <th scope="col">Panelist</th>
+          <th scope="col">Panel Status</th>
+          <th scope="col">Repeat Topics</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let panel of panelList">
+          <td>{{panel.trainee.name}}</td>
+          <td>{{panel.interviewDate}}</td>
+          <td>{{panel.panelist.name}}</td>
+          <td>{{panel.status}}</td>
+          <ng-container *ngFor="let feedback of panel.feedback">
+            <tr *ngIf="feedback.status == 'Repanel'">{{feedback.technology.skillCategory}}</tr>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col">
+
+      <h6 *ngIf="panelList == null">
+          There are currently no panels for this trainee!
+      </h6>
+
+    </div>
+  </div>
 </div>

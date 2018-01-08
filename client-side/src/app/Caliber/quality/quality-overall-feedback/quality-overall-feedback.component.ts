@@ -36,7 +36,7 @@ export class QualityOverallFeedbackComponent implements OnInit, OnDestroy, OnCha
    */
   private setQCStatuses(statuses: string[]): void {
     this.qcStatuses = statuses;
-    console.log(this.batchNote);
+    // console.log(this.batchNote);
   }
 
   /**

@@ -220,14 +220,14 @@ export abstract class AbstractApiService<T> {
     let dateString: string;
 
     if ( date.hasOwnProperty('year') === false ) {
-      date = new Date(date);
+      dateString = date;
+    } else {
+      dateString = [
+        date.year,
+        date.month,
+        date.day,
+      ].join('-');
     }
-
-    dateString = [
-      date.year,
-      date.month,
-      date.day,
-    ].join('-');
 
     return [
       dateString,

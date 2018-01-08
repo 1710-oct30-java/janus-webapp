@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/observable/merge';
 
@@ -24,8 +25,24 @@ import { Batch } from '../entities/Batch';
 @Injectable()
 export class NoteService extends AbstractApiService<Note> {
 
+  /*
+  * holds list of notes for one trainee
+  */
+  private traineeListSubject: BehaviorSubject<Note[]>;
+
   constructor(httpClient: HttpClient, alertService: AlertsService) {
     super(httpClient, alertService);
+
+    this.traineeListSubject = new BehaviorSubject([]);
+  }
+
+  /**
+  * returns the Trainee specific list of notes
+  * in an observable
+  * @return Observalbe<Note[]>
+  */
+  public getTraineeList(): Observable<Note[]> {
+    return this.traineeListSubject.asObservable();
   }
 
   /*
@@ -144,11 +161,51 @@ export class NoteService extends AbstractApiService<Note> {
   *
   * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
   */
-  public fetchByTrainee(trainee: Trainee): Observable<Note[]> {
-    const url = environment.note.fetchByTrainee(trainee.traineeId);
+  public fetchByTrainee(trainee: Trainee): void {
+    const $trainingNotes = this.fetchTrainingNotesByTrainee(trainee);
+    const $qcNotes = this.fetchQcNotesByTrainee(trainee);
+    let results: Note[] = [];
+
+    Observable.merge( $trainingNotes, $qcNotes)
+      .subscribe( (notes) => {
+        results = results.concat(notes);
+      }, (error) => {
+        super.pushAlert('error', 'Notes retrieval failed');
+      }, // errors are already sent to the console in the SpringInterceptor
+      () => {
+        this.traineeListSubject.next(results); // send the merged results
+        super.pushAlert('success', 'Notes retrieved successfully');
+      });
+  }
+
+  /**
+  * retrieves all Training notes associated with the passed
+  * trainee and pushes the results on the listSubject
+  *
+  * @param trainee: Trainee
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
+  */
+  public fetchTrainingNotesByTrainee(trainee: Trainee): Observable<Note[]> {
+    const url = environment.note.fetchTrainingNotesByTrainee(trainee.traineeId);
 
     return super.doGetListObservable(url);
   }
+
+  /**
+  * retrieves all Training notes associated with the passed
+  * trainee and pushes the results on the listSubject
+  *
+  * @param trainee: Trainee
+  *
+  * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
+  */
+  public fetchQcNotesByTrainee(trainee: Trainee): Observable<Note[]> {
+    const url = environment.note.fetchQcNotesByTrainee(trainee.traineeId);
+
+    return super.doGetListObservable(url);
+  }
+
 
   /**
    * transmits a note to be updated and pushes the

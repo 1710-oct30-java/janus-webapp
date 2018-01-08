@@ -19,9 +19,15 @@ export class TechnicalFeedbackComponent implements OnInit {
 
   @Input() technologyForm: FormGroup;
 
+  /**
+   *
+   * @param categoryService
+   */
+  constructor(private categoryService: CategoriesService) { }
 
-  constructor(private categoryService: CategoriesService, private cp: CreatePanelComponent) { }
-
+  /**
+   * gets technology list and filters out duplicates
+   */
   ngOnInit() {
     this.categoryService.fetchAll();
     this.categoryService.getList().subscribe((techList) => {
@@ -31,9 +37,5 @@ export class TechnicalFeedbackComponent implements OnInit {
       }
     });
 
-  }
-
-  addFeedback() {
-    this.cp.addFeedback();
   }
 }

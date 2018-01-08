@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./panel.component.css']
 })
 
-/** Class representing the Panel page */
 export class PanelComponent implements OnInit {
 
   constructor() { }

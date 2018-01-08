@@ -31,6 +31,8 @@ export class BatchModalComponent implements OnInit, OnDestroy, OnChanges {
   public skills: string[];
   public locations: Address[];
   public trainingTypes: string[];
+  batchType: string;
+  isNewBatch: boolean;
 
   private savedBatchSubscription: Subscription;
   private trainingTypeListSubscription: Subscription;
@@ -87,6 +89,10 @@ export class BatchModalComponent implements OnInit, OnDestroy, OnChanges {
     this.batchService.save( this.batch );
   }
 
+  create(): void {
+    this.batchService.create(this.batch);
+  }
+
   /** Dynamically updates the createBatch location selected inside the
     * create batch modal whenever a location is selected from the dropdown
     */
@@ -99,6 +105,8 @@ export class BatchModalComponent implements OnInit, OnDestroy, OnChanges {
     /** Create batch also requires a "location" field inside of it
      *  For now, we will just send a string for the city since the address
      * is already set
+     * 
+     * The address/location entities need to be redesigned across the application
      */
     this.batch.location = this.batch.address.city;
   }
@@ -160,6 +168,23 @@ export class BatchModalComponent implements OnInit, OnDestroy, OnChanges {
 
     /* fetches all training locations */
     this.locationService.fetchAll();
+
+    /* basic logic to assign the header and button names to what the modal
+    is being used for
+    If current batch is empty we are creating a new batch
+    If current batch has a field asssigned already we are updating a batch
+
+    isNewBatch is assigned so that the proper functions are called from the buttons
+    
+    This should be redesigned */
+
+    if (this.batch.trainer == null) {
+      this.batchType = 'Create Batch';
+      this.isNewBatch = true;
+     } else {
+        this.batchType = 'Update Batch';
+        this.isNewBatch = false;
+      }
 
     this.clone();
   }

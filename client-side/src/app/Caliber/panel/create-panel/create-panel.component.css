@@ -1,5 +1,5 @@
 .top-buffer {
-    margin-top: 20px;
+    padding-top: 20px;
 }
 
 /*
@@ -12,9 +12,50 @@
 }
 
 .container {
-    padding: 10px;
+    padding: 0px;
 }
 
 .align-self-end {
-    margin-bottom: 45px;
+    margin-bottom: 90px;
 }
+
+#deleteFeedback {
+    margin-left: 50px;
+    margin-bottom: 10px;
+}
+
+.btn-secondary:disabled {
+    background-color: white;
+    color: #fa7427;
+    border-bottom: 1px solid #ebe8e8;
+    border-color: white;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #fa7427;
+    border-bottom: 1px solid #ebe8e8;
+    border-color: white;
+}
+.btn-secondary:hover:enabled {
+    background-color: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    color: #10009c;
+    transition: 1s;
+}
+
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+ }
+
+ app-alerts {
+     position: absolute;
+     z-index: 99999;
+ }
+
+h3 {
+    background-color: #F26925;
+    padding-left: 10px;
+ }
+

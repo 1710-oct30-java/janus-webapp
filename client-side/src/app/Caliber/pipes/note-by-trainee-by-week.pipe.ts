@@ -7,7 +7,7 @@ import { Trainee } from '../entities/Trainee';
 })
 export class NoteByTraineeByWeekPipe implements PipeTransform {
 
-  transform(value: Note[], trainee: Trainee, week: number ): string {
+  transform(value: Note[], trainee: Trainee, week: number ): Note {
 
     const n = value.filter( (note) => {
 
@@ -16,9 +16,9 @@ export class NoteByTraineeByWeekPipe implements PipeTransform {
       })[0];
 
       if (n != null) {
-        return n.content;
+        return n;
       } else {
-        return '';
+        return new Note();
       }
 
   }

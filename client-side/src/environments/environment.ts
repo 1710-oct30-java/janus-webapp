@@ -42,7 +42,8 @@ export const environment = {
     fetchQcTraineeNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}qc/note/trainee/${batchId}/${week}`,
     fetchBatchNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}trainer/note/batch/${batchId}/${week}`,
     fetchTraineeNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}trainer/note/trainee/${batchId}/${week}`,
-    fetchByTrainee: (traineeId: number) => `${context}all/notes/trainee/${traineeId}`,
+    fetchTrainingNotesByTrainee: (traineeId: number) => `${context}all/notes/trainee/${traineeId}`,
+    fetchQcNotesByTrainee: (traineeId: number) => `${context}qc/note/trainee/${traineeId}`,
     update: () => `${context}note/update`,
     save: () => `${context}note/create`,
     getAllQCTraineeNotes: (batchId: number, week: number) => `${context}qc/note/trainee/${batchId}/${week}`,
@@ -89,6 +90,10 @@ export const environment = {
 
   trainingType: {
     fetchAll: () => `${context}types/training/all`,
+  },
+
+  traineeStatus: {
+    fetchAll: () => `${context}types/trainingstatus/all`,
   },
 
   // API calls for the VP functionality group
