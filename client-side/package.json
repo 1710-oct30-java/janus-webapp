@@ -32,6 +32,7 @@
     "jspdf": "^1.3.5",
     "ng-charts": "^1.0.0-alpha",
     "ng2-charts": "^1.6.0",
+    "ng4-material-dropdown": "^1.0.0",
     "rxjs": "5.5.2",
     "zone.js": "^0.8.14"
   },

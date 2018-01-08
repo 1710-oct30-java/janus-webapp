@@ -85,7 +85,7 @@ import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.com
     RouterModule.forChild(routes),
     FormsModule,
     ChartsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     // pipes
