@@ -9,16 +9,20 @@
             <td>Categories</td>
             <td>Quality Audit</td>
             <td>QC Feedback</td>
-            <td>Trainer Feedback</td>
           </tr>
         </thead>
-        <tbody *ngIf="weekTopics">
-          <tr *ngFor="let topic of weekTopics; let week = index">
+        <tbody *ngFor="let topic of weekTopics; let week = index" class="row-border">
+          <tr>
             <td>{{week+1}}</td>
             <td>{{topic}}</td>
             <td *ngIf="qcNotes">{{qcWeek(week+1).qcStatus}}</td>
             <td *ngIf="qcNotes">{{qcWeek(week+1).content}}</td>
-            <td *ngIf="allNotes">{{allWeek(week+1).content}}</td>
+          </tr>
+          <tr>
+            <th>Notes:</th>
+            <td class="align-left" colspan="3" *ngIf="allNotes">
+              {{allWeek(week+1).content}}
+            </td>
           </tr>
         </tbody>
       </table>

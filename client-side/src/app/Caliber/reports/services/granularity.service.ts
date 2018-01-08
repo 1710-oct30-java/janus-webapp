@@ -19,14 +19,16 @@ export class GranularityService {
   private currentBatch = new ReplaySubject<Batch>(1);
   private currentTrainee = new ReplaySubject<Trainee>(1);
   private currentWeek = new ReplaySubject<number>(1);
+  private ready = new ReplaySubject<boolean>(1);
 
   public currentBatch$ = this.currentBatch.asObservable();
   public currentTrainee$ = this.currentTrainee.asObservable();
   public currentWeek$ = this.currentWeek.asObservable();
+  public ready$ = this.ready.asObservable();
 
   constructor() {
     /*   Default values used for testing   */
-
+/*
     // this is an actual batch from api
     const sampleBatch = {
       'batchId': 2201, 'resourceId': null, 'trainingName': '1702 Feb13 Java (AP)',
@@ -170,8 +172,9 @@ export class GranularityService {
     };
     this.currentTrainee.next(testTrainee);
 
-    const week = 0;
+    const week = 4;
     this.currentWeek.next(week);
+    */
   }
 
   /*
@@ -185,7 +188,8 @@ export class GranularityService {
    * @param trainee - Trainee to push to the subject.
    */
   pushTrainee(trainee: Trainee) {
-    console.log('next trainee');
+    console.log('next trainee: ');
+    console.log(trainee);
     this.currentTrainee.next(trainee);
   }
 
@@ -204,7 +208,17 @@ export class GranularityService {
    * @param week - Week number to push to the subject.
    */
   pushWeek(week: number) {
-    console.log('next week');
+    console.log('next week: ' + week);
     this.currentWeek.next(week);
+  }
+
+  /**
+   * Pushes a specified ready state to the ready subject.
+   * This value is used to destroy the view when multiple state changes
+   * are required.
+   * @param ready - boolean ready state
+   */
+  pushReady(ready: boolean) {
+    this.ready.next(ready);
   }
 }

@@ -63,6 +63,8 @@ export class TableComponent implements OnInit, OnChanges {
         if (this.tableType === 'bar') {
             if (this.tableData[0].data.length === 1 && this.tableData[1] !== undefined) {
                 return 3;
+            } else {
+                return 4;
             }
         }
         if (this.tableType === 'line') {

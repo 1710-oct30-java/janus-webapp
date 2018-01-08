@@ -1,20 +1,20 @@
-<div class="container" id="trainee-tech-skills">
+<div class="container" *ngIf="trainee" id = "trainee-tech-skills">
   <div class="panel panel-default">
 
     <div class="panel-heading">
       Technical Skills
       <i (click)="downloadPDF()" class="fa fa-download"></i>
-      <div *ngIf="week === 0" role="button" class="pull-right" (click)="open(traineeTechSkillsSelector)">
+      <div *ngIf="week === 0 && trainee.traineeId === 0" role="button" class="pull-right" (click)="open(traineeTechSkillsSelector)">
         <i class="fa fa-user-circle-o fa-lg"></i>
       </div>
     </div>
 
-    <div *ngIf="week === 0" class="panel-body">
+    <div *ngIf="week === 0 && trainee.traineeId === 0" class="panel-body">
       <app-graph *ngIf="chartData && chartData.length === trainees.length + 1" [data]="(chartData | graphData:dataSetLabels)" [legend]=true
         [type]="chartType"></app-graph>
       <app-table *ngIf="chartData && chartData.length === trainees.length + 1" [data]="(chartData | graphData:dataSetLabels)" [type]="chartType"></app-table>
     </div>
-    <div *ngIf="week !== 0" class="panel-body">
+    <div *ngIf="trainee.traineeId !== 0" class="panel-body">
       <app-graph *ngIf="chartData && chartData.length === 2" [data]="(chartData | graphData:dataSetLabels)" [legend]=true [type]="chartType"></app-graph>
       <app-table *ngIf="chartData && chartData.length === 2" [data]="(chartData | graphData:dataSetLabels)" [type]="chartType"></app-table>
     </div>

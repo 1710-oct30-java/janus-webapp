@@ -10,7 +10,6 @@ export class GraphDataPipe implements PipeTransform {
      */
     transform(rawData: number[], dataSetLabels: string[]): any {
         const output: any[] = [];
-
         for (let i = 0; i < rawData.length; i++) {
             output.push(this.dataSet(rawData[i], dataSetLabels[i]));
         }
