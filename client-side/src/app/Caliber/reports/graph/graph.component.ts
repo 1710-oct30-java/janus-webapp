@@ -207,8 +207,8 @@ export class GraphComponent implements OnInit, OnChanges {
   /**
   * HSV to RGB color conversion
   *
-  * H runs from 0 to 360 degrees
-  * S and V run from 0 to 100
+  * @param H runs from 0 to 360 degrees
+  * @param S and @param V run from 0 to 100
   *
   * Function from
   * https://gist.github.com/eyecatchup/9536706/#file-hsvtorgb-js
@@ -292,6 +292,7 @@ export class GraphComponent implements OnInit, OnChanges {
   }
   /**
    * converts hex values to rgb values
+   * @param hex the hex to convert to rgb
   */
   convertHex(hex) {
     hex = hex.replace('#', '');
@@ -320,7 +321,10 @@ export class GraphComponent implements OnInit, OnChanges {
       pointBorderColor: '#fff'
     };
   }
-  // returns an object for chart options
+  /**
+   * returns an object for chart options
+   * @param _chartType the type of chart to determine the options to return
+   */
   chartOption(_chartType: string) {
     // default is radar options
     const _chartOptions: any = {

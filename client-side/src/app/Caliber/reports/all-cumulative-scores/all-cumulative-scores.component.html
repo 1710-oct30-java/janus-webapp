@@ -1,0 +1,12 @@
+<div class="container" *ngIf="traineeId <= 0">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Cumulative Scores
+            <i (click)="downloadPDF()" class="fa fa-download"></i>
+        </div>
+        <div id="chart" class="panel-body">
+            <app-graph *ngIf="chartData" [data]="(chartData) | graphData:dataSetLabels" [legend]=true [type]="chartType"></app-graph>
+            <app-table *ngIf="chartData" [data]="(chartData) | graphData:dataSetLabels" [type]="chartType"></app-table>
+        </div>
+    </div>
+</div>

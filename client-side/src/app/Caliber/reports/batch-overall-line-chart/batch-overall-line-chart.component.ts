@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ReportingService } from '../../../services/reporting.service';
 import { GranularityService } from '../services/granularity.service';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Component utilizes service API calls to fetch and display an overall
@@ -24,6 +25,10 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
 
   private batchSub: Subscription;
   private weekSub: Subscription;
+  private granularitySubscription: Subscription;
+
+  public traineeId: Subscription;
+
 
   public labels: Array<String> = null;
   public labelsShown: Array<String> = null;
@@ -71,54 +76,57 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
 
   constructor(private reportsService: ReportingService, private granularityService: GranularityService) {}
 
-  ngOnInit() {
-    this.dataSubscription = this.reportsService.batchOverallLineChart$.subscribe((result) => {
-      if (result) {
-        const newData = [];
+  ngOnInit() { 
+    this.granularitySubscription = Observable.combineLatest(
+      this.granularityService.currentBatch$, this.granularityService.currentTrainee$, 
+      this.granularityService.currentWeek$).subscribe((batchdata) =>
+      {
+        const batch = batchdata[0];
+        const trainee = batchdata[1];
+        const week = batchdata[2];
+        this.batchId = batch.batchId;
+
+        this.week = week;
+        this.labels = [batch.trainingName];
+
+        if (trainee.traineeId === 0 )
+        {
+          return 
+        }
+        this.reportsService.fetchTraineeOverallLineChart(batch.batchId, trainee.traineeId);
+
+        
+      }
+    )
+    this.dataSubscription = this.reportsService.lineTraineeOverall$.subscribe(
+      (data) => {
+        const newBatchData = [];
+        const newTraineeData = [];
         const newLabels = [];
 
-        // Format data for charts
-        for (const key in result.data) {
-          if (result.data.hasOwnProperty(key)) {
-
-              // Fixing decimal length for charts
-              newData.push(result.data[key].toFixed(2));
-              newLabels.push(key);
+        if(!data) {
+          console.log('data request failed to resolve');
+          return;
+        }
+        // console.log(data);
+        for (const key in data.data) {
+          if (data.data.hasOwnProperty(key)) {
+            console.log(data.data[key]);
+            newBatchData.push(data.data[key][1].toFixed(2));
+            newTraineeData.push(data.data[key][0].toFixed(2));
+            newLabels.push(key);
           }
         }
-
-        // Assign new data
         this.labels = newLabels;
-        this.data = [{data: newData, label: 'label'}];
-
-        // Update display data with new data accounting for week limitation
-        this.updateWeeks();
-
-      } else {
-        console.log('line chart data failed to load');
+        this.data = [{data: newTraineeData, label: 'trainee'},
+                    {data: newBatchData, label: 'batch'}];
+                    console.log(this.data) 
       }
-    });
-
-    this.batchSub = this.granularityService.currentBatch$.subscribe(
-      (result) => {
-        // Make sure batchId is not undefined
-        if (result) {
-          if (result.batchId !== this.batchId) {
-            this.batchId = result.batchId;
-            this.fetch();
-          }
-        }
-    });
-
-    this.weekSub = this.granularityService.currentWeek$.subscribe(
-      (result) => {
-        if (result !== this.week) {
-          this.week = result;
-          this.updateWeeks();
-        }
-      }
-    );
+      
+    )
   }
+    
+      
 
   // Fetches data when new data is pushed in
   private fetch() {

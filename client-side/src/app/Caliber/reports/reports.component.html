@@ -1,23 +1,26 @@
-<!--<app-toolbar></app-toolbar>-->
+<app-toolbar></app-toolbar>
 <div class="container" *ngIf="currentTrainee">
     <div class="row reports-row">
         <div class="col-md-12">
-            <app-weekly-line-chart *ngIf="currentTrainee.traineeId === 0 && weekId === 0"></app-weekly-line-chart>
+            <!-- <app-cumulative-skills></app-cumulative-skills> -->
+            <div class="charts"><app-all-cumulative-scores *ngIf="weekId === 0"></app-all-cumulative-scores></div>
+            <div class="charts"><app-weekly-cumulative-skills *ngIf="weekId > 0"></app-weekly-cumulative-skills></div>
             <app-assessment-breakdown *ngIf="currentTrainee.traineeId > 0"></app-assessment-breakdown>
-            <app-cumulative-skills *ngIf="currentTrainee.traineeId === 0 && weekId > 0"></app-cumulative-skills>
         </div>
     </div>
     <div class="row reports-row"> 
         <div class="col-md-4">
-            <!-- <app-quality-audit *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-quality-audit>-->
+            <div class="charts"><app-weekly-audit *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-weekly-audit></div>
             <app-trainee-tech-skills *ngIf="!(weekId !== 0 && currentTrainee.traineeId === 0)"></app-trainee-tech-skills>
+            <app-qc-doughnut *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-qc-doughnut>
         </div>
         <div class="col-md-8">
-            <app-assessment-breakdown *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-assessment-breakdown>
-            <app-batch-overall-line-chart *ngIf="weekId === 0 || currentTrainee.traineeId > 0"></app-batch-overall-line-chart>
-            <app-panel-batch-all-trainees *ngIf="weekId === 0 && currentTrainee.traineeId === 0"></app-panel-batch-all-trainees>
+            <app-batch-overall-line-chart *ngIf="currentTrainee.traineeId > 0"></app-batch-overall-line-chart>
+            <app-assessment-breakdown *ngIf="currentTrainee.traineeId === 0 && weekId > 0"></app-assessment-breakdown>
+            <app-panel-batch-all-trainees></app-panel-batch-all-trainees>
         </div>
     </div>
-    <app-overall-feedback *ngIf="currentTrainee.traineeId > 0"></app-overall-feedback>
+
+    <app-overall-feedback *ngIf="currentTrainee.traineeId > 0"></app-overall-feedback> 
     <app-panel-feedback *ngIf="currentTrainee.traineeId > 0"></app-panel-feedback>
 </div>

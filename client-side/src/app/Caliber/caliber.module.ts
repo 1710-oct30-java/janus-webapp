@@ -65,7 +65,7 @@ import { AssessComponent } from './assess/assess.component';
 import { NavComponent } from '../nav/nav.component';
 import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
-import { WeeklyLineChartComponent } from './reports/weekly-line-chart/weekly-line-chart.component';
+import { AllCumulativeScoresComponent } from './reports/all-cumulative-scores/all-cumulative-scores.component';
 import { TraineeTechSkillsComponent } from './reports/trainee-tech-skills/trainee-tech-skills.component';
 import { ToolbarComponent } from './reports/toolbar/toolbar.component';
 import { TestComponent } from './components/test/test.component';
@@ -98,15 +98,15 @@ import { AssessmentBreakdownComponent } from './reports/assessment-breakdown/ass
 import { WeeklyFeedbackComponent } from './reports/weekly-feedback/weekly-feedback.component';
 import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.component';
 import { WeeklyAuditComponent } from './reports/weekly-audit/weekly-audit.component';
-import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative-scores.component';
-import { DoughnutComponent } from './doughnut/doughnut.component';
-import { ReportsService } from './services/reports.service';
-import { GeneralFeedbackComponent } from './panel/general-feedback/general-feedback.component';
-import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical-feedback.component';
-import { BatchModalComponent } from './manage/batch/batch-modal.component';
+import { WeeklyCumulativeScoreComponent } from './reports/weekly-cumulative-scores/weekly-cumulative-scores.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { ReactivateLocationComponent } from './settings/locations/reactivatelocation/reactivatelocation.component';
 import { BarGraphModalComponent } from './home/vp-bar-graph/bar-graph-modal/bargraphmodal.component';
+import { ReportsService } from './services/reports.service';
+import { GeneralFeedbackComponent } from './panel/general-feedback/general-feedback.component';
+import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical-feedback.component';
+import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component';
+import { BatchModalComponent } from './manage/batch/batch-modal.component';
 import { PanelOverallFeedbackComponent } from './panel/overall-feedback/panel-overall-feedback.component';
 import { FeedbackIconComponent } from './quality/feedback-icon/feedback-icon.component';
 import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedback/quality-overall-feedback.component';
@@ -152,7 +152,7 @@ import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedb
     AssessComponent,
     ManageComponent,
     ReportsComponent,
-    WeeklyLineChartComponent,
+    AllCumulativeScoresComponent,
     VpBarGraphComponent,
     VpLineGraphComponent,
     VpPanelGraphComponent,
@@ -182,8 +182,8 @@ import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedb
     WeeklyGradesComponent,
     PanelFeedbackComponent,
     WeeklyAuditComponent,
-    CumulativeScoreComponent,
-    DoughnutComponent,
+    WeeklyCumulativeScoreComponent,
+    QcDoughnutComponent,
     ReactivateLocationComponent,
     AlertsComponent,
     BarGraphModalComponent,
@@ -213,7 +213,9 @@ import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedb
     OrderByPipe,
     GradeByTraineeByAssessmentPipe,
     BatchByTrainerPipe,
-
+    GeneralFeedbackComponent,
+    TechnicalFeedbackComponent,
+    QcDoughnutComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests

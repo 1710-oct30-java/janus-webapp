@@ -12,11 +12,11 @@ import { Batch } from '../../entities/Batch';
  * @author John Hudson
 */
 @Component({
-    selector: 'app-cumulative-skills',
-    templateUrl: './cumulative-scores.component.html',
-    styleUrls: ['./cumulative-scores.component.css']
+    selector: 'app-weekly-cumulative-skills',
+    templateUrl: './weekly-cumulative-scores.component.html',
+    styleUrls: ['./weekly-cumulative-scores.component.css']
 })
-export class CumulativeScoreComponent implements OnInit, OnDestroy {
+export class WeeklyCumulativeScoreComponent implements OnInit, OnDestroy {
 
     // chart data sub
     private BatchWeekSortedBarChart: Subscription;
