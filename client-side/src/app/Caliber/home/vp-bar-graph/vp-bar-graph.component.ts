@@ -81,7 +81,6 @@ export class VpBarGraphComponent implements OnInit, OnDestroy {
         if (resp.length > 0) {
           this.holder.push(resp);
         }
-        console.log(resp);
         if (this.counter > 2) {
           // have to sort to find which object is in the array the result of Observable1 will have a qcStatus field
           this.results = this.holder.filter(i => ('qcStatus' in i[0]))[0];
