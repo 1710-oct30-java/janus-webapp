@@ -220,7 +220,7 @@ export class ToolbarComponent implements OnInit {
    */
   weekOnClick(week): void {
     this.weekSelect = week;
-    this.pushToGranularityService();
+    this.granularityService.pushWeek(this.weekSelect);
   }
 
   /**
@@ -240,7 +240,7 @@ export class ToolbarComponent implements OnInit {
       this.currentTrainee = this.getTraineeByIdFromSelection(traineeId);
       this.clearSearchBox();
     }
-    this.pushToGranularityService();
+    this.granularityService.pushTrainee(this.currentTrainee);
   }
 
   /**

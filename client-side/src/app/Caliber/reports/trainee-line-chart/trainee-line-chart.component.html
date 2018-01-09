@@ -1,0 +1,36 @@
+<div class="container" *ngIf="data">
+    <header class="panel-heading">Weekly Progress</header>
+    <div class="panel-body">
+      <canvas  baseChart
+            [datasets]="data"
+            [labels]="labels"
+            [legend] = "true"
+            [colors]="lineChartColors"
+            [legend]="lineChartLegend"
+            [options]="options"
+            [chartType]="lineChartType"></canvas>
+    </div>
+    <div class="table-responsive">
+      <table *ngIf="data" class="table ng-scope table-responsive" style="border-collapse: collapse">
+        
+      
+            <tr>
+                <th class="pull-left"></th>
+                <th *ngFor="let week of labels; let i = index"> Week {{i + 1}}</th>
+              </tr>
+         <tr>
+            <th class="pull-left">Trainee</th>
+            <td *ngFor="let datum of data[0].data; let i = index">{{datum | number:'2.2-2'}}%</td>
+          </tr>
+    
+           
+              <tr>
+                <th class="pull-left">Batch </th>
+                <td *ngFor="let datum of data[1].data; let i = index" >{{datum | number:'2.2-2'}}%</td>
+              </tr>
+            </tbody>
+          </table>
+      
+    </div>
+  </div>
+  

@@ -1,44 +1,55 @@
-<ul *ngIf="batch">
-  <ng-container *ngFor="let week of getBatchWeeks()">
-    <li>
-      <button class="btn btn-primary" (change)="changeWeek(week)">Week {{ week }}</button>
-    </li>
-  </ng-container>
-  <li>
-    <button class="btn btn-primary" (click)="addWeekToBatch()">Add Week</button>
-  </li>
-</ul>
 
-<table>
-  <thead>
-    <tr>
-      <th>Trainee</th>
-      <th>Individual Feedback</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let trainee of batch?.trainees">
-      <tr>
-        <td>{{ trainee?.name }}</td>
-        <td>
-          <select #statusSelect (change)="updateQcStatusOnTraineeNote(statusSelect.value, trainee)">
-            <option *ngFor="let status of qcStatuses" [value]="status" [selected]="getQcStatusOnTrainee(trainee) === status">{{ status }}</option>
-          </select>
-          <p class="mx-auto">
-            <app-feedback-icon [status]="statusMap[trainee.traineeId]" css="fa-2x text-orange"></app-feedback-icon>
-          </p>  
-        </td>
-        <td class="col-sm-9 col-md-9 col-lg-9">
-          <textarea #newContent [ngModel]="getNoteOnTrainee(trainee)?.content" id="noteTextArea" cols="75" rows="3" maxlength="4000"
-            placeholder="Note on {{ trainee.name }}" (blur)="updateTraineeNoteContent(newContent.value, trainee)"></textarea>
-        </td>
-      </tr>
-    </ng-container>
-  </tbody>
-</table>
-<div class="row">
-  <hr class="w-100" />
-</div>
+<ngb-tabset #tabSet="ngbTabset" (tabChange)="checkForAddTab($event)">
 
-<app-quality-overall-feedback [batchNote]="getQcBatchNote()"></app-quality-overall-feedback>
+<ngb-tab *ngFor="let week of getBatchWeeks()" [id]="'week-' + week">
+    <ng-template ngbTabTitle>
+      <a href="#" (click)="setWeek(week)">Week {{ week }}</a>
+    </ng-template>
+    
+    <ng-template ngbTabContent>
+       <div *ngFor="let row of data" class="row my-2">
+
+        <div class="col-md-3">
+            <p>{{ row.trainee.name }}</p>
+        </div>
+
+        <div class="col-md-2">
+            <div class="row">
+              <select #statusSelect class="custom-select mx-auto text-orange" (change)="onStatusChange(row, statusSelect.value)">
+                <option 
+                  *ngFor="let status of statusList" 
+                  [value]="status" 
+                  [selected]="status === row.note.qcStatus">{{ status }} </option>
+              </select>
+            </div>
+
+            <div class="row mt-3">
+              <p class="mx-auto">
+                <app-feedback-icon [status]="row.note.qcStatus" css="fa-2x text-orange"></app-feedback-icon>
+              </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+          <textarea class="form-control" [disabled]="noteIsUndefined(row.note)" [(ngModel)]="row.note.content" rows="4" (change)="saveNote(row.note)"></textarea>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <hr class="w-100" />
+      </div>
+
+      <app-quality-overall-feedback [batchNote]="getBatchNote()"></app-quality-overall-feedback>
+    </ng-template>
+</ngb-tab>
+
+<ngb-tab id="addWeekTab">
+  <ng-template ngbTabTitle>
+    <a href="#">
+      <span class="fa fa-plus text-orange"></span>
+    </a>
+  </ng-template>
+</ngb-tab>
+
+</ngb-tabset>

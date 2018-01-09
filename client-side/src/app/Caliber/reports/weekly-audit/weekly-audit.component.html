@@ -1,6 +1,6 @@
 <div>
   <div class="container">
-    <header class="feedback-heading">Feedback for the week
+    <header class="feedback-heading">Quality Audit Report
       <span class="pull-right">Week {{week}}</span>
     </header>
     <div class="feedback-body">
@@ -18,16 +18,17 @@
             </tr>
           </thead>
           <tbody>
+            <tr *ngIf="traineeNotes.length === 0" colspan="3"><em>No QC Notes found for this batch.</em></tr>
             <tr *ngFor="let note of (traineeNotes | orderBy:'trainee.name')" class="feedback-trainee">
               <td>{{note.trainee.name}}</td>
               <td>{{note.qcStatus}}</td>
               <td>{{note.content}}</td>
             </tr>
-            <tr>
+            <tr *ngIf="traineeNotes.length > 0">
               <th>Overall Feedback:</th>
               <td colspan="2">{{batchNote.qcStatus}}</td>
             </tr>
-            <tr>
+            <tr *ngIf="traineeNotes.length > 0">
               <th>Notes:</th>
               <td colspan="2">{{batchNote.content}}</td>
             </tr>

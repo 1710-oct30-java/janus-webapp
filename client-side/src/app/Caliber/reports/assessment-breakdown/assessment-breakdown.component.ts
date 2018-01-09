@@ -24,14 +24,11 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
   private week: Number;
   private traineeId: Number;
 
-  private batchIdSub: Subscription;
-  private weekSub: Subscription;
-  private traineeIdSub: Subscription;
   private granularitySub: Subscription;
+  private dataSubscription: Subscription;
 
   public data: Array<any>;
   public labels: Array<string>;
-  private dataSubscription: Subscription;
 
   private chartType = 'bar';
   private barChartLegend = true;
@@ -44,6 +41,12 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
         scaleLabel: {
           display: true,
           labelString: 'Average'
+        },
+        ticks: {
+          beginAtZero: false,
+          fixedStepSize: 10,
+          max: 100,
+          suggestedMin: 40
         }
       }]
     }
@@ -70,20 +73,27 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
           // Format data as chart expects it
           for (const key in result.data) {
             if (result.data.hasOwnProperty(key)) {
+
+                // If both batch and trainee data
                 if (this.traineeId !== 0) {
                   incomingTraineeData.data.push(result.data[key][0].toFixed(2));
                   incomingBatchData.data.push(result.data[key][1].toFixed(2));
-                  this.data = [incomingTraineeData, incomingBatchData];
                 } else {
+                  // else only batch data
                   incomingBatchData.data.push(result.data[key][0].toFixed(2));
-                  this.data = [incomingBatchData];
                 }
                 // Fixing decimal length for charts
                 incomingLabels.push(key);
-                this.labels = incomingLabels;
             }
           }
-        } else {
+          // Assign data to data object for display
+          this.labels = incomingLabels;
+          this.data = undefined;
+          this.data = [incomingTraineeData, incomingBatchData];
+          /* else {
+            this.data = undefined;
+            this.data = [incomingBatchData];
+          }*/
         }
       });
 
@@ -98,44 +108,20 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
         this.tryFetch();
       });
 
-      // this.batchIdSub = this.granularityService.currentBatch$.subscribe(
-      //     data => {
-      //       console.log('breakdown - batch incoming with id : ' + data.batchId);
-      //       // Make sure batchId is not undefined
-
-      //       if (data) {
-      //         this.batchId = data.batchId; this.tryFetch();
-      //       }
-
-      //     });
-
-      // this.weekSub = this.granularityService.currentWeek$.subscribe(
-      //     data => {
-      //       // Make sure traineeId is not undefined
-      //       if (data) {
-      //         this.week = data;
-      //         this.tryFetch();
-      //       }
-      //     });
-
-      // this.traineeIdSub = this.granularityService.currentTrainee$.subscribe(
-      //     data => {
-      //       if (data) {
-      //         this.traineeId = data.traineeId; this.tryFetch();
-      //       }
-      //     });
   }
 
   tryFetch() {
     // Check that all objects are present
-    if (this.batchId && this.week !== undefined) {
+    if (this.batchId && this.week !== undefined && this.traineeId) {
       if (this.week === 0) {
         // If week is 0, fetch data for all weeks
+        this.data = null;
         this.reportsService.fetchBatchOverallTraineeBarChart(this.batchId, this.traineeId);
       } else if (this.traineeId === 0) {
         this.reportsService.fetchBatchWeekAvgBarChart(this.batchId, this.week);
       } else {
         // Else fetch data for the specific week
+        this.data = null;
         this.reportsService.fetchBatchWeekTraineeBarChart(this.batchId, this.week, this.traineeId);
       }
     }
@@ -143,8 +129,8 @@ export class AssessmentBreakdownComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Unsubscribe from subscriptions
-    this.granularitySub.unsubscribe();
-    this.dataSubscription.unsubscribe();
+    if (this.granularitySub)    { this.granularitySub.unsubscribe(); }
+    if (this.dataSubscription)  { this.dataSubscription.unsubscribe(); }
   }
 
 }
