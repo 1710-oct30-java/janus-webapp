@@ -59,8 +59,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Unsubscribe from subscriptions
-    this.weekIdSub.unsubscribe();
-    this.traineeIdSub.unsubscribe();
-    this.readySub.unsubscribe();
+    if (this.weekIdSub) { this.weekIdSub.unsubscribe(); }
+    if (this.traineeIdSub) { this.traineeIdSub.unsubscribe(); }
+    if (this.readySub) { this.readySub.unsubscribe(); }
   }
 }

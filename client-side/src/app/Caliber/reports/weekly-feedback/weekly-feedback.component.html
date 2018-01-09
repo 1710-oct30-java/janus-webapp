@@ -6,7 +6,7 @@
     <div class="feedback-body">
       <div class="feedback-sub">
         <strong>Categories covered this week: </strong>
-        <span *ngIf="weekTopics">{{weekTopics}}</span>
+        <span *ngIf="weekTopics">{{weekTopics | arrToString}}</span>
       </div>
       <div class="table-responsive">
         <table class="table">
@@ -19,9 +19,13 @@
           </thead>
           <tbody>
             <tr>
-              <td *ngIf="trainerNote">{{trainerNote.content}}</td>
-              <td *ngIf="qcNote">{{qcNote.qcStatus}}</td>
-              <td *ngIf="qcNote">{{qcNote.content}}</td>
+              <td *ngIf="!trainerNote.trainee"><em>No trainer note was found for this week.</em></td>
+              <td *ngIf="trainerNote.trainee">{{trainerNote.content}}</td>
+              <td *ngIf="!qcNote.trainee" colspan="2"><em>No QC note was found for this week.</em></td>
+              <td *ngIf="qcNote.trainee && qcNote.qcStatus">{{qcNote.qcStatus}}</td>
+              <td *ngIf="qcNote.trainee && !qcNote.qcStatus">-</td>
+              <td *ngIf="qcNote.trainee && qcNote.content">{{qcNote.content}}</td>
+              <td *ngIf="qcNote.trainee && !qcNote.content">-</td>
             </tr>
           </tbody>
         </table>

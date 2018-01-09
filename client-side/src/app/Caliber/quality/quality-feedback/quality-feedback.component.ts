@@ -1,230 +1,358 @@
-import { Component, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
-import { Batch } from '../../entities/Batch';
-import { NoteService } from '../../services/note.service';
-import { Note } from '../../entities/Note';
+import { Component, OnInit, OnDestroy, Input, OnChanges, ViewChild } from '@angular/core';
+import {NgbTabChangeEvent, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
+
+// rxjs
 import { Subscription } from 'rxjs/Subscription';
-import { Trainee } from '../../entities/Trainee';
+
+// services
+import { NoteService } from '../../services/note.service';
 import { QCStatusService } from '../../services/qcstatus.service';
 import { BatchService } from '../../services/batch.service';
+
+// entities
+import { Batch } from '../../entities/Batch';
+import { Note } from '../../entities/Note';
+import { Trainee } from '../../entities/Trainee';
+
+
 
 @Component({
   selector: 'app-quality-feedback',
   templateUrl: './quality-feedback.component.html',
   styleUrls: ['./quality-feedback.component.css']
 })
+
 export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() batch: Batch;
-  qcBatchNotes: Note[];
-  qcTraineeNotes: Note[];
+  @ViewChild('tabSet') tabs: NgbTabset;
 
-  notesSubscription: Subscription;
-  qcStatusSubscription: Subscription;
+  public statusList: string[];
+  public notes: Note[];
+  public week: number;
+  public data: any[];
 
-  qcStatuses: string[];
-  selectedStatus: string;
+  private qcStatusSubscription: Subscription;
+  private noteListSubscription: Subscription;
+  private updatedBatchSubscription: Subscription;
+  private noteSavedSubscription: Subscription;
 
-  week = 1;
-  statusMap;
+  private savedNote: Note;
 
-  constructor(private noteService: NoteService, private qcStatusService: QCStatusService, private batchService: BatchService) {
-    this.qcTraineeNotes = [];
-    this.qcStatuses = [];
-   }
-
-  ngOnInit() {
-    this.qcStatusSubscription = this.qcStatusService.getList()
-      .subscribe( (statuses) => this.setQcStatuses(statuses) );
-
-    this.notesSubscription = this.noteService.getList()
-      .subscribe( (notes) => {
-        console.log(notes);
-        this.setNotes(notes);
-
-      });
+  constructor(
+    private noteService: NoteService,
+    private qcStatusService: QCStatusService,
+    private batchService: BatchService
+  ) {
+    this.setWeek(1);
   }
 
-  ngOnDestroy() {
-    this.notesSubscription.unsubscribe();
-    this.qcStatusSubscription.unsubscribe();
+  /**
+  * capture the add week tab and prevet user
+  * navigating to a blank tabe
+  *
+  * @param event: NdbTabChangeEvent
+  */
+  public checkForAddTab(event: NgbTabChangeEvent): void {
+      if ( event.nextId === 'addWeekTab') {
+        this.addWeek();
+        event.preventDefault();
+        this.tabs.select(`week-${this.batch.weeks}`);
+      }
   }
 
-  ngOnChanges() {
-    if (this.batch.batchId ) {
-      this.fetchNotes();
-    }
-  }
-
-  getQcBatchNote(): Note {
-    let note: Note;
-
-    // console.log(this.qcBatchNotes);
-
-    if ( this.qcBatchNotes.length === 1 ) {
-      note = this.qcBatchNotes[0];
-    } else {
-      note = {
-        noteId: 0,
-        type: Note.TYPE_QCBATCH,
-        qcStatus: Note.STATUS_UNDEFINED,
-        qcFeedback: true,
-        content: '',
-        week: this.week,
-        batch: this.batch,
-        trainee: null,
-        maxVisibility: 'ROLE_PANEL',
-      };
-    }
-
-    return note;
-  }
-
-  setNotes(notes: Note[]): void {
-    this.qcTraineeNotes = notes.filter(note => (note.type === Note.TYPE_TRAINEE) );
-    this.qcBatchNotes = notes.filter(note => (note.type === Note.TYPE_QCBATCH) );
-     console.log(notes);
-    this.addMissingNotes();
-
-     // console.log(notes);
-
-    this.buildStatusMap();
-
-    // console.log(notes);
-    // console.log(this.statusMap);
-
-    // console.log(notes);
-    // console.log(this.qcBatchNotes);
-    // console.log(this.qcTraineeNotes);
-  }
-
-  buildStatusMap(): void {
-    this.statusMap = {};
-
-    for (const note of this.qcTraineeNotes) {
-      this.statusMap[note.trainee.traineeId] = note.qcStatus;
-    }
-    // console.log(this.qcTraineeNotes);
-  }
-
-  setQcStatuses(statuses: string[]) {
-    this.qcStatuses = statuses;
-    // console.log(statuses);
-  }
-
-  fetchNotes() {
-    this.noteService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
-  }
-
-  getBatchWeeks(): number[] {
-    const batchWeeks: number[] = [];
-    for (let i = 1; i < this.batch.weeks + 1; i++) {
-      batchWeeks.push(i);
-    }
-    return batchWeeks;
-  }
-
-  changeWeek(week: number) {
+  /**
+  * sets the current week of the component
+  * and performs necessary steps that are
+  * required due to the change
+  *
+  * @param week: number
+  */
+  public setWeek(week: number): void {
+    this.reset();
     this.week = week;
     this.fetchNotes();
-    this.createNewTraineeNotesForNewWeek();
   }
 
-  addWeekToBatch() {
-    this.batch.weeks += 1;
-    // this.createNewTraineeNotesForNewWeek();
-    this.batchService.update(this.batch);
-  }
 
-  addMissingNotes(): void {
-    // console.log(this.batch);
+  /**
+  * returns an array of numbers
+  * representing each week of the
+  * batch
+  */
+  public getBatchWeeks(): number[] {
+    const weeks: number[] = [];
 
-    if ( this.batch.trainees ) {
-      for ( let i = 0; i < this.batch.trainees.length; i++ ) {
-        const trainee = this.batch.trainees[i];
-        const traineeNote = this.getNoteOnTrainee(trainee);
-        if (traineeNote === null) {
-          this.qcTraineeNotes.push({
-            noteId: 0,
-            type: Note.TYPE_QCTRAINEE,
-            qcStatus: Note.STATUS_UNDEFINED,
-            qcFeedback: true,
-            content: '',
-            week: this.week,
-            batch: this.batch,
-            trainee: trainee,
-            maxVisibility: 'ROLE_PANEL',
-          });
-        }
-        // console.log(i);
-      }
+    for (let i = 0; i < this.batch.weeks; ) {
+      weeks.push(++i);
     }
 
+    return weeks;
   }
 
-  getNoteOnTrainee(trainee: Trainee) {
-    let traineeNote = null;
-    for (let i = 0; i < this.qcTraineeNotes.length; i++) {
-      if (trainee.traineeId === this.qcTraineeNotes[i].trainee.traineeId) {
-        traineeNote = this.qcTraineeNotes[i];
-        break;
+  /**
+  * adds a week to the current batch
+  */
+  public addWeek() {
+     const weeks = ++this.batch.weeks;
+
+     this.batchService.update(this.batch);
+     this.setWeek(weeks);
+  }
+
+  /**
+  * return the class switcher object
+  * for the TextArea control
+  *
+  * @return any
+  */
+  public noteIsUndefined(note: Note): boolean {
+    return (note.qcStatus === Note.STATUS_UNDEFINED);
+  }
+
+  /**
+  * filters the notes passed to return the QC Batch note
+  *
+  * @param notes: Note[]
+  *
+  * @return Note
+  */
+  public getBatchNote(): Note {
+    const batchNotes = this.notes.filter( (note) => ( note.type === Note.TYPE_QCBATCH ) );
+
+    switch ( batchNotes.length ) {
+      case 0:
+        console.log('EXCEPTION: no QC batch note found. generating new note');
+        return this.createNote(Note.TYPE_QCBATCH);
+      case 1:
+        return batchNotes[0];
+      default:
+        console.log('EXCEPTION: multiple QC batch notes found. returning first one');
+        return batchNotes[0];
+    }
+  }
+
+  /**
+  * sets the status of a note and saves
+  * it to the API
+  *
+  * @param row: any  (struct that represents each row of data)
+  * @param statu: string
+  */
+  public onStatusChange(row: any, status: string): void {
+    const note = row.note;
+
+    note.qcStatus = status;
+    this.saveNote(note);
+  }
+
+
+
+
+  /**
+  * filters the notes passed to return only the
+  * QC Trainee notes
+  *
+  * @param notes: Note[]
+  *
+  * @return Note[]
+  */
+  private getTraineeNotes(): Note[] {
+    return this.notes.filter( (note) => ( note.type === Note.TYPE_QCTRAINEE ) );
+  }
+
+  /**
+  * returns the single note that belongs to
+  * the trainee passed
+  *
+  * @param trainee: Trainee
+  *
+  * @return Note
+  */
+  private getTraineeNote(trainee: Trainee): Note {
+    const notes = this.getTraineeNotes()
+      .filter( (note) => ( note.trainee.traineeId === trainee.traineeId ));
+
+    switch ( notes.length ) {
+      case 0 :
+        const note = this.createNote(Note.TYPE_QCTRAINEE);
+        /*
+        * this MUST be done in order for the note to be attached to the
+        * trainee, but it creates a circular reference on the server
+        * when it succeeds and the notes can no longer be retrieved
+        */
+        note.trainee = trainee;
+        return note;
+      case 1:
+        return notes[0];
+      default :
+        console.log(`EXCEPTION: multiple QC notes found on trainee [${trainee.name}:${trainee.traineeId}]`);
+        return notes[0];
+    }
+  }
+
+
+
+
+
+  /**
+  * resets data associated with the component
+  * back to a blank state
+  */
+  private reset(): void {
+    if ( this.notes) {
+      this.notes.length = 0;
+    }
+
+    if ( this.data ) {
+      this.data.length = 0;
+    }
+
+    this.notes = [];
+    this.data = [];
+  }
+
+  /**
+  * set the list of possible statuses
+  */
+  private setStatusList(data: string[]): void {
+   this.statusList = data;
+  }
+
+  /**
+  * set the list of notes
+  */
+  private setNoteList(notes: Note[] ): void {
+    this.notes = notes;
+    this.compileData();
+  }
+
+  /**
+  * trigger the NoteService to retrieve
+  * all notes
+  */
+  private fetchNotes(): void {
+    if (this.batch) {
+      this.noteService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
+    }
+  }
+
+  /**
+  * tranforms the data used by the component
+  * into an array of objects that represent the data
+  * for each row of the view and stores it in the
+  * data variable
+  */
+  private compileData(): void {
+
+    const data = [];
+
+   this.batch.trainees.forEach( (trainee) => {
+      const row = {
+        batch: this.batch,
+        trainee: trainee,
+        note: this.getTraineeNote(trainee),
+      };
+
+      data.push(row);
+    });
+
+    this.data = data;
+  }
+
+  /**
+  * factory method for creating a new instance
+  * of a note object
+  *
+  * @param type: string
+  * @param isQcFeedback: boolean (default: true)
+  *
+  * @return Note
+  */
+  private createNote(type: string, isQcFeedback = true): Note {
+    return {
+        noteId: 0,
+        type: type,
+        qcStatus: Note.STATUS_UNDEFINED,
+        qcFeedback: isQcFeedback,
+        content: '',
+        week: this.week,
+        batch: (type === Note.TYPE_QCBATCH) ? this.batch : null,
+        trainee: null,
+        maxVisibility: 'ROLE_PANEL',
+    };
+  }
+
+  /**
+  * saves a note to the API
+  *
+  * @param note: Note
+  */
+  private saveNote(note: Note): void {
+    if ( note.noteId === 0 ) {
+      this.noteService.save(note);
+      this.savedNote = note;
+    } else {
+      this.noteService.update(note);
+    }
+  }
+
+  private refreshSavedNote(data: any): void {
+    console.log(data);
+    if ( this.savedNote ) {
+      this.savedNote.noteId = data;
+    }
+  }
+
+  /**
+  * copy the properties of the batch passed
+  * into the current batch
+  *
+  * @param batch: Batch
+  *
+  */
+  private copyBatch(batch: Batch): void {
+    if ( this.batch ) {
+      if ( this.batch.batchId === batch.batchId ) {
+        Object.assign(this.batch, batch);
+        this.setWeek(this.batch.weeks);
       }
     }
-    return traineeNote;
   }
 
-  getQcStatusOnTrainee(trainee: Trainee) {
-    let traineeQcStatus = '';
-    for (let i = 0; i < this.qcTraineeNotes.length; i++) {
-      if (trainee.traineeId === this.qcTraineeNotes[i].trainee.traineeId) {
-        traineeQcStatus = this.qcTraineeNotes[i].qcStatus;
-      }
+
+/*
+* ================================
+* LIFECYCLE HOOKS
+* ================================
+*/
+
+
+  ngOnInit(): void {
+    this.qcStatusSubscription = this.qcStatusService.getList()
+      .subscribe( (data) => this.setStatusList(data) );
+
+    this.noteListSubscription = this.noteService.getList()
+      .subscribe( (notes) => this.setNoteList(notes) );
+
+    this.noteSavedSubscription = this.noteService.getSaved()
+      .subscribe( (note) => this.refreshSavedNote(note) );
+
+    // this.updatedBatchSubscription = this.batchService.getUpdated()
+    //   .subscribe( (batch) => this.copyBatch(batch) );
+  }
+
+  ngOnDestroy(): void {
+    this.noteListSubscription.unsubscribe();
+    this.noteSavedSubscription.unsubscribe();
+    this.qcStatusSubscription.unsubscribe();
+    // this.updatedBatchSubscription.unsubscribe();
+  }
+
+  ngOnChanges(): void {
+    if (this.batch) {
+      this.setWeek(1);
     }
-    // console.log(traineeQcStatus);
-    return traineeQcStatus;
   }
 
-  updateQcStatusOnTraineeNote(status: string, trainee: Trainee) {
-    const traineeNote = this.getNoteOnTrainee(trainee);
-    traineeNote.qcStatus = status;
-    this.statusMap[trainee.traineeId] = status;
-    this.noteService.update(traineeNote);
-  }
-
-  updateTraineeNoteContent(noteContent: string, trainee: Trainee) {
-    const traineeNote = this.getNoteOnTrainee(trainee);
-    traineeNote.content = noteContent;
-    this.noteService.update(traineeNote);
-    // console.log(traineeNote);
-    // console.log(traineeNote.content);
-    // this.fetchNotes();
-  }
-
-  createNewTraineeNotesForNewWeek() {
-    console.log('in createNewTraineeNotesForNewWeek');
-    for ( let i = 0; i < this.batch.trainees.length; i++ ) {
-      const trainee = this.batch.trainees[i];
-      const traineeNote = this.getNoteOnTrainee(trainee);
-      if (traineeNote === null) {
-        this.qcTraineeNotes.push({
-          noteId: 0,
-          type: Note.TYPE_QCTRAINEE,
-          qcStatus: Note.STATUS_UNDEFINED,
-          qcFeedback: true,
-          content: '',
-          week: this.week,
-          batch: this.batch,
-          trainee: trainee,
-          maxVisibility: 'ROLE_PANEL',
-        });
-      }
-    }
-    // console.log(this.qcTraineeNotes);
-  }
-  // test() {
-  //   console.log(this.batch.batchId);
-  //   console.log(this.week);
-  //   console.log(this.qcBatchNote);
-  //   console.log(this.qcTraineeNotes[1].trainee.name);
-
-  // }
 }

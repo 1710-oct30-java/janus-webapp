@@ -8,6 +8,7 @@ import { Note } from '../../entities/Note';
 
 // services
 import { QCStatusService } from '../../services/qcstatus.service';
+import { NoteService } from '../../services/note.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class QualityOverallFeedbackComponent implements OnInit, OnDestroy, OnCha
   private qcStatusListSubscription: Subscription;
 
   constructor(
-    private qcStatusService: QCStatusService
+    private qcStatusService: QCStatusService,
+    private noteService: NoteService
   ) {
     this.selectedStatus = Note.STATUS_UNDEFINED;
   }
@@ -60,9 +62,33 @@ export class QualityOverallFeedbackComponent implements OnInit, OnDestroy, OnCha
   public onStatusChange(status: string) {
     if ( this.batchNote ) {
       this.batchNote.qcStatus = status;
+      this.saveNote(this.batchNote);
     }
 
     this.setSelectedStatus();
+  }
+
+  /**
+  * saves the note passed to the API
+  *
+  * @param note: Note
+  */
+  public saveNote(note: Note): void {
+    if ( note.noteId === 0 ) {
+      this.noteService.save(note);
+    } else {
+      this.noteService.update(note);
+    }
+  }
+
+  /**
+  * return the class switcher object
+  * for the TextArea control
+  *
+  * @return any
+  */
+  public noteIsUndefined(note: Note): boolean {
+    return ( note.qcStatus === Note.STATUS_UNDEFINED );
   }
 
   ngOnInit() {

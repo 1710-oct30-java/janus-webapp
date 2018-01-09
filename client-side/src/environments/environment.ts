@@ -121,19 +121,6 @@ export const environment = {
   reportsDashBoard: context + 'all/reports/dashboard',
   reportsBiWeeklyPanel: context + 'all/reports/biweeklyPanelResults',
 
-  /* Evaluation Service API endpoints */
-  apiAllQCTraineeOverallNotes: (traineeId: Number) =>
-    environment.context + `qc/note/trainee/${traineeId}`,
-
-  apiAllTraineeNotes: (traineeId: Number) =>
-    environment.context + `all/notes/trainee/${traineeId}`,
-
-  apiQCTraineeNote: (traineeId: Number, week: Number) =>
-    environment.context + `/qc/note/trainee/${traineeId}/for/${week}`,
-
-  apiTraineeNote: (traineeId: Number, week: Number) =>
-    environment.context + `/trainer/note/trainee/${traineeId}/for/${week}`,
-
   /* Reporting service API endpoints */
   apiBatchComparisonAvgEndpoint: (skill: string, training: string, startDate) =>
     environment.context + `/all/reports/compare/skill/${skill}/training/${training}/date/${startDate}`,

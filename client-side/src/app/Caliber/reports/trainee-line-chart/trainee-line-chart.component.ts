@@ -1,29 +1,30 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ReportingService } from '../../../services/reporting.service';
 import { GranularityService } from '../services/granularity.service';
+import { Observable } from 'rxjs/Observable';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 
 /**
- * Component utilizes service API calls to fetch and display an overall
- * batch line chart
- *
- * @author Mitch Goshorn
+ * @author Robert Choboy
  */
 @Component({
-  selector: 'app-batch-overall-line-chart',
-  templateUrl: './batch-overall-line-chart.component.html',
-  styleUrls: ['./batch-overall-line-chart.component.css']
+  selector: 'app-trainee-line-chart',
+  templateUrl: './trainee-line-chart.component.html',
+  styleUrls: ['./trainee-line-chart.component.css']
 })
-export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
+export class TraineeLineChartComponent implements OnInit, OnDestroy {
 
   public data: any = null;
-  private dataSubscription: Subscription;
   public dataShown = null;
   private batchId: Number;
   private week: number;
 
-  private batchSub: Subscription;
-  private weekSub: Subscription;
+  private dataSubscription: Subscription;
+  private granularitySubscription: Subscription;
+
+  public traineeId: Subscription;
+
 
   public labels: Array<String> = null;
   public labelsShown: Array<String> = null;
@@ -78,47 +79,42 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
   constructor(private reportsService: ReportingService, private granularityService: GranularityService) {}
 
   ngOnInit() {
-    this.dataSubscription = this.reportsService.batchOverallLineChart$.subscribe((result) => {
-      if (result) {
-        const newData = [];
-        const newLabels = [];
+    this.granularitySubscription = Observable.combineLatest(
+      this.granularityService.currentBatch$, this.granularityService.currentTrainee$,
+      this.granularityService.currentWeek$).subscribe((batchdata) => {
+        const batch = batchdata[0];
+        const trainee = batchdata[1];
+        const week = batchdata[2];
+        this.batchId = batch.batchId;
 
-        // Format data for charts
-        for (const key in result.data) {
-          if (result.data.hasOwnProperty(key)) {
+        this.week = week;
+        this.labels = [batch.trainingName];
 
-              // Fixing decimal length for charts
-              newData.push(result.data[key].toFixed(2));
-              newLabels.push(key);
-          }
-        }
-
-        // Assign new data
-        this.labels = newLabels;
-        this.data = [{data: newData, label: 'label'}];
-
-        // Update display data with new data accounting for week limitation
-        this.updateWeeks();
-
-      }
-    });
-
-    this.batchSub = this.granularityService.currentBatch$.subscribe(
-      (result) => {
-        if (result.batchId !== this.batchId) {
-          this.batchId = result.batchId;
-          this.fetch();
-        }
-    });
-
-    this.weekSub = this.granularityService.currentWeek$.subscribe(
-      (result) => {
-        if (result !== this.week) {
-          this.week = result;
-          this.updateWeeks();
-        }
+        if (trainee.traineeId === 0 ) { return; }
+        this.reportsService.fetchTraineeOverallLineChart(batch.batchId, trainee.traineeId);
       }
     );
+
+    this.dataSubscription = this.reportsService.lineTraineeOverall$.subscribe(
+      (data) => {
+        const newBatchData = [];
+        const newTraineeData = [];
+        const newLabels = [];
+
+        if (!data) {
+          return;
+        }
+        for (const key in data.data) {
+          if (data.data.hasOwnProperty(key)) {
+            newBatchData.push(data.data[key][1].toFixed(2));
+            newTraineeData.push(data.data[key][0].toFixed(2));
+            newLabels.push(key);
+          }
+        }
+        this.labels = newLabels;
+        this.data = [{data: newTraineeData, label: 'trainee'},
+                    {data: newBatchData, label: 'batch'}];
+      });
   }
 
   // Fetches data when new data is pushed in
@@ -158,8 +154,7 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Unsubscribe from subscriptions
-    this.batchSub.unsubscribe();
-    this.weekSub.unsubscribe();
-    this.dataSubscription.unsubscribe();
+    if (this.granularitySubscription) { this.granularitySubscription.unsubscribe(); }
+    if (this.dataSubscription) { this.dataSubscription.unsubscribe(); }
   }
 }

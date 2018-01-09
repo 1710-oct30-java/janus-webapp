@@ -53,10 +53,13 @@ export class WeeklyGradesComponent implements OnInit, OnDestroy {
 
       this.batch = batchWeek[0];
       this.week = batchWeek[1];
-      this.assessmentService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
-      this.gradeService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
-      this.noteService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
-      this.reportService.fetchTechnologiesForTheWeek(this.batch.batchId, this.week);
+
+      if (this.week > 0) {
+        this.assessmentService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
+        this.gradeService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
+        this.noteService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
+        this.reportService.fetchTechnologiesForTheWeek(this.batch.batchId, this.week);
+      }
 
     });
 

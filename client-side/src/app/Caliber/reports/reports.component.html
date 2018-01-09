@@ -1,26 +1,28 @@
 <app-toolbar></app-toolbar>
-<div class="container" *ngIf="currentTrainee">
+<div class="container" *ngIf="currentTrainee && ready">
     <div class="row reports-row">
         <div class="col-md-12">
             <!-- <app-cumulative-skills></app-cumulative-skills> -->
-            <div class="charts"><app-all-cumulative-scores *ngIf="weekId === 0"></app-all-cumulative-scores></div>
-            <div class="charts"><app-weekly-cumulative-skills *ngIf="weekId > 0"></app-weekly-cumulative-skills></div>
+            <div class="charts"><app-all-cumulative-scores *ngIf="weekId === 0 && currentTrainee.traineeId === 0"></app-all-cumulative-scores></div>
+            <div class="charts"><app-weekly-cumulative-skills *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-weekly-cumulative-skills></div>
             <app-assessment-breakdown *ngIf="currentTrainee.traineeId > 0"></app-assessment-breakdown>
         </div>
     </div>
     <div class="row reports-row"> 
         <div class="col-md-4">
-            <div class="charts"><app-weekly-audit *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-weekly-audit></div>
             <app-trainee-tech-skills *ngIf="!(weekId !== 0 && currentTrainee.traineeId === 0)"></app-trainee-tech-skills>
             <app-qc-doughnut *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-qc-doughnut>
         </div>
         <div class="col-md-8">
-            <app-batch-overall-line-chart *ngIf="currentTrainee.traineeId > 0"></app-batch-overall-line-chart>
+            <app-batch-overall-line-chart *ngIf="currentTrainee.traineeId === 0 && weekId === 0"></app-batch-overall-line-chart>
+            <app-trainee-line-chart *ngIf="currentTrainee.traineeId > 0"></app-trainee-line-chart>
             <app-assessment-breakdown *ngIf="currentTrainee.traineeId === 0 && weekId > 0"></app-assessment-breakdown>
-            <app-panel-batch-all-trainees></app-panel-batch-all-trainees>
+            <app-panel-batch-all-trainees *ngIf="weekId === 0 && currentTrainee.traineeId === 0"></app-panel-batch-all-trainees>
         </div>
     </div>
-
-    <app-overall-feedback *ngIf="currentTrainee.traineeId > 0"></app-overall-feedback> 
-    <app-panel-feedback *ngIf="currentTrainee.traineeId > 0"></app-panel-feedback>
+    <app-weekly-grades *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-weekly-grades>
+    <app-weekly-feedback *ngIf="weekId > 0 && currentTrainee.traineeId > 0"></app-weekly-feedback>
+    <app-weekly-audit *ngIf="weekId > 0 && currentTrainee.traineeId === 0"></app-weekly-audit>
+    <app-overall-feedback *ngIf="weekId === 0 && currentTrainee.traineeId > 0"></app-overall-feedback>
+    <app-panel-feedback *ngIf="weekId === 0 && currentTrainee.traineeId > 0"></app-panel-feedback>
 </div>

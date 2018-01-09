@@ -47,7 +47,6 @@ export class QcDoughnutComponent implements OnInit {
 
     this.dataSubscription = this.reportsService.qcStatusDoughnut$.subscribe((result) => {
       if (result) {
-        console.log(result.data);
         this.chartData = [result.data];
       }
     });

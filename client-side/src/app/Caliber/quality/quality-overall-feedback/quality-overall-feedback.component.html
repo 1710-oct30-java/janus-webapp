@@ -3,9 +3,10 @@
 </div>
 
 <div class="row mb-5">
-    <div class="col-md-2">
+
+    <div class="col-md-3">
         <div class="row">
-            <select #statusSelect class="custom-select mx-auto" (change)="onStatusChange(statusSelect.value)" >
+            <select #statusSelect class="custom-select mx-auto text-orange" (change)="onStatusChange(statusSelect.value)" >
                 <option *ngFor="let status of qcStatuses" [value]="status" [selected]="status === batchNote?.qcStatus">{{ status }}</option>
             </select>
         </div>
@@ -15,7 +16,8 @@
             </p>
         </div>
     </div>
-    <div class="col-md-10">
-        <textarea *ngIf="batchNote" class="form-control" [(ngModel)]="batchNote.content" rows="4"></textarea>
+
+    <div class="col-md-9">
+        <textarea *ngIf="batchNote" class="form-control" [disabled]="noteIsUndefined(batchNote)" [(ngModel)]="batchNote.content" (change)="saveNote(batchNote)" rows="4"></textarea>
     </div>
 </div>

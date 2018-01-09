@@ -14,11 +14,12 @@ import { DisplayBatchByYear } from '../pipes/display-batch-by-year.pipe';
   styleUrls: ['./quality.component.css'],
   providers: [ DisplayBatchByYear ],
 })
+
 export class QualityComponent implements OnInit, OnDestroy {
 
   batches: Batch[];
 
-  currentBatch: Batch = new Batch();
+  currentBatch: Batch;
   currentYear: number;
 
   batchSubscription: Subscription;
@@ -29,18 +30,26 @@ export class QualityComponent implements OnInit, OnDestroy {
     private batchesByYearPipe: DisplayBatchByYear
   ) {
     this.setCurrentYear( this.getCalendarYear() );
+    this.currentBatch = this.createBatch();
   }
 
   ngOnInit() {
-    this.batchService.fetchAll();
+
     this.batchSubscription = this.batchService.getList()
       .subscribe( (batches) => this.setBatches(batches) );
+
+    this.batchService.fetchAll();
    }
 
    ngOnDestroy() {
     this.batchSubscription.unsubscribe();
    }
 
+   /**
+   * sets the batch list
+   *
+   * @param batches: Batch[]
+   */
    private setBatches(batches: Batch[]): void {
     this.batches = batches;
    }
@@ -49,7 +58,7 @@ export class QualityComponent implements OnInit, OnDestroy {
    public onYearSelect(year: number) {
      const currentYearBatches: Batch[] = this.batchesByYearPipe.transform(this.batches, year);
      this.setCurrentYear(year);
-     
+
      if ( currentYearBatches.length > 0 ) {
        this.currentBatch = currentYearBatches[0];
      } else {
@@ -58,14 +67,28 @@ export class QualityComponent implements OnInit, OnDestroy {
 
    }
 
+   /**
+   * returns the current calendar year
+   *
+   * @return number
+   */
    private getCalendarYear(): number {
      return new Date().getFullYear();
    }
 
-   public setCurrentYear(currentYear: number): void {
-     this.currentYear = currentYear;
+   /**
+   * sets the current year for the component
+   *
+   * @param year: number
+   */
+   public setCurrentYear(year: number): void {
+     this.currentYear = year;
 
      // console.log(currentYear);
+   }
+
+   public getBatchesOfCurrentYear(): Batch[] {
+     return this.batchesByYearPipe.transform(this.batches, this.currentYear);
    }
 
    getTrackedYears(): number[] {
@@ -87,6 +110,33 @@ export class QualityComponent implements OnInit, OnDestroy {
       this.currentBatch = selectedBatches[0];
     }
 
+  }
+
+  /**
+  * creates an empty batch instance
+  *
+  * @return Batch
+  */
+  private createBatch(): Batch {
+
+    return {
+      batchId: 0,
+      resourceId: 0,
+      trainingName: '',
+      trainer: null,
+      coTrainer: null,
+      skillType: '',
+      trainingType: '',
+      startDate: null,
+      endDate: null,
+      location: '',
+      address: null,
+      goodGradeThreshold: 0,
+      borderlineGradeThreshold: 0,
+      trainees: [],
+      weeks: 1,
+      gradedWeeks: 1,
+    };
   }
 
 }

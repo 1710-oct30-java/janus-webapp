@@ -6,8 +6,8 @@
                 <option [value]="year" *ngFor="let year of getTrackedYears()">{{ year }}</option>
             </select>
 
-            <select name="batchSelect" #batchSelect (change)="onBatchSelect(batchSelect.value)" class="custom-select">
-                <option [value]="batch.batchId" *ngFor="let batch of batches | DisplayBatchByYear:currentYear" [selected]="batch.batchId === currentBatch.batchId">
+            <select name="batchSelect" #batchSelect *ngIf="getBatchesOfCurrentYear().length > 0" (change)="onBatchSelect(batchSelect.value)" class="custom-select">
+                <option [value]="batch.batchId" *ngFor="let batch of getBatchesOfCurrentYear()" [selected]="batch.batchId === currentBatch.batchId">
                     {{ batch.trainer.name }} - {{ batch.startDate | date:"MM/dd/yy" }}
                 </option>
             </select>
@@ -17,8 +17,6 @@
     </div>
 
 
-    <div class="row">
-        <app-quality-feedback [batch]="currentBatch"></app-quality-feedback>
-    </div>
+    <app-quality-feedback *ngIf="currentBatch.trainees.length > 0" [batch]="currentBatch"></app-quality-feedback>
 
 </div>
