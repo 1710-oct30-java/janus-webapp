@@ -12,11 +12,7 @@ import { LocationsComponent } from './settings/locations/locations.component';
 import { TrainersComponent } from './settings/trainers/trainers.component';
 import { DeactivateTrainerComponent } from './settings/trainers/deactivatetrainer/deactivatetrainer.component';
 import { QualityComponent } from './quality/quality.component';
-<<<<<<< HEAD
-import { PanelComponent } from './panel//panel/panel.component';
-=======
 import { PanelComponent } from './panel/panel/panel.component';
->>>>>>> 27be40a5dd5b6c158f8178d90677dbd2bbb79619
 import { TestComponent } from './components/test/test.component';
 import { TrainerProfilesComponent } from './settings/trainer-profile/trainer-profile.component';
 
