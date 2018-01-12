@@ -17,31 +17,36 @@ import { GranularityService } from '../services/granularity.service';
 })
 export class PanelBatchAllTraineesComponent implements OnInit, OnDestroy {
 
-  private batchIdSub: Subscription;
+  // State data provided by granularity service for API calls
   batchId: number = null;
 
+  // Data to be injected into view
   public data: Array<PanelReview> = null;
   public headings: Array<String> = null;
+
+  // Subscriptions
   private dataSubscription: Subscription;
+  private batchIdSub: Subscription;
+
+
+  /*===================== Life Cycle Methods ======================*/
 
   constructor(private reportsService: ReportingService, private granularityService: GranularityService) { }
 
+  /**
+   * Initializes component and sets up subscriptions
+   */
   ngOnInit() {
     // Subscription for the data source
     this.dataSubscription = this.reportsService.panelBatchAllTrainees$
       .subscribe((result) => {
         if  (result) {
           this.data = result.data;
-        } else {
-          console.log('Panel data failed to load');
         }
       });
 
     // Subscription for batch selection in toolbar
     this.batchIdSub = this.granularityService.currentBatch$.subscribe((result) => {
-
-      console.log('data incoming to panel from granularity');
-      console.log(result);
 
       // Make sure batchId is not undefined
       if (result.batchId) {
@@ -53,6 +58,9 @@ export class PanelBatchAllTraineesComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Destroys subscriptions
+   */
   ngOnDestroy() {
     this.dataSubscription.unsubscribe();
     this.batchIdSub.unsubscribe();

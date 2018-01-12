@@ -22,24 +22,15 @@ export class PanelTableComponent implements OnInit {
   * @param traineeservice - the TraineeService
   * @param panelService - the PanelService
   */
-  constructor(private panelService: PanelService) {  }
+  constructor(private panelService: PanelService) { }
 
+  /**
+   * array of all panels
+   */
   ngOnInit() {
-    /**
-     * @property {Array} panelList   - array of all panels
-     */
 
     this.panelService.getList().subscribe((panelList) => {
       this.panelList = panelList;
-      console.log(this.panelList);
     });
   }
-
-  /**
-   * Sets the current trainee for panel viewing
-   *
-   * @method
-   * @param  $event - A trainee selection event
-   * @listens PanelSearchBarComponent#Trainee
-   */
 }

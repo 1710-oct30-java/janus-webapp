@@ -40,6 +40,8 @@ import { VpHomeBarGraphService } from './services/graph/vp-home-bar-graph.servic
 import { VpHomePanelGraphService } from './services/graph/vp-home-panel-graph.service';
 import { AlertsService } from './services/alerts.service';
 import { EvaluationService } from './services/evaluation.service';
+import { QCStatusService } from './services/qcstatus.service';
+import { TraineeStatusService } from './services/trainee-status.service';
 
 // pipes
 import { GradeByTraineeByAssessmentPipe } from './pipes/grade-by-trainee-by-assessment.pipe';
@@ -50,9 +52,11 @@ import { TrainerPipePipe } from './pipes/trainer-pipe.pipe';
 import { OrderByPipe } from './pipes/order-by.pipe';
 import { BatchByTrainerPipe } from './pipes/trainerbatch.pipe';
 import { NoteByTraineeByWeekPipe } from './pipes/note-by-trainee-by-week.pipe';
-import { DisplayBatchByYear } from './manage/manage.pipe';
+import { DisplayBatchByYear } from './pipes/display-batch-by-year.pipe';
 import { FilterByPipe } from './pipes/filter-by.pipe';
 import { ToolbarFilterPipe } from './pipes/toolbar-filter.pipe';
+import { AddressToStringPipe } from './pipes/address-to-string.pipe';
+import { TraineeSearch } from './pipes/trainee-search.pipe';
 
 // components
 import { CaliberComponent } from './caliber.component';
@@ -61,7 +65,7 @@ import { AssessComponent } from './assess/assess.component';
 import { NavComponent } from '../nav/nav.component';
 import { ManageComponent } from './manage/manage.component';
 import { ReportsComponent } from './reports/reports.component';
-import { WeeklyLineChartComponent } from './reports/weekly-line-chart/weekly-line-chart.component';
+import { AllCumulativeScoresComponent } from './reports/all-cumulative-scores/all-cumulative-scores.component';
 import { TraineeTechSkillsComponent } from './reports/trainee-tech-skills/trainee-tech-skills.component';
 import { ToolbarComponent } from './reports/toolbar/toolbar.component';
 import { TestComponent } from './components/test/test.component';
@@ -87,13 +91,14 @@ import { QualityComponent } from './quality/quality.component';
 import { GraphComponent } from './reports/graph/graph.component';
 import { TableComponent } from './reports/table/table.component';
 import { PanelBatchAllTraineesComponent } from './reports/panel-batch-all-trainees/panel-batch-all-trainees.component';
+import { QualityFeedbackComponent } from './quality/quality-feedback/quality-feedback.component';
 import { BatchOverallLineChartComponent } from './reports/batch-overall-line-chart/batch-overall-line-chart.component';
 import { PanelFeedbackComponent } from './reports/panel-feedback/panel-feedback.component';
 import { AssessmentBreakdownComponent } from './reports/assessment-breakdown/assessment-breakdown.component';
 import { WeeklyFeedbackComponent } from './reports/weekly-feedback/weekly-feedback.component';
 import { WeeklyGradesComponent } from './reports/weekly-grades/weekly-grades.component';
 import { WeeklyAuditComponent } from './reports/weekly-audit/weekly-audit.component';
-import { CumulativeScoreComponent } from './reports/cumulative-scores/cumulative-scores.component';
+import { WeeklyCumulativeScoreComponent } from './reports/weekly-cumulative-scores/weekly-cumulative-scores.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { ReactivateLocationComponent } from './settings/locations/reactivatelocation/reactivatelocation.component';
 import { BarGraphModalComponent } from './home/vp-bar-graph/bar-graph-modal/bargraphmodal.component';
@@ -101,6 +106,12 @@ import { ReportsService } from './services/reports.service';
 import { GeneralFeedbackComponent } from './panel/general-feedback/general-feedback.component';
 import { TechnicalFeedbackComponent } from './panel/technical-feedback/technical-feedback.component';
 import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component';
+import { BatchModalComponent } from './manage/batch/batch-modal.component';
+import { PanelOverallFeedbackComponent } from './panel/overall-feedback/panel-overall-feedback.component';
+import { FeedbackIconComponent } from './quality/feedback-icon/feedback-icon.component';
+import { QualityOverallFeedbackComponent } from './quality/quality-overall-feedback/quality-overall-feedback.component';
+import { TraineeLineChartComponent } from './reports/trainee-line-chart/trainee-line-chart.component';
+import { ArrToStringPipe } from './pipes/arr-to-string.pipe';
 
 @NgModule({
   imports: [
@@ -117,9 +128,26 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
   declarations: [
     // pipes
     GraphDataPipe,
+    PanelBatchAllTraineesComponent,
+    GradeByTraineeByAssessmentPipe,
+    DisplayBatchByYear,
+    BatchByTrainerPipe,
+    CategorySkillPipe,
+    NoteByTraineeByWeekPipe,
+    TierPipe,
+    TrainerPipePipe,
+    OrderByPipe,
+    GradeByTraineeByAssessmentPipe,
+    BatchByTrainerPipe,
+    GeneralFeedbackComponent,
+    TechnicalFeedbackComponent,
+    AddressToStringPipe,
+    GraphDataPipe,
     OrderByPipe,
     FilterByPipe,
     ToolbarFilterPipe,
+    TraineeSearch,
+    ArrToStringPipe,
 
     // components
     CaliberComponent,
@@ -127,7 +155,7 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
     AssessComponent,
     ManageComponent,
     ReportsComponent,
-    WeeklyLineChartComponent,
+    AllCumulativeScoresComponent,
     VpBarGraphComponent,
     VpLineGraphComponent,
     VpPanelGraphComponent,
@@ -151,6 +179,7 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
     TrainerProfilesComponent,
     PanelComponent,
     OverallFeedbackComponent,
+    QualityFeedbackComponent,
     PanelBatchAllTraineesComponent,
     BatchOverallLineChartComponent,
     AssessmentBreakdownComponent,
@@ -158,7 +187,8 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
     WeeklyGradesComponent,
     PanelFeedbackComponent,
     WeeklyAuditComponent,
-    CumulativeScoreComponent,
+    WeeklyCumulativeScoreComponent,
+    QcDoughnutComponent,
     ReactivateLocationComponent,
     AlertsComponent,
     BarGraphModalComponent,
@@ -167,6 +197,12 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
     PanelSearchbarComponent,
     CreatePanelComponent,
     InterviewDetailsComponent,
+    BatchModalComponent,
+    GeneralFeedbackComponent,
+    TechnicalFeedbackComponent,
+    PanelOverallFeedbackComponent,
+    FeedbackIconComponent,
+    QualityOverallFeedbackComponent,
 
     // pipes
     GraphDataPipe,
@@ -184,6 +220,7 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
     GeneralFeedbackComponent,
     TechnicalFeedbackComponent,
     QcDoughnutComponent,
+    TraineeLineChartComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: SpringInterceptor, multi: true },  // interceptor for all HTTP requests
@@ -213,6 +250,8 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
     SkillService,
     TrainingTypeService,
     ReportsService,
+    QCStatusService,
+    TraineeStatusService,
   ],
   bootstrap: [
     TrainersComponent
@@ -222,6 +261,7 @@ import { QcDoughnutComponent } from './reports/qc-doughnut/qc-doughnut.component
   ],
   entryComponents: [
     BarGraphModalComponent,
+    BatchModalComponent,
   ],
 })
 export class CaliberModule { }

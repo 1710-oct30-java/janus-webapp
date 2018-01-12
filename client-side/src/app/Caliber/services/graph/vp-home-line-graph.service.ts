@@ -13,10 +13,9 @@ export class VpHomeLineGraphService {
   /**
    * Factory for creating ChartDataEntity
    * used for the line chart on Vp Home
-   *
-   * @returns ChartDataEntity
+   * @returns {ChartDataEntity}
+   * @memberof VpHomeLineGraphService
    */
-
   public getLineChartData(): ChartDataEntity {
     const lineChartData = new ChartDataEntity();
     lineChartData.colors = [lineChartData.mainColor, lineChartData.secondaryColor];
@@ -65,14 +64,14 @@ export class VpHomeLineGraphService {
   }
 
   /**
-  * Populates and returns a ChartDataEntity.
-  * @param results: any
-  * @param barChartData: ChartDataEntity
-  * @param state: string
-  * @param city: string
-  * @return ChartDataEntity
-  */
-
+   * Populates and returns a ChartDataEntity.
+   * @param {*} results
+   * @param {ChartDataEntity} lineChartData
+   * @param {string} state
+   * @param {string} city
+   * @returns {ChartDataEntity}
+   * @memberof VpHomeLineGraphService
+   */
   public fillChartData(results: any, lineChartData: ChartDataEntity, state: string, city: string): ChartDataEntity {
     let holder;
     lineChartData = this.clearLineChartData(lineChartData);
@@ -114,11 +113,12 @@ export class VpHomeLineGraphService {
   }
 
   /**
- * Clears the arrays of a ChartDataEntity
- * @param ChartDataEntity
- * @returns ChartDataEntity
- */
-
+   * Clears the arrays of a ChartDataEntity
+   * @private
+   * @param {ChartDataEntity} lineChartData
+   * @returns {ChartDataEntity}
+   * @memberof VpHomeLineGraphService
+   */
   private clearLineChartData(lineChartData: ChartDataEntity): ChartDataEntity {
     lineChartData.data.length = 0;
     lineChartData.labels.length = 0;

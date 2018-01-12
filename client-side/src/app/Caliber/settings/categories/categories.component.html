@@ -23,7 +23,7 @@
         <!-- Col Start -->
         <div class="col top5" *ngFor='let column of columns;let c=index;'>
             <!-- Accordian table -->
-            <table class="table table-responsive" style="border-collapse: collapse;">
+            <table class="table table-responsive table-hover" style="border-collapse: collapse;">
                 <thead>
                     <tr>
                         <th>Category</th>
@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                     <!-- Load all categories -->
-                    <tr *ngFor="let category of categories; let i=index;" class='table-hover'>
+                    <tr *ngFor="let category of categories; let i=index;">
                         <td *ngIf='nextColumn(c,i)' (click)='editopen(editCategory,category);' class='pointer'>
                             {{category.skillCategory}}
                         </td>
@@ -71,7 +71,7 @@
         </div>
         <div class="modal-footer">
             <button (click)="addNewCategory(myForm.value); c();" type="button" [disabled]="!myForm.valid" class="btn btn-primary" data-dismiss="modal">Submit</button>
-            <button type="button" class="btn btn-outline-dark" (click)="c()">Close</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c(); this.resetFormControl();">Close</button>
         </div>
     </form>
 </ng-template>

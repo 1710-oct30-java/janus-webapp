@@ -14,7 +14,7 @@
         <tbody *ngFor="let topic of weekTopics; let week = index" class="row-border">
           <tr>
             <td>{{week+1}}</td>
-            <td>{{topic}}</td>
+            <td>{{topic | arrToString}}</td>
             <td *ngIf="!qcWeek(week+1)" colspan="2"><em>No QC notes were found for this trainee.</em></td>
             <td *ngIf="qcWeek(week+1) && qcWeek(week+1).qcStatus">{{qcWeek(week+1).qcStatus}}</td>
             <td *ngIf="qcWeek(week+1) && !qcWeek(week+1).qcStatus">-</td>
@@ -23,8 +23,8 @@
           </tr>
           <tr>
             <th>Notes:</th>
-            <td class="align-left" colspan="3" *ngIf="allNotes && allNotes.length > 0">
-              {{allWeek(week+1).content}}
+            <td class="align-left" colspan="3" *ngIf="traineeNotes && traineeNotes.length > 0 && traineeWeek(week+1)">
+              {{traineeWeek(week+1).content}}
             </td>
           </tr>
         </tbody>

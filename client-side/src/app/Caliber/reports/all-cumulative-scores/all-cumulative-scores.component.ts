@@ -12,11 +12,11 @@ import { GranularityService } from '../services/granularity.service';
  */
 
 @Component({
-  selector: 'app-weekly-line-chart',
-  templateUrl: './weekly-line-chart.component.html',
-  styleUrls: ['./weekly-line-chart.component.css']
+  selector: 'app-all-cumulative-scores',
+  templateUrl: './all-cumulative-scores.component.html',
+  styleUrls: ['./all-cumulative-scores.component.css']
 })
-export class WeeklyLineChartComponent implements OnInit {
+export class AllCumulativeScoresComponent implements OnInit {
 
   public batchId = 0;
   public traineeId = -1;
@@ -139,10 +139,21 @@ export class WeeklyLineChartComponent implements OnInit {
   }
 
   /**
-   * Downloads weekly chart as a PDF file.
+   * Downloads cumulative scores chart as a PDF file.
    */
   public downloadPDF(): void {
     this.pdfService.downloadPDF('chart');
+  }
+
+  /**
+   * Downloads cumulative scores chart as a PDF file with a specified name.
+   */
+  public downloadPDFwithFilename(filename): void {
+    this.pdfService.downloadPDFwithFilename('chart', filename);
+  }
+
+  public downloadPDFwithFeedback() {
+    this.pdfService.downloadPDFwithFeedback();
   }
 
 }

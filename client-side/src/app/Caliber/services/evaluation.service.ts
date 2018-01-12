@@ -45,7 +45,6 @@ export class EvaluationService {
    */
   FetchAllQCTraineeNotes(batchId: Number, weekId: Number) {
     const endpoint = environment.apiFetchAllQCTraineeNotes(batchId, weekId);
-    console.log(endpoint);
     const params = {
       batchId: batchId,
       weekId: weekId
@@ -54,7 +53,6 @@ export class EvaluationService {
     if (this.needsRefresh(this.allQCTraineeNotes, params)) {
       this.httpClient.get(endpoint).subscribe(
         success => {
-          console.log(success);
           this.allQCTraineeNotes.next({params: params, data: success});
         });
     }
@@ -62,7 +60,6 @@ export class EvaluationService {
 
   FetchAllQCBatchNotes(batchId: Number, weekId: Number) {
     const endpoint = environment.apiFetchAllQCBatchNotes(batchId, weekId);
-    console.log(endpoint);
     const params = {
       batchId: batchId,
       weekId: weekId
@@ -71,7 +68,6 @@ export class EvaluationService {
     if (this.needsRefresh(this.allQCBatchNotes, params)) {
       this.httpClient.get(endpoint).subscribe(
         success => {
-          console.log(success);
           this.allQCBatchNotes.next({params: params, data: success});
         });
     }

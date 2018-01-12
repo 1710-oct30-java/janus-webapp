@@ -1,0 +1,44 @@
+<ul *ngIf="batch">
+  <ng-container *ngFor="let week of getBatchWeeks()">
+    <li>
+      <button class="btn btn-primary" (change)="changeWeek(week)">Week {{ week }}</button>
+    </li>
+  </ng-container>
+  <li>
+    <button class="btn btn-primary" (click)="addWeekToBatch()">Add Week</button>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Trainee</th>
+      <th>Individual Feedback</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let trainee of batch?.trainees">
+      <tr>
+        <td>{{ trainee?.name }}</td>
+        <td>
+          <select #statusSelect (change)="updateQcStatusOnTraineeNote(statusSelect.value, trainee)">
+            <option *ngFor="let status of qcStatuses" [value]="status" [selected]="getQcStatusOnTrainee(trainee) === status">{{ status }}</option>
+          </select>
+          <p class="mx-auto">
+            <app-feedback-icon [status]="statusMap[trainee.traineeId]" css="fa-2x text-orange"></app-feedback-icon>
+          </p>  
+        </td>
+        <td class="col-sm-9 col-md-9 col-lg-9">
+          <textarea #newContent [ngModel]="getNoteOnTrainee(trainee)?.content" id="noteTextArea" cols="75" rows="3" maxlength="4000"
+            placeholder="Note on {{ trainee.name }}" (blur)="updateTraineeNoteContent(newContent.value, trainee)"></textarea>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+<div class="row">
+  <hr class="w-100" />
+</div>
+
+<app-quality-overall-feedback [batchNote]="getQcBatchNote()"></app-quality-overall-feedback>

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ReportingService } from '../../../services/reporting.service';
 import { GranularityService } from '../services/granularity.service';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Component utilizes service API calls to fetch and display an overall
@@ -16,18 +17,23 @@ import { GranularityService } from '../services/granularity.service';
 })
 export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
 
+  // Holds all data for the current selection
   public data: any = null;
-  private dataSubscription: Subscription;
+  public labels: Array<String> = null;
+
+  // Holds data to be displayed after filtering weeks
   public dataShown = null;
+  public labelsShown: Array<String> = null;
+
+  // State data for API calls
   private batchId: Number;
   private week: number;
 
-  private batchSub: Subscription;
-  private weekSub: Subscription;
+  // Subscriptions
+  private dataSubscription: Subscription;
+  private granularitySub: Subscription;
 
-  public labels: Array<String> = null;
-  public labelsShown: Array<String> = null;
-
+  // Chart options
   public lineChartLegend = false;
   public lineChartType = 'line';
 
@@ -37,6 +43,12 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
         scaleLabel: {
           display: true,
           labelString: 'Average'
+        },
+        ticks: {
+          beginAtZero: false,
+          fixedStepSize: 20,
+          max: 100,
+          suggestedMin: 40
         }
       }]
     }
@@ -69,8 +81,13 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
     }
   ];
 
+  /*================ Life Cycle Methods ===================*/
+
   constructor(private reportsService: ReportingService, private granularityService: GranularityService) {}
 
+  /**
+   * Initializes subscriptions and initial state
+   */
   ngOnInit() {
     this.dataSubscription = this.reportsService.batchOverallLineChart$.subscribe((result) => {
       if (result) {
@@ -94,31 +111,35 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
         // Update display data with new data accounting for week limitation
         this.updateWeeks();
 
-      } else {
-        console.log('line chart data failed to load');
       }
     });
 
-    this.batchSub = this.granularityService.currentBatch$.subscribe(
-      (result) => {
-        // Make sure batchId is not undefined
-        if (result) {
-          if (result.batchId !== this.batchId) {
-            this.batchId = result.batchId;
-            this.fetch();
-          }
-        }
-    });
-
-    this.weekSub = this.granularityService.currentWeek$.subscribe(
-      (result) => {
-        if (result !== this.week) {
-          this.week = result;
-          this.updateWeeks();
-        }
+    // Subscription to needed granularity data sources
+    this.granularitySub = Observable.combineLatest(
+      this.granularityService.currentBatch$,
+      this.granularityService.currentWeek$
+    ).subscribe( data => {
+      if (data[0].batchId !== this.batchId) {
+        this.batchId = data[0].batchId;
+        this.fetch();
       }
-    );
+      if (data[1] !== this.week) {
+        this.week = data[1];
+        this.fetch();
+      }
+    });
   }
+
+  /**
+   * Unsubscribe from subscriptions
+   */
+  ngOnDestroy() {
+    // Unsubscribe from subscriptions
+    this.dataSubscription.unsubscribe();
+    this.granularitySub.unsubscribe();
+  }
+
+  /*==================== Helper Methods ================*/
 
   // Fetches data when new data is pushed in
   private fetch() {
@@ -154,11 +175,6 @@ export class BatchOverallLineChartComponent implements OnInit, OnDestroy {
       this.labelsShown = this.labels;
     }
   }
-
-  ngOnDestroy() {
-    // Unsubscribe from subscriptions
-    this.batchSub.unsubscribe();
-    this.weekSub.unsubscribe();
-    this.dataSubscription.unsubscribe();
-  }
 }
+
+

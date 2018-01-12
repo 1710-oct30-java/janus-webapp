@@ -1,35 +1,119 @@
+const context = 'http://localhost/';
+
 export const environment = {
   production: true,
-  context: 'http://localhost:8080/', // change for what the production environment would actually be
+  context: context, // change for what the production environment would actually be
+
+  assessment: {
+    fetchByBatchIdByWeek: (batchId: number, week: number) => `${context}trainer/assessment/${batchId}/${week}`,
+    save: () => `${context}trainer/assessment/create`,
+    update: () => `${context}trainer/assessment/update`,
+    delete: (assessmentId: number) => `${context}trainer/assessment/delete/${assessmentId}`,
+  },
+
+  batch: {
+    fetchAllByTrainer: () => `${context}trainer/batch/all`,
+    fetchAll: () => `${context}vp/batch/all`,
+    save: () => `${context}all/batch/create`,
+    update: () => `${context}all/batch/update`,
+    delete: (batchId) => `${context}all/batch/delete/${batchId}`,
+  },
+
+  category: {
+    fetchAll: () => `${context}vp/category`,
+    fetchAllActive: () => `${context}category/all`,
+    fetchById: (id: number) => `${context}category/${id}`,
+    save: () => `${context}vp/category`,
+    update: () => `${context}vp/category/update`,
+  },
+
+  location: {
+    fetchAll: () => `${context}all/location/all/`,
+    save: () => `${context}vp/location/create`,
+    update: () => `${context}vp/location/update`,
+  },
+
+  note: {
+    fetchQcBatchNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}qc/note/batch/${batchId}/${week}`,
+    fetchQcTraineeNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}qc/note/trainee/${batchId}/${week}`,
+    fetchBatchNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}trainer/note/batch/${batchId}/${week}`,
+    fetchTraineeNotesByBatchIdByWeek: (batchId: number, week: number) => `${context}trainer/note/trainee/${batchId}/${week}`,
+    fetchTrainingNotesByTrainee: (traineeId: number) => `${context}all/notes/trainee/${traineeId}`,
+    fetchQcNotesByTrainee: (traineeId: number) => `${context}qc/note/trainee/${traineeId}`,
+    update: () => `${context}note/update`,
+    save: () => `${context}note/create`,
+    getAllQCTraineeNotes: (batchId: number, week: number) => `${context}qc/note/trainee/${batchId}/${week}`,
+    findQCBatchNotes: (batchId: number, week: number) => `${context}qc/note/batch/${batchId}/${week}`,
+  },
+
+  panel: {
+    fetchAll: () => `${context}panel/all`,
+    fetchAllByTrainee: (traineeId) => `${context}panel/trainee/${traineeId}`,
+    save: () => `${context}panel/create`,
+    update: () => `${context}panel/update`,
+    delete: (panelId: number) => `${context}panel/delete/${panelId}`,
+  },
+
+  grade: {
+    fetchByBatchIdByWeek: (batchId, week) => `${context}all/grades/batch/${batchId}/week/${week}`,
+    save: () => `${context}trainer/grade/create`,
+    update: () => `${context}trainer/grade/update`,
+  },
+
+  qcStatus: {
+    fetchAll: () => `${context}types/qcstatus/all`,
+  },
+
+  skill: {
+    fetchAll: () => `${context}types/skill/all`,
+  },
+
+  trainee: {
+    fetchAllByBatch: (batchId: number) => `${context}all/trainee?batchId=${batchId}`,
+    save: () => `${context}all/trainee/create`,
+    update: () => `${context}all/trainee/update`,
+    delete: (traineeId: number) => `${context}all/trainee/delete/${traineeId}`,
+  },
+
+  trainer: {
+    fetchByEmail: (email: string) => `${context}training/trainer/byemail/${email}`,
+    fetchAll: () => `${context}all/trainer/all`,
+    save: () => `${context}all/trainer/all`,
+    update: () => `${context}vp/trainer/update`,
+    getTitles: () => `${context}vp/trainer/titles`,
+    getTiers: () => `${context}types/trainer/role/all`,
+  },
+
+  trainingType: {
+    fetchAll: () => `${context}types/training/all`,
+  },
+
+  traineeStatus: {
+    fetchAll: () => `${context}types/trainingstatus/all`,
+  },
 
   // API calls for the VP functionality group
-  addNewCategory: 'http://localhost:8080/vp/category',
-  getAllCategories: 'http://localhost:8080/vp/category',
-  addNewTrainer: 'http://localhost:8080/vp/trainer/create',
-  editCurrentCategory: 'http://localhost:8080/vp/category/update',
-  editLocation: 'http://localhost:8080/vp/location/update',
-  deleteLocation: 'http://localhost:8080/vp/location/delete',
-  reactivateLocation: 'http://localhost:8080/vp/location/reactivate',
-  addLocation: 'http://localhost:8080/vp/location/create',
-  deleteTrainer: 'http://localhost:8080/vp/trainer/delete',
-  getAllLocations: 'http://localhost:8080/all/location/all/',
-  getAllTrainers: 'http://localhost:8080/all/trainer/all',
-  getAllTitles: 'http://localhost:8080/vp/trainer/titles/',
-  getAllTiers: 'http://localhost:8080/types/trainer/role/all',
-  editTrainer: 'http://localhost:8080/vp/trainer/update',
+  addNewCategory: context + 'vp/category',
+  getAllCategories: context + 'vp/category',
+  editCurrentCategory: context + 'vp/category/update',
 
-  /* Evaluation Service API endpoints */
-  apiAllQCTraineeOverallNotes: (traineeId: Number) =>
-    environment.context + `qc/note/trainee/${traineeId}`,
+  // Location API calls
+  editLocation: context + 'vp/location/update',
+  deleteLocation: context + 'vp/location/delete',
+  reactivateLocation: context + 'vp/location/reactivate',
+  addLocation: context + 'vp/location/create',
 
-  apiAllTraineeNotes: (traineeId: Number) =>
-    environment.context + `all/notes/trainee/${traineeId}`,
+  // Trainer API calls
+  addNewTrainer: context + 'vp/trainer/create',
+  deleteTrainer: context + 'vp/trainer/delete',
+  getAllTitles: context + 'vp/trainer/titles/',
+  getAllTiers: context + 'types/trainer/role/all',
+  editTrainer: context + 'vp/trainer/update',
 
-  apiQCTraineeNote: (traineeId: Number, week: Number) =>
-    environment.context + `/qc/note/trainee/${traineeId}/for/${week}`,
-
-  apiTraineeNote: (traineeId: Number, week: Number) =>
-    environment.context + `/trainer/note/trainee/${traineeId}/for/${week}`,
+  // Reports Service API endpoints
+  reportsStackedBarCurrentWeek: context + 'all/reports/batch/week/stacked-bar-current-week',
+  reportsDashBoard: context + 'all/reports/dashboard',
+  reportsBiWeeklyPanel: context + 'all/reports/biweeklyPanelResults',
 
   /* Reporting service API endpoints */
   apiBatchComparisonAvgEndpoint: (skill: string, training: string, startDate) =>

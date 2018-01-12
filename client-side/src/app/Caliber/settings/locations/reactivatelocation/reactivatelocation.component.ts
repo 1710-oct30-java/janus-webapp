@@ -10,8 +10,8 @@ import { Location } from '../../../entities/Location';
     templateUrl: './reactivatelocation.component.html',
     styleUrls: ['./reactivatelocation.component.css'],
     encapsulation: ViewEncapsulation.None,
-  })
-export class ReactivateLocationComponent implements OnInit {
+})
+export class ReactivateLocationComponent {
     @Input()
     location: Location;
 
@@ -22,10 +22,21 @@ export class ReactivateLocationComponent implements OnInit {
 
     }
 
+    /**
+     * open up the modal with prompt
+     * 
+     * @param {any} content 
+     * @memberof ReactivateLocationComponent
+     */
     showModal(content) {
         this.modalService.open(content);
     }
 
+    /**
+     * reactivate the location by setting active to true
+     * 
+     * @memberof ReactivateLocationComponent
+     */
     reactivateLocation() {
         this.location.active = true;
         this.ls.reactivateLocation(this.location);

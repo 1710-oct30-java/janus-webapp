@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
 import { AlertsService } from './alerts.service';
+import { environment } from '../../../environments/environment';
 
 // entities
 import { Trainee } from '../entities/Trainee';
@@ -17,8 +17,8 @@ import { Panel } from '../entities/Panel';
 @Injectable()
 export class PanelService extends AbstractApiService<Panel> {
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
   }
 
   /*
@@ -33,13 +33,13 @@ export class PanelService extends AbstractApiService<Panel> {
   * spring-security: @PreAuthorize("hasAnyRole('VP', 'QC', 'TRAINER', 'STAGING','PANEL')")
   */
   public fetchAll(): void {
-    const url = 'panel/all';
+    const url = environment.panel.fetchAll();
     const messages = {
       success: 'Panels retrieved successfully',
       error: 'Panel retrieval failed',
     };
 
-    super.doGetList(url, {}, messages);
+    super.doGetList(url, messages);
   }
 
   /**
@@ -51,13 +51,13 @@ export class PanelService extends AbstractApiService<Panel> {
    * @param trainee: Trainee
    */
   public fetchAllByTrainee(trainee: Trainee): void {
-    const url = `panel/trainee/${trainee.traineeId}`;
+    const url = environment.panel.fetchAllByTrainee(trainee.traineeId);
     const messages = {
       success: 'Panels retrieved successfully',
       error: 'Panel retrieval failed',
     };
 
-    super.doGetList(url, {}, messages);
+    super.doGetList(url, messages);
   }
 
   /**
@@ -68,7 +68,7 @@ export class PanelService extends AbstractApiService<Panel> {
   *
   * @param panel: Panel
   */
-  public create(panel: Panel): void {
+  public create(panel: any): void {
     this.save(panel);
   }
 
@@ -81,13 +81,14 @@ export class PanelService extends AbstractApiService<Panel> {
   * @param panel: Panel
   */
   public save(panel: Panel): void {
-    const url = 'panel/create';
+    const url = environment.panel.save();
     const messages = {
       success: 'Panels saved successfully',
       error: 'Panel save failed',
     };
+    const clone = this.prepareForApi(panel);
 
-    super.doPost(panel, url, {}, messages);
+    super.doPost(panel, url, messages);
   }
 
   /**
@@ -99,13 +100,14 @@ export class PanelService extends AbstractApiService<Panel> {
   * @param panel: Panel
   */
   public update(panel: Panel): void {
-    const url = 'panel/update';
+    const url = environment.panel.update();
     const messages = {
       success: 'Panels updated successfully',
       error: 'Panel udpated failed',
     };
+    const clone = this.prepareForApi(panel);
 
-    super.doPut(panel, url, {}, messages);
+    super.doPut(clone, url, messages);
   }
 
   /**
@@ -117,13 +119,32 @@ export class PanelService extends AbstractApiService<Panel> {
   * @param panel: Panel
   */
   public delete(panel: Panel): void {
-    const url = `panel/delete/${panel.panelId}`;
+    const url = environment.panel.delete(panel.panelId);
     const messages = {
       success: 'Panels deleted successfully',
       error: 'Panel deletion failed',
     };
 
-    super.doDelete(panel, url, {}, messages);
+    super.doDelete(panel, url, messages);
+  }
+
+  /**
+ * produces a clone of the Panel object that
+ * has changes required for the API in order
+ * to be processed
+ *
+ * @param batch: Batch
+ *
+ * @return any
+ */
+  protected prepareForApi(panel: Panel) {
+    const output: any = {};
+
+    Object.assign(output, panel);
+
+    output.interviewDate = super.stringifyDate(panel.interviewDate);
+
+    return output;
   }
 
 }

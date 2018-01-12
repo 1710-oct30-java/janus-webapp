@@ -29,6 +29,10 @@ export class ReportingService {
   private batchOverallRadar = new BehaviorSubject<CacheData>(null);
   public batchOverallRadar$ = this.batchOverallRadar.asObservable();
 
+  private lineTraineeOverall = new BehaviorSubject<CacheData>(null);
+  public lineTraineeOverall$ = this.lineTraineeOverall.asObservable();
+
+
   private qcStatusDoughnut = new BehaviorSubject<CacheData>(null);
   public qcStatusDoughnut$ = this.qcStatusDoughnut.asObservable();
 
@@ -62,12 +66,21 @@ export class ReportingService {
    * Clear all data stored in subjects.
    */
   refresh() {
-    // Clear all data stored in subjects
+    // Clear all data stored in subjects in order to force a refresh
+    // rather than reverting to cached data
+
     this.traineeOverallRadar.next(null);
-    this.batchOverallRadar.next(null);
-    this.qcStatusDoughnut.next(null);
+    this.traineeWeeklyRadar.next(null);
     this.batchOverallBar.next(null);
+    this.lineTraineeOverall.next(null);
+    this.qcStatusDoughnut.next(null);
+    this.batchOverallRadar.next(null);
+    this.technologiesForTheWeek.next(null);
     this.technologiesUpToWeek.next(null);
+    this.panelBatchAllTrainees.next(null);
+    this.batchOverallLineChart.next(null);
+    this.assessmentBreakdownBarChart.next(null);
+    this.BatchWeekSortedBarChart.next(null);
   }
 
   /**
@@ -98,12 +111,18 @@ export class ReportingService {
   }
 
 
-  /* Doughnut / Pie charts */
+  /*============================================
+             Doughnut / Pie charts
+  =============================================*/
 
   /**
-     * Fetches doughnut chart of all QC statuses for this batch
+     * Fetches doughnut chart of all QC statuses for this batch unless data
+     * matching these parameters is already being stored.
+     *
+     * Data stored in @property {BehaviorSubject<CacheData>} qcStatusDoughnut
+     * and exposed through @property {Observable<CacheData>} qcStatusDoughnut$
+     *
      * @param batchId the id of the batch being fetched
-     * Data can be subscribed to @ qcStatusDoughnut$
      */
   fetchQcStatusDoughnutChart(batchId: Number) {
     const endpoint = environment.apiPieChartCurrentWeekQCStatus(batchId);
@@ -121,6 +140,10 @@ export class ReportingService {
   }
 
   /**
+   * Fetches data from API for a weekly pie chart given a batchId and a weekId
+   * unless data matching these parameters is already being stored.
+   * Data is stored in @property {BehaviorSubject<CacheData>} qcStatusDoughnut
+   * and exposed through @property {Observable<CacheData>} qcStatusDoughnut$
    *
    * @param batchId batchId filter value
    * @param weekId weekId filter value
@@ -142,7 +165,13 @@ export class ReportingService {
 
   }
 
-
+  /**
+   * Fetches data used for creating a QC status donut chart for a given batch
+   * and stores the data.
+   * Data is stored in @property {BehaviorSubject<CacheData>} qcStatusDoughnut
+   * and exposed through @property {Observable<CacheData>} qcStatusDoughnut$
+   * @param batchId
+   */
   fetchPieChartCurrentWeekQCStatus(batchId: Number) {
     const endpoint = environment.apiPieChartCurrentWeekQCStatus(batchId);
 
@@ -158,7 +187,9 @@ export class ReportingService {
     }
   }
 
-  /* Stacked Bar Charts */
+  /*===========================================
+                Stacked Bar Charts
+  ===========================================*/
 
   fetchAllBatchesCurrentWeekQCStackedBarChart(batchId: Number, week: Number) {
     const endpoint = environment.apiAllBatchesCurrentWeekQCStackedBarChart(batchId, week);
@@ -167,14 +198,42 @@ export class ReportingService {
 
   }
 
-  /* Bar Charts */
+  /*===========================================
+                   Bar Charts
+  ===========================================*/
+
+  /**
+   * Fetches data for display of a batch week average bar chart given
+   * a batchId and a week if data for these parameters is not already available.
+   * Data is stored in @property {BehaviorSubject<CacheData>} assessmentBreakdownBarChart
+   * and exposed through @property {Observable<CacheData} assessmentBreakdownBarChart$
+   *
+   * @param batchId - BatchID to fetch data for
+   * @param week - week number for data within batch to fetch
+   */
   fetchBatchWeekAvgBarChart(batchId: Number, week: Number) {
     const endpoint = environment.apiBatchWeekAvgBarChart(batchId, week);
 
-    // TODO: Implement API call and subject push logic
+    const params = {
+      batchId: batchId,
+      week: week
+    };
 
+    if (this.needsRefresh(this.assessmentBreakdownBarChart, params)) {
+      this.httpClient.get(endpoint).subscribe(
+        success => this.assessmentBreakdownBarChart.next({params: params, data: success}));
+    }
   }
 
+  /**
+   * Fetch data for a sorted bar chart from backend given a specific batchID and week.
+   *
+   * Data is stored at @property {BehaviorSubject<CacheData>} BatchWeekSortedBarChart
+   * Data is exposed at @property {Observable<CacheData>} BatchWeekSortedBarChart$
+   *
+   * @param batchId ID of batch to fetch
+   * @param week Week of batch program to get by
+   */
   fetchBatchWeekSortedBarChart(batchId: Number, week: Number) {
     const endpoint = environment.apiBatchWeekSortedBarChart(batchId, week);
 
@@ -189,6 +248,14 @@ export class ReportingService {
     }
   }
 
+  /**
+   * Fetches data for a batch overall line chart given a batchID and a trainee ID and stores
+   * data and parameters in @property {BehaviorSubject<CacheData>} assessmentBreakdownBarChart
+   * and exposed through @property {Observable<CachedData>} assessmentBreakdownChart$
+   *
+   * @param batchId - Requested batchID
+   * @param traineeId - Requested traineeId
+   */
   fetchBatchOverallTraineeBarChart(batchId: Number, traineeId: Number) {
     const endpoint = environment.apiBatchOverallTraineeBarChart(batchId, traineeId);
 
@@ -206,6 +273,9 @@ export class ReportingService {
 
   /**
    * Fetches overall batch for Cumulative Scores bar chart.
+   * data and parameters in @property {BehaviorSubject<CacheData>} batchOverallBar
+   * and exposed through @property {Observable<CachedData>} batchOverallBar$
+   *
    * @param batchId - batch whose cumulative score data should be fetched
    * @author Edel Benavides
    */
@@ -228,6 +298,8 @@ export class ReportingService {
   /**
    * Fetches topical assessment data on a given week for a given user along with the
    * average assessment of a given batch
+   * data and parameters in @property {BehaviorSubject<CacheData>} assessmentBreakdownBarChart
+   * and exposed through @property {Observable<CachedData>} assessmentBreakdownChart$
    * @param batchId
    * @param weekId
    * @param traineeId
@@ -249,6 +321,8 @@ export class ReportingService {
 
   /* Line Charts */
 
+
+
   fetchTraineeUpToWeekLineChart(batchId: Number, weekId: Number, traineeId: Number) {
     const endpoint = environment.apiTraineeUpToWeekLineChart(batchId, weekId, traineeId);
 
@@ -256,13 +330,31 @@ export class ReportingService {
 
   }
 
+  /**
+   * Fetches data for use in trainee overall line chart if data with these parameters
+   * is not already in cache.
+   * Data is exposed through @property {Observable<CacheData>} lineTraineeOverall$
+   */
   fetchTraineeOverallLineChart(batchId: Number, traineeId: Number) {
     const endpoint = environment.apiTraineeOverallLineChart(batchId, traineeId);
+    const params = {
+      batchId: batchId,
+      traineeId: traineeId
+    };
+    if (this.needsRefresh(this.lineTraineeOverall, params)) {
+      this.httpClient.get(endpoint).subscribe(
 
-    // TODO: Implement API call and subject push logic
-
+        success => { this.lineTraineeOverall.next({ params: params, data: success });
+      });
   }
+}
 
+
+  /**
+   * Fetches data for use inbatch overall line chart if data with these parameters
+   * is not already in cache.
+   * Data is exposed through @property {Observable<CacheData>} batchOverallLineChart$
+   */
   fetchBatchOverallLineChart(batchId: Number) {
     const endpoint = environment.apiBatchOverallLineChart(batchId);
 
@@ -278,9 +370,7 @@ export class ReportingService {
 
   fetchCurrentBatchesLineChart() {
     const endpoint = environment.apiCurrentBatchesLineChart;
-
-    // TODO: Implement API call and subject push logic
-
+    // TODO: Implment API call and subject push logic
   }
 
   fetchCurrentPanelsLineChart() {
@@ -292,6 +382,14 @@ export class ReportingService {
 
   /* Radar Charts */
 
+  /**
+   * Fetches data for use in trainee up to week radar chart if data with these parameters
+   * is not already in cache.
+   * Data is exposed through @property {Observable<CacheData>} traineeWeeklyRadar$
+   *
+   * @param week
+   * @param traineeId
+   */
   fetchTraineeUpToWeekRadarChart(week: Number, traineeId: Number) {
     const endpoint = environment.apiTraineeUpToWeekRadarChart(week, traineeId);
 
@@ -312,7 +410,7 @@ export class ReportingService {
 
   /**
    * Updates Trainee overall tech skills data if necessary
-   * Data can be subscribed to @ traineeOverallRadar$
+   * Data exposed through @property {Observable<CacheData>} traineeOverallRadar$
    * @param traineeId - trainee whose skill data should be fetched
    */
   fetchTraineeOverallRadarChart(traineeId: Number) {
@@ -332,7 +430,7 @@ export class ReportingService {
 
   /**
    * Updates Batch overall tech skills data if necessary
-   * Data can be subscribed to @ batchOverallRadar$
+   * Data exposed through @property {Observable<CacheData>} batchOverallRadar$
    * @param batchId - batch whose skill data should be fetched
    */
   fetchBatchOverallRadarChart(batchId: Number) {
@@ -370,12 +468,13 @@ export class ReportingService {
   /**
    * Updates the single week subject to contain the topics covered
    * by a given batch for a given week.
+   * Data exposed through @property {Observable<CacheData>} technologiesForTheWeek$
+   *
    * @param batchId - Batch whose week topics we're fetching.
    * @param week - How many weeks we're requesting.
    */
   fetchTechnologiesForTheWeek(batchId: Number, weekId: Number) {
     const endpoint = environment.apiTechnologiesForTheWeek(batchId, weekId);
-    console.log(endpoint);
 
     // Params object for refresh check
     const params = {
@@ -393,6 +492,8 @@ export class ReportingService {
   /**
    * Updates the multiple weeks subject to contain all the topics
    * covered up to the given week within the given batch.
+   * Data exposed through @property {Observable<CacheData>} technologiesUpToWeek$
+   *
    * @param batchId - Batch whose week topics we're fetching.
    * @param week - How many weeks we're requesting.
    */
@@ -424,10 +525,11 @@ export class ReportingService {
    *
    * Note: While the endpoint suggests this is a reporting endpoint
    * the handler is located in the PanelController.
+   *
+   * Data exposed through @property {Observable<CacheData>} panelBatchAllTrainees$
    */
   fetchPanelBatchAllTrainees(batchId: Number) {
     const endpoint = environment.apiPanelBatchAllTrainees(batchId);
-    // console.log(endpoint);
     const params = {
       batchId: batchId
     };
@@ -435,7 +537,6 @@ export class ReportingService {
     if (this.needsRefresh(this.panelBatchAllTrainees, params)) {
       this.httpClient.get(endpoint).subscribe(
         success => {
-          // console.log(success);
           this.panelBatchAllTrainees.next({params: params, data: success});
         });
     }

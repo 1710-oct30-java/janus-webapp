@@ -9,8 +9,9 @@ import 'rxjs/add/operator/delay';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
 import { AlertsService } from './alerts.service';
+import { environment } from '../../../environments/environment';
+
 
 // entities
 import { Assessment } from '../entities/Assessment';
@@ -24,8 +25,8 @@ import { Assessment } from '../entities/Assessment';
 @Injectable()
 export class AssessmentService extends AbstractApiService<Assessment> {
 
-  constructor(eService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(eService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
   }
 
    /*
@@ -42,7 +43,7 @@ export class AssessmentService extends AbstractApiService<Assessment> {
      * @param week: number
      */
   public fetchByBatchIdByWeek(batchId: number, week: number): void {
-    const url = `trainer/assessment/${batchId}/${week}`;
+    const url = environment.assessment.fetchByBatchIdByWeek(batchId, week);
 
     super.doGetList(url);
   }
@@ -76,12 +77,12 @@ export class AssessmentService extends AbstractApiService<Assessment> {
  * @param assessment: Assessment
  */
   public save(assessment: Assessment): void {
-    const url = this.envService.buildUrl('trainer/assessment/create');
-    const fetchUrl = `trainer/assessment/${assessment.batch.batchId}/${assessment.week}`;
+    const url = environment.assessment.save();
+    const fetchUrl = environment.assessment.fetchByBatchIdByWeek(assessment.batch.batchId, assessment.week);
     const body = JSON.stringify(assessment);
 
     this.http.post(url, body, { responseType: 'text'} ).subscribe( () => {
-      this.fetchByBatchIdByWeek(assessment.batch.batchId, assessment.week);
+      // this.fetchByBatchIdByWeek(assessment.batch.batchId, assessment.week);
 
       super.doGetListObservable(fetchUrl).subscribe( (list) => {
         // console.log(assessment);
@@ -126,13 +127,13 @@ export class AssessmentService extends AbstractApiService<Assessment> {
    * @param assessment: Assessment
    */
   public update(assessment: Assessment): void {
-    const url = 'trainer/assessment/update';
+    const url = environment.assessment.update();
     const messages = {
       success: 'Assessment updated successfully',
       error: 'Assessment failed to update',
     };
 
-    super.doPut(assessment, url, {}, messages);
+    super.doPut(assessment, url, messages);
   }
 
   /**
@@ -144,13 +145,13 @@ export class AssessmentService extends AbstractApiService<Assessment> {
    * @param assessment: Assessment
    */
   public delete(assessment: Assessment): void {
-    const url = `trainer/assessment/delete/${assessment.assessmentId}`;
+    const url = environment.assessment.delete(assessment.assessmentId);
     const messages = {
       success: 'Assessment deleted successfully',
       error: 'Assessment failed to delete',
     };
 
-    super.doDelete(assessment, url, {}, messages);
+    super.doDelete(assessment, url, messages);
   }
 
 }

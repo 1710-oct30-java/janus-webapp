@@ -174,7 +174,7 @@ add or edit a trainer-->
     </div>
     <div class="modal-footer">
       <button type="button" data-dismiss="modal" [disabled]="!addForm.valid" (click)="addTrainer(addTrainerForm.value); c()" class="btn btn-add">Save</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c(); this.initFormControl();">Close</button>
     </div>
 
   </ng-template>

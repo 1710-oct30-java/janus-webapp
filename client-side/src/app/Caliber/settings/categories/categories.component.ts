@@ -34,9 +34,12 @@ export class CategoriesComponent implements OnInit {
   numColumns: number;
   constructor(private categoriesService: CategoriesService, private modalService: NgbModal,
     private fb: FormBuilder) {
-   }
+  }
 
-  // Loads all categories
+  /**
+   * Loads all Categories
+   * @memberof CategoriesComponent
+   */
   ngOnInit() {
     this.initFormControl();
     this.categoriesService.fetchAll();
@@ -50,12 +53,22 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
+  resetFormControl() {
+    this.addForm = this.fb.group({
+      'name': ['', Validators.required]
+    });
+  }
   initFormControl() {
     this.addForm = this.fb.group({
       'name': [this.newCategory.skillCategory, Validators.required]
     });
   }
 
+  /**
+   * Adds a new Category
+   * @param {any} value
+   * @memberof CategoriesComponent
+   */
   addNewCategory(value) {
     this.newCategory.skillCategory = value.name;
     this.newCategory.active = true;
@@ -63,14 +76,23 @@ export class CategoriesComponent implements OnInit {
     this.categoriesService.getSaved().subscribe((succ) => {
       this.categoriesService.fetchAll();
     });
+    this.resetFormControl();
   }
 
-  // Change active status of category
+  /**
+   * Change the active status of Category
+   * @param {any} activeValue
+   * @memberof CategoriesComponent
+   */
   activeChange(activeValue) {
     this.isActive = activeValue;
   }
 
-  // Send call to update active status
+  /**
+   * Send call to update active status
+   * @param {any} nameChange
+   * @memberof CategoriesComponent
+   */
   editCurrentCategory(nameChange) {
     this.currentCategory.skillCategory = nameChange.value.skillCategory;
     this.currentCategory.active = this.isActive;
@@ -80,8 +102,14 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
+  /**
+   * Populates the Columns with Categories
+   * @param {any} column
+   * @param {any} index
+   * @returns
+   * @memberof CategoriesComponent
+   */
   nextColumn(column, index) {
-    // Logic for populating columns
     switch (column) {
       case 0:
         if (index < this.categories.length / this.numColumns) {
@@ -111,13 +139,23 @@ export class CategoriesComponent implements OnInit {
     }
   }
 
-  // Modal open functions
+  /**
+   * Opens a Modal
+   * @param {any} content
+   * @memberof CategoriesComponent
+   */
   open(content) {
     this.modalService.open(content).result.then((result) => {
     }, (reason) => {
     });
   }
 
+  /**
+   * Open the edit modal
+   * @param {any} content
+   * @param {Category} index
+   * @memberof CategoriesComponent
+   */
   editopen(content, index: Category) {
     this.currentCategory = index;
     this.isActive = index.active;

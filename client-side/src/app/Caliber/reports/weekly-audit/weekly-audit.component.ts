@@ -49,8 +49,10 @@ export class WeeklyAuditComponent implements OnInit {
       this.batch = batchWeek[0];
       this.week = batchWeek[1];
 
-      this.noteService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
-      this.reportService.fetchTechnologiesForTheWeek(this.batch.batchId, this.week);
+      if (this.week > 0) {
+        this.noteService.fetchByBatchIdByWeek(this.batch.batchId, this.week);
+        this.reportService.fetchTechnologiesForTheWeek(this.batch.batchId, this.week);
+      }
 
     });
 

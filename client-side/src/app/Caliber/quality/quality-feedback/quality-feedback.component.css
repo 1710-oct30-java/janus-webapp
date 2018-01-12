@@ -1,0 +1,13 @@
+ul {
+    list-style: none;
+}
+
+li {
+    display: inline;
+}
+
+.hiddenButton {
+    border: none;
+    outline: none;
+    background-color: Transparent;
+}

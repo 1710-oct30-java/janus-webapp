@@ -7,7 +7,6 @@ import { Observable } from 'rxjs/Observable';
 
 // services
 import { environment } from '../../../environments/environment';
-import { EnvironmentService } from './environment.service';
 import { CategoryService } from './category.service';
 
 
@@ -28,8 +27,8 @@ export class CategoriesService extends CategoryService {
 
   categories$ = this.listSubject.asObservable();
 
-  constructor(envService: EnvironmentService, httpClient: HttpClient, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
 
     this.getAll();
   }

@@ -5,6 +5,6 @@ export class Grade {
     gradeId: number;
     assessment: Assessment;
     trainee: Trainee;
-    dateReceived: Date;
+    dateReceived: any;
     score: number;
 }

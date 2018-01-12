@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GranularityService } from './services/granularity.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Trainee } from '../entities/Trainee';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Parent component to reports charts & graphs. Handles filtering of displayed
@@ -9,7 +10,7 @@ import { Trainee } from '../entities/Trainee';
  *
  * @author Mitch Goshorn
  *
- * Reports Team
+ * Reports Team Members
  * @author Mitch Goshorn
  * @author Micah West
  * @author John Hudson
@@ -25,37 +26,39 @@ import { Trainee } from '../entities/Trainee';
 })
 export class ReportsComponent implements OnInit, OnDestroy {
 
-  traineeIdSub: Subscription;
-  weekIdSub: Subscription;
+  // Subscriptions
+  granularitySub: Subscription;
+  readySub: Subscription;
 
-  // This value should be null when no trainees are selected,
-  //    and otherwise contain a trainee object
-  currentTrainee: Trainee = null;
-
-  // When this has value 0, ALL TRAINEES is selected, otherwise it is a specific trainee
-  weekId: number = null;
+  // State data used for filtering the view
+  ready = false;
+  allTrainees = false;
+  allWeeks = false;
 
   constructor(private granularityService: GranularityService) { }
 
+  /**
+   * Initializes data subscriptions necessary for component functionality
+   */
   ngOnInit() {
-
     // subscribe to trainee and week data in order to filter subcomponents
-    this.traineeIdSub = this.granularityService.currentTrainee$.subscribe((data) => {
-      if (this.currentTrainee !== data) {
-        this.currentTrainee = data;
-      }
+    this.granularitySub = Observable.combineLatest(this.granularityService.currentTrainee$,
+    this.granularityService.currentWeek$).subscribe((data) => {
+      this.allTrainees = data[0].traineeId === 0;
+      this.allWeeks = data[1] === 0;
     });
 
-    this.weekIdSub = this.granularityService.currentWeek$.subscribe((data) => {
-      if (this.weekId !== data) {
-        this.weekId = data;
-      }
-    });
+    // Listen for ready state to construct/destroy subcomponents
+    this.readySub = this.granularityService.ready$.subscribe(
+            (state) => { this.ready = state; });
   }
 
+  /**
+   * Unsubscribes from subscriptions
+   */
   ngOnDestroy() {
     // Unsubscribe from subscriptions
-    this.weekIdSub.unsubscribe();
-    this.traineeIdSub.unsubscribe();
+    if (this.granularitySub)  { this.granularitySub.unsubscribe(); }
+    if (this.readySub)        { this.readySub.unsubscribe(); }
   }
 }

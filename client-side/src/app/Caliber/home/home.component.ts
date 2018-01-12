@@ -8,11 +8,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class HomeComponent implements OnInit, OnDestroy {
   constructor() { }
 
-  ngOnInit() {
-  }
-
-  // clean up subscriptions
-  ngOnDestroy() {
-
-  }
+  ngOnInit() {}
+  ngOnDestroy() {}
 }

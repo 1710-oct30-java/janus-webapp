@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WeeklyLineChartComponent } from './weekly-line-chart.component';
+import { OverallFeedbackComponent } from './overall-feedback.component';
 
-describe('WeeklyLineChartComponent', () => {
-  let component: WeeklyLineChartComponent;
-  let fixture: ComponentFixture<WeeklyLineChartComponent>;
+describe('OverallFeedbackComponent', () => {
+  let component: OverallFeedbackComponent;
+  let fixture: ComponentFixture<OverallFeedbackComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WeeklyLineChartComponent ]
+      declarations: [ OverallFeedbackComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WeeklyLineChartComponent);
+    fixture = TestBed.createComponent(OverallFeedbackComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

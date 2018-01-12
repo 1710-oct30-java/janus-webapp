@@ -11,7 +11,7 @@ import { TrainerService } from '../../../services/trainer.service';
     templateUrl: './deactivatetrainer.component.html',
     styleUrls: ['./deactivatetrainer.component.css'],
     encapsulation: ViewEncapsulation.None,
-  })
+})
 export class DeactivateTrainerComponent implements OnInit {
     @Input()
     trainer: Trainer;
@@ -22,14 +22,25 @@ export class DeactivateTrainerComponent implements OnInit {
     ngOnInit() {
 
     }
-
+    /**
+     * open modal with prompt
+     * 
+     * @param {any} content 
+     * @memberof DeactivateTrainerComponent
+     */
     showModal(content) {
         this.modalService.open(content);
     }
-
+    /**
+     * deactiave trainer by setting role to INACTIVE
+     * 
+     * @memberof DeactivateTrainerComponent
+     */
     deactivateTrainer() {
-        this.ts.deleteTrainer(this.trainer);
+        this.ts.delete(this.trainer);
         this.trainer.tier = 'ROLE_INACTIVE';
-        this.ts.fetchAll();
+        this.ts.getUpdated().subscribe((resp) => {
+            this.ts.fetchAll();
+          });
     }
 }

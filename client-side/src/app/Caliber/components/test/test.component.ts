@@ -10,6 +10,7 @@ import { Grade } from '../../entities/Grade';
 import { Trainee } from '../../entities/Trainee';
 import { Assessment } from '../../entities/Assessment';
 import { Batch } from '../../entities/Batch';
+import { Note } from '../../entities/Note';
 
 // services
 import { BatchService } from '../../services/batch.service';
@@ -23,6 +24,7 @@ import { LocationService } from '../../services/location.service';
 import { PanelService } from '../../services/panel.service';
 import { SkillService } from '../../services/skill.service';
 import { TrainingTypeService } from '../../services/training-type.service';
+import { QCStatusService } from '../../services/qcstatus.service';
 
 @Component({
   selector: 'app-test',
@@ -32,16 +34,18 @@ import { TrainingTypeService } from '../../services/training-type.service';
 
 export class TestComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
-  private data: any[];
+  // private subscriptionB: Subscription;
+  private data: any;
+  // private dataB: any[];
 
 
-  constructor(private service: NoteService ) {
+  constructor(private service: TraineeService) {
 
   }
 
   public getTestTrainee(): Trainee {
     return {
-      traineeId: 5524,
+      traineeId: 0,
       resourceId: null,
       name: 'Cartagena, Michael',
       email: 'mcartagenaez8@gmail.com',
@@ -54,7 +58,8 @@ export class TestComponent implements OnInit, OnDestroy {
       degree: null,
       major: null,
       techScreenerName: null,
-      projectCompletion: null
+      projectCompletion: null,
+      batch: this.getTestBatch(),
     };
   }
 
@@ -109,6 +114,14 @@ export class TestComponent implements OnInit, OnDestroy {
     };
   }
 
+  // private getTestBatchNote(): Note {
+  //   const qcNotes: Note[] = this.dataB.filter( (note) => note.type = Note.TYPE_QCBATCH);
+
+  //   if ( qcNotes.length > 0 ) {
+  //     return qcNotes[0];
+  //   }
+  // }
+
   private log(object: any): void {
     console.log(object);
   }
@@ -126,7 +139,7 @@ export class TestComponent implements OnInit, OnDestroy {
 
     // this.service.getSaved().subscribe( (saved) => console.log(saved) );
 
-    this.subscription = this.service.getList().subscribe( (data) => {
+    this.subscription = this.service.getSaved().subscribe( (data) => {
       this.data = data;
       this.log(this.data);
 
@@ -135,13 +148,28 @@ export class TestComponent implements OnInit, OnDestroy {
       // }
     });
 
+    // this.subscriptionB = this.serviceB.getList().subscribe( (data) => this.dataB = data );
+
+    // this.serviceB.fetchByBatchIdByWeek(2201, 1);
+
     // this.service.fetchAll();
     // this.service.fetchAllByBatch(3002);
-    this.service.fetchByBatchIdByWeek(2150, 5);
+    // this.service.fetchByBatchIdByWeek(2150, 5);
+
+    this.saveTraineeTest();
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
+    // this.subscriptionB.unsubscribe();
+  }
+
+  private saveTraineeTest(): void {
+    const trainee: Trainee = this.getTestTrainee();
+
+    console.log(trainee);
+
+    this.service.save(trainee);
   }
 
 }

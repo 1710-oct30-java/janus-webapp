@@ -29,7 +29,9 @@ export class PanelFeedbackComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.traineeSubscription = this.granularityService.currentTrainee$.subscribe((trainee) => {
-      this.panelService.fetchAllByTrainee(trainee);
+      if (trainee.traineeId > 0) {
+        this.panelService.fetchAllByTrainee(trainee);
+      }
     });
 
     this.panelSubscription = this.panelService.getList().subscribe((panels) => {

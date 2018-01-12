@@ -18,13 +18,15 @@ import * as $ from 'jquery';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GradeByTraineeByAssessmentPipe } from '../pipes/grade-by-trainee-by-assessment.pipe';
 import { NoteByTraineeByWeekPipe } from '../pipes/note-by-trainee-by-week.pipe';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-assess',
   templateUrl: './assess.component.html',
   styleUrls: ['./assess.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [DatePipe],
 })
 export class AssessComponent implements OnInit {
 
@@ -41,13 +43,15 @@ export class AssessComponent implements OnInit {
   rForm: FormGroup;
 
   newAssessment: Assessment = new Assessment();
-
   editingAssessment: Assessment = new Assessment();
-
   selectedAssessment: Assessment = new Assessment();
 
+  years: Set<any> = new Set<any>();
+  currentYear = 2017;
+
   constructor(private modalService: NgbModal, private batchService: BatchService, private assessmentService: AssessmentService,
-  private gradeService: GradeService, private categoryService: CategoryService, private noteService: NoteService, private fb: FormBuilder) {
+  private gradeService: GradeService, private categoryService: CategoryService, private noteService: NoteService,
+  private fb: FormBuilder, private datePipe: DatePipe) {
 
   }
 
@@ -66,26 +70,41 @@ export class AssessComponent implements OnInit {
     }
   }
 
+
   ngOnInit() {
+
     this.selectedWeek = 1;
+
     this.batchService.fetchAll();
+
     this.categoryService.fetchAllActive();
+
     this.noteService.getList().subscribe(notes => {
       return this.notes = notes;
     });
+
     this.assessmentService.getList().subscribe(assessment => this.assessments = assessment);
+
     this.gradeService.getList().subscribe(grade => this.grades = grade);
+
+    this.gradeService.getSaved().subscribe(grade => {
+      this.gradeService.fetchByBatchIdByWeek(this.selectedBatch.batchId, this.selectedWeek);
+    });
+
     this.categoryService.getList().subscribe(categories => {
       this.categories = categories;
       this.newAssessment.category = this.findCategory('Java');
     });
+
     this.batchService.getList().subscribe(batch => {
       this.batches = batch;
       if (this.batches.length !== 0) {
-        this.selectedBatch = this.batches[4];
-        this.assessmentService.fetchByBatchIdByWeek(this.selectedBatch.batchId, 1);
-        this.gradeService.fetchByBatchIdByWeek(this.selectedBatch.batchId, 1);
-        this.noteService.fetchByBatchIdByWeek(this.selectedBatch.batchId, 1);
+        this.changeBatch(this.batches[4]);
+
+        // Set the year dropdown.
+        this.batches.forEach(b => {
+          this.years.add(this.datePipe.transform(b.startDate, 'yyyy'));
+        });
       }
     });
 
@@ -98,8 +117,7 @@ export class AssessComponent implements OnInit {
         grade.score = 0;
         grade.assessment = assessment;
         const newDate = new Date();
-        grade.dateReceived = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), newDate.getHours(), 
-        newDate.getMinutes());
+        grade.dateReceived = new Date('01-01-2000');
         this.gradeService.create(grade);
       });
 
@@ -107,15 +125,9 @@ export class AssessComponent implements OnInit {
 
   }
 
-  changeCategory(categorySelect: ElementRef) {
-    const newCategory = $(categorySelect).find(':selected').val();
-    this.newAssessment.category = this.findCategory(newCategory);
-  }
-
-  editCategory(categorySelect: ElementRef) {
-    const newCategory = $(categorySelect).find(':selected').val();
-    this.editingAssessment.category = this.findCategory(newCategory);
-  }
+/****************************************************************************************
+                                      ASSESSMENTS
+*****************************************************************************************/
 
   editAssessment(content, modalAssessment: Assessment) {
     this.editingAssessment = modalAssessment;
@@ -128,7 +140,36 @@ export class AssessComponent implements OnInit {
   }
 
   deleteAssessment() {
+    this.assessments.forEach(a => {
+      if (Number(a.assessmentId) === Number(this.editingAssessment.assessmentId)) {
+        this.assessments.splice(this.assessments.indexOf(a), 1);
+      }
+    });
     this.assessmentService.delete(this.editingAssessment);
+  }
+
+  addAssessment() {
+    this.newAssessment.week = this.selectedWeek;
+    this.newAssessment.batch = this.selectedBatch;
+    this.assessmentService.create(this.newAssessment);
+  }
+
+  getAssessments(week: number) {
+    this.assessmentService.fetchByBatchIdByWeek(this.selectedBatch.batchId, week);
+  }
+
+/****************************************************************************************
+                                      CATEGORIES
+*****************************************************************************************/
+
+  editCategory(categorySelect: ElementRef) {
+    const newCategory = $(categorySelect).find(':selected').val();
+    this.editingAssessment.category = this.findCategory(newCategory);
+  }
+
+  changeCategory(categorySelect: ElementRef) {
+    const newCategory = $(categorySelect).find(':selected').val();
+    this.newAssessment.category = this.findCategory(newCategory);
   }
 
   findCategory(category: any): Category {
@@ -143,47 +184,140 @@ export class AssessComponent implements OnInit {
     return matchingCat;
   }
 
-  updateGrade(grade: Grade, input) {
-    grade.score = input.value;
+
+/****************************************************************************************
+                                      GRADES
+*****************************************************************************************/
+
+  updateGrade(trainee: Trainee, assessment: Assessment, input) {
+    const grade = this.getGrade(trainee, assessment);
+    grade.score = Number(input.value);
+    grade.dateReceived = '2000-01-01T01:01:01.000Z';
     this.updatingGrades.add(grade);
     this.gradeService.update(grade);
-    console.log(this.notes);
   }
 
   getGrade(trainee: Trainee, assessment: Assessment) {
-    return new GradeByTraineeByAssessmentPipe().transform(this.grades, trainee, assessment)[0];
+    const grade = new GradeByTraineeByAssessmentPipe().transform(this.grades, trainee, assessment)[0];
+
+    if (grade != null) {
+      return grade;
+    } else {
+      const tempGrade = new Grade();
+      tempGrade.score = 0;
+      tempGrade.assessment = assessment;
+      tempGrade.trainee = trainee;
+      return tempGrade;
+    }
   }
 
-  checkGradeLoading(grade: Grade) {
-    if (this.updatingGrades.has(grade)) {
-      return true;
-    }
-    return false;
+  getPercentage(assessment: Assessment) {
+    let sum = 0;
+    this.assessments.forEach(a => {
+      sum += a.rawScore;
+    });
+
+    return Math.round((assessment.rawScore / sum) * 100);
   }
+
+  getOverallAverage() {
+    let total = 0;
+
+    this.assessments.forEach(a => {
+      let sum = 0;
+      const percentage = this.getPercentage(a);
+
+      this.selectedBatch.trainees.forEach(trainee => {
+        sum += (this.getGrade(trainee, a).score * percentage) / 100;
+      });
+
+      sum /= this.selectedBatch.trainees.length;
+      total += sum;
+    });
+
+    return total;
+  }
+
+  getAssessmentAverage(assessment: Assessment) {
+    let total = 0;
+
+    this.selectedBatch.trainees.forEach(trainee => {
+      total += this.getGrade(trainee, assessment).score;
+    });
+
+    return total / this.selectedBatch.trainees.length;
+  }
+
+/****************************************************************************************
+                                      NOTES
+*****************************************************************************************/
 
   getNote(trainee: Trainee) {
-    const note = new NoteByTraineeByWeekPipe().transform(this.notes, trainee, this.selectedWeek);
+    let note: Note;
+    note = new NoteByTraineeByWeekPipe().transform(this.notes, trainee, this.selectedWeek);
+    if (note.content === undefined) {
+      note.content = '';
+    }
     return note;
   }
+
+  addWeekOfNotes(week: number) {
+    this.selectedBatch.trainees.forEach(trainee => {
+      const note = new Note();
+      note.content = ' ';
+      note.trainee = trainee;
+      note.batch = this.selectedBatch;
+      note.maxVisibility = '2';
+      note.qcFeedback = false;
+      note.week = week;
+      note.type = 'TRAINEE';
+      this.noteService.create(note);
+    });
+  }
+
+  updateNote(note: Note, input) {
+    note.content = input.value;
+    note.batch = this.selectedBatch;
+    this.noteService.update(note);
+  }
+
+/****************************************************************************************
+                                      OTHER
+*****************************************************************************************/
 
   open(content) {
     this.modalService.open(content);
   }
 
-  getAssessments(week: number) {
-    this.assessmentService.fetchByBatchIdByWeek(this.selectedBatch.batchId, week);
-  }
-
   addWeek() {
+    console.log(this.selectedBatch);
     this.selectedBatch.weeks += 1;
+    this.addWeekOfNotes(this.selectedBatch.weeks);
     this.batchService.update(this.selectedBatch);
   }
 
-  addAssessment() {
-    this.newAssessment.week = this.selectedWeek;
-    this.newAssessment.batch = this.selectedBatch;
-    console.log(this.newAssessment);
-    this.assessmentService.create(this.newAssessment);
+  changeYear(year: number) {
+    this.currentYear = Number(year);
+  }
+
+  changeBatch(batch: Batch) {
+    if (this.selectedBatch.weeks < this.selectedWeek) {
+      this.selectedWeek = 1;
+    }
+
+    this.selectedBatch = batch;
+    this.assessmentService.fetchByBatchIdByWeek(this.selectedBatch.batchId, this.selectedWeek);
+    this.gradeService.fetchByBatchIdByWeek(this.selectedBatch.batchId, this.selectedWeek);
+    this.noteService.fetchByBatchIdByWeek(this.selectedBatch.batchId, this.selectedWeek);
+  }
+
+  switchBatch(id: number) {
+    this.batches.forEach(batch => {
+
+      if (Number(batch.batchId) === Number(id)) {
+        this.changeBatch(batch);
+      }
+    });
   }
 
   counter(i: number) {

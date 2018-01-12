@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/Observable';
 
 // services
 import { AbstractApiService } from './abstract-api.service';
-import { EnvironmentService } from './environment.service';
 import { environment } from '../../../environments/environment';
 import { AlertsService } from './alerts.service';
 
@@ -39,8 +38,8 @@ export class TrainerService extends AbstractApiService<Trainer> {
   titles$: Observable<any> = this.getTitlesList();
   tiers$: Observable<any> = this.getTierList();
 
-  constructor(httpClient: HttpClient, envService: EnvironmentService, alertService: AlertsService) {
-    super(envService, httpClient, alertService);
+  constructor(httpClient: HttpClient, alertService: AlertsService) {
+    super(httpClient, alertService);
 
     this.populateOnStart();
   }
@@ -107,7 +106,7 @@ export class TrainerService extends AbstractApiService<Trainer> {
    * @return Observable<Trainer>
    */
   public fetchByEmail(email: string): Observable<Trainer> {
-    const url = `training/trainer/byemail/${email}`;
+    const url = environment.trainer.fetchByEmail(email);
 
     return super.doGetOneObservable(url);
   }
@@ -119,13 +118,13 @@ export class TrainerService extends AbstractApiService<Trainer> {
     * spring-security: @PreAuthorize("hasAnyRole('VP', 'TRAINER', 'STAGING', 'QC', 'PANEL')")
     */
   public fetchAll(): void {
-    const url = 'all/trainer/all';
+    const url = environment.trainer.fetchAll();
     const messages = {
       success: 'Trainers retrieved successfully',
       error: 'Trainers retrieval failed',
     };
 
-    super.doGetList(url, {}, messages);
+    super.doGetList(url, messages);
   }
 
   /**
@@ -149,13 +148,13 @@ export class TrainerService extends AbstractApiService<Trainer> {
    * @param trainer: Trainer
    */
   public save(trainer: Trainer): void {
-    const url = 'vp/trainer/create';
+    const url = environment.trainer.save();
     const messages = {
       success: 'Trainer saved successfully',
       error: 'Trainer save failed',
     };
 
-    super.doPost(trainer, url, {}, messages);
+    super.doPost(trainer, url, messages);
   }
 
   /**
@@ -167,13 +166,13 @@ export class TrainerService extends AbstractApiService<Trainer> {
    * @param trainer: Trainer
    */
   public update(trainer: Trainer): void {
-    const url = 'vp/trainer/update';
+    const url = environment.trainer.update();
     const messages = {
       success: 'Trainer updated successfully',
       error: 'Trainer update failed',
     };
 
-    super.doPut(trainer, url, {}, messages);
+    super.doPut(trainer, url, messages);
   }
 
   /**
@@ -188,7 +187,7 @@ export class TrainerService extends AbstractApiService<Trainer> {
   * @param trainer: Trainer
   */
   public delete(trainer: Trainer): void {
-    const url = 'vp/trainer/update';
+    const url = environment.trainer.update();
     const messages = {
       success: 'Trainer deactivated successfully',
       error: 'Trainer deactivation failed',
@@ -196,7 +195,7 @@ export class TrainerService extends AbstractApiService<Trainer> {
 
     trainer.tier = Trainer.ROLE_INACTIVE;
 
-    super.doPut(trainer, url, {}, messages);
+    super.doPut(trainer, url, messages);
   }
 
   /**
@@ -207,7 +206,7 @@ export class TrainerService extends AbstractApiService<Trainer> {
   * that extracts if from the list of Trainers
   */
   public getTitles(): void {
-    const url = this.envService.buildUrl('vp/trainer/titles');
+    const url = environment.trainer.getTitles();
 
     this.http.get<string[]>(url).subscribe( (data) => this.titlesSubject.next(data) );
   }
@@ -221,7 +220,7 @@ export class TrainerService extends AbstractApiService<Trainer> {
   * -> retained for backward compatibility
   */
   public getTiers(): void {
-    const url = this.envService.buildUrl('types/trainer/role/all');
+    const url = environment.trainer.getTiers();
 
     this.http.get<string[]>(url).subscribe( (data) => this.tiersSubject.next(data) );
   }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms/';
 
 @Component({
   selector: 'app-general-feedback',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./general-feedback.component.css']
 })
 export class GeneralFeedbackComponent implements OnInit {
+
+  @Input() generalFeedback: FormGroup;
 
   constructor() { }
 

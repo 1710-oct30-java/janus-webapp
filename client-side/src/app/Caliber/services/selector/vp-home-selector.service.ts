@@ -5,10 +5,12 @@ import { ChartDataEntity } from '../../entities/ChartDataEntity';
 export class VpHomeSelectorService {
 
   constructor() { }
+
   /**
    * populates addresses from the results array
-   * @param results Array<any>
-   * @returns Array<any>
+   * @param {Array<any>} results
+   * @returns {Array<any>}
+   * @memberof VpHomeSelectorService
    */
   public populateAddresses(results: Array<any>): Array<any> {
     const addresses = [];
@@ -17,10 +19,12 @@ export class VpHomeSelectorService {
     }
     return addresses;
   }
+
   /**
    * populates states from the addresses array
-   * @param addresses Array<any>
-   * @returns Set<String>
+   * @param {Array<any>} addresses
+   * @returns {Set<string>}
+   * @memberof VpHomeSelectorService
    */
   public populateStates(addresses: Array<any>): Set<string> {
     const states = new Set<string>();
@@ -29,11 +33,13 @@ export class VpHomeSelectorService {
     }
     return states;
   }
+
   /**
    * populates cities by filtering addresses with states
-   * @param state : string
-   * @param addresses : Array<any
-   * @returns Set<String
+   * @param {string} state
+   * @param {Array<any>} addresses
+   * @returns {Set<string>}
+   * @memberof VpHomeSelectorService
    */
   public populateCities(state: string, addresses: Array<any>): Set<string> {
     const cities = new Set<string>();

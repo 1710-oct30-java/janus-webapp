@@ -22,6 +22,7 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
   private traineeOverallRadar: Subscription;
   private traineeWeeklyRadar: Subscription;
   private weekBatchFilter: Subscription;
+  private granularity: Subscription;
   private overallBatchFilter: Subscription;
 
   private batchSubscription: Subscription;
@@ -34,7 +35,7 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
     private pdfService: PDFService, private modalService: NgbModal, private granularityService: GranularityService) { }
 
   // batch id of batch being viewed
-  public batch: Batch = new Batch();
+  public batch: Batch;
   // current week
   public week: Number = 0;
   // current trainee
@@ -52,25 +53,37 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
   // same but for the labels provided to the graph-data pipe
   public dataSetLabels: string[] = [];
 
+  private overallDataFlag: boolean;
+  private traineeDataFlag: boolean;
+
   // Chart type assignment
   public chartType = 'radar';
-
+  /**
+   * Sets up all data for component
+   * calls functions for setup
+   */
   ngOnInit() {
     this.chartData = [];
-    this.dataSetLabels = [];
     // set up batch overall sub; put data in index 0 of chartData
     this.batchOverallSubscription = this.reportsService.batchOverallRadar$.subscribe((result) => {
       if (result) {
-        if (this.batch.batchId === result.params.batchId) {
-          this.chartData.unshift(result.data);
+        if (this.batch) {
+          if (this.batch.batchId === result.params.batchId) {
+            if (!this.overallDataFlag) {
+              this.overallDataFlag = true;
+              this.chartData.unshift(result.data);
+            }
+          }
         }
       }
     });
     // set up trainee overall sub
     this.traineeOverallRadar = this.reportsService.traineeOverallRadar$.subscribe((result) => {
       if (result) {
+
         if (this.trainee.traineeId !== 0) {
-          if (this.trainee.traineeId === result.params.traineeId) {
+          if (!this.traineeDataFlag) {
+            this.traineeDataFlag = true;
             this.chartData.push(result.data);
           }
         } else {
@@ -81,7 +94,10 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
     // set up trainee weekly sub
     this.traineeWeeklyRadar = this.reportsService.traineeWeeklyRadar$.subscribe((result) => {
       if (result) {
-        this.chartData.push(result.data);
+        if (!this.traineeDataFlag) {
+          this.chartData.push(result.data);
+          this.traineeDataFlag = true;
+        }
       }
     });
 
@@ -90,9 +106,6 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
       (result) => {
         if (result !== this.week) {
           this.week = result;
-          // console.log('week: ');
-          // console.log(result);
-          this.setUp();
         }
       });
     // granularity trainee sub
@@ -100,20 +113,23 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
       (result) => {
         if (result !== this.trainee) {
           this.trainee = result;
-          // console.log('trainee: ');
-          // console.log(result);
-          this.setUp();
         }
       });
 
     // granularity batch sub; controls what setup is run.
     this.batchSubscription = this.granularityService.currentBatch$.subscribe(
       (result) => {
-        if (result.batchId !== this.batch.batchId) {
+        if (this.batch) {
+          if (result.batchId !== this.batch.batchId) {
+            this.batch = result;
+          }
+        } else {
           this.batch = result;
-          this.dataSetLabels = [this.batch.trainingName];
-          this.setUp();
         }
+      });
+    this.granularity = Observable.combineLatest(this.granularityService.currentBatch$,
+      this.granularityService.currentTrainee$, this.granularityService.currentWeek$).subscribe(() => {
+        this.setUp();
       });
     // data formating for weekly trainee chart
     // this is a subscription since it need both datasets to be updated
@@ -133,25 +149,7 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
           this.dataSetLabels[0] = swap;
 
           // need the datasets to be the same length so shorten the overall dataset
-          if (Object.entries(this.chartData[1]).length !== Object.entries(this.chartData[0]).length) {
-            const objArr = [];
-            // change the objects into arrays
-            const longArr = Object.entries(this.chartData[1]);
-            const shortArr = Object.entries(this.chartData[0]);
-
-            for (let i = 0; i < longArr.length; i++) {
-              for (let j = 0; j < shortArr.length; j++) {
-                if (longArr[i][0] === shortArr[j][0]) {
-                  objArr.push(longArr[i]);
-                }
-              }
-            }
-            // make a new object from the array
-            this.chartData[1] = {};
-            for (let i = 0; i < objArr.length; i++) {
-              this.chartData[1][objArr[i][0]] = objArr[i][1];
-            }
-          }
+          this.dataSetAlign();
         }
       }
       );
@@ -160,27 +158,8 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
       () => {
         // only do this there is enough data
         if (this.chartData.length === 2) {
-
           // need the datasets to be the same length so shorten the overall dataset
-          if (Object.entries(this.chartData[1]).length !== Object.entries(this.chartData[0]).length) {
-            const objArr = [];
-            // change the objects into arrays
-            const longArr = Object.entries(this.chartData[1]);
-            const shortArr = Object.entries(this.chartData[0]);
-
-            for (let i = 0; i < longArr.length; i++) {
-              for (let j = 0; j < shortArr.length; j++) {
-                if (longArr[i][0] === shortArr[j][0]) {
-                  objArr.push(longArr[i]);
-                }
-              }
-            }
-            // make a new object from the array
-            this.chartData[1] = {};
-            for (let i = 0; i < objArr.length; i++) {
-              this.chartData[1][objArr[i][0]] = objArr[i][1];
-            }
-          }
+          this.dataSetAlign();
         }
       }
       );
@@ -191,17 +170,26 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
     this.traineeOverallRadar.unsubscribe();
     this.traineeWeeklyRadar.unsubscribe();
     this.weekBatchFilter.unsubscribe();
+    this.granularity.unsubscribe();
 
     this.batchSubscription.unsubscribe();
     this.weekSubscription.unsubscribe();
     this.traineeSubscription.unsubscribe();
   }
+  /**
+   * general set up would go here.
+   */
   setUp() {
-    if (this.trainee && this.trainee.traineeId) {
+    if (this.batch) {
+      this.chartData = [];
+      this.dataSetLabels = [];
+      this.overallDataFlag = false;
+      this.traineeDataFlag = false;
+      this.dataSetLabels = [this.batch.trainingName];
+      this.reportsService.fetchBatchOverallRadarChart(this.batch.batchId);
       if (this.week === 0 && this.trainee.traineeId === 0) {
         this.overallSetup();
-      } else {
-
+      } else if (this.trainee.traineeId !== 0) {
         this.weekSetup();
       }
     }
@@ -210,7 +198,6 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
    * Sets up some variables and send requests for overall radar
    */
   overallSetup() {
-    this.chartData = [];
     for (let i = 0; i < this.batch.trainees.length; i++) {
       this.traineesList.push(this.batch.trainees[i].traineeId);
       this.traineesNames.push(this.batch.trainees[i].name);
@@ -227,16 +214,38 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
    * Sets up some variables and send requests for weekly radar
    */
   weekSetup() {
-    this.chartData = [];
     if (this.batch.batchId) {
       this.dataSetLabels.push(this.trainee.name);
 
-      this.reportsService.fetchBatchOverallRadarChart(this.batch.batchId);
       if (this.week === 0) {
-        console.log('debug');
         this.reportsService.fetchTraineeOverallRadarChart(this.trainee.traineeId);
       } else {
         this.reportsService.fetchTraineeUpToWeekRadarChart(this.week, this.trainee.traineeId);
+      }
+    }
+  }
+
+  /**
+   * makes datasets the same length
+   */
+  dataSetAlign() {
+    if (Object.entries(this.chartData[1]).length !== Object.entries(this.chartData[0]).length) {
+      const objArr = [];
+      // change the objects into arrays
+      const longArr = Object.entries(this.chartData[1]);
+      const shortArr = Object.entries(this.chartData[0]);
+
+      for (let i = 0; i < longArr.length; i++) {
+        for (let j = 0; j < shortArr.length; j++) {
+          if (longArr[i][0] === shortArr[j][0]) {
+            objArr.push(longArr[i]);
+          }
+        }
+      }
+      // make a new object from the array
+      this.chartData[1] = {};
+      for (let i = 0; i < objArr.length; i++) {
+        this.chartData[1][objArr[i][0]] = objArr[i][1];
       }
     }
   }
@@ -275,7 +284,6 @@ export class TraineeTechSkillsComponent implements OnInit, OnDestroy {
    * @param index is the index to the trainee in traineesList to be added/removed from chartData
   */
   traineeChecked(index: number) {
-    // console.log('debug: ' + this.traineesNames[index]);
     if (this.trainees.includes(this.traineesList[index])) {
       this.trainees = this.remove(this.trainees, this.traineesList[index]);
       this.chartData = this.remove(this.chartData, this.traineesData[index]);

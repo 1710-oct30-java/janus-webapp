@@ -2,16 +2,18 @@ import { Component, OnInit, SimpleChanges, OnDestroy } from '@angular/core';
 
 // rxjs
 import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 // services
-import { EvaluationService } from '../../../services/evaluation.service';
 import { ReportingService } from '../../../services/reporting.service';
 import { GranularityService } from '../services/granularity.service';
+import { NoteService } from '../../services/note.service';
 
 // entities
 import { Note } from '../../entities/Note';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { Trainee } from '../../entities/Trainee';
+import { Batch } from '../../entities/Batch';
 
 /**
  * Creates a table of the overall feedback of a given trainee in a given batch.
@@ -31,72 +33,48 @@ import { Observable } from 'rxjs/Observable';
 
 export class OverallFeedbackComponent implements OnInit, OnDestroy {
 
+  private granularitySubscription: Subscription;
+  private noteSubscription: Subscription;
+  private topicSubscription: Subscription;
+
   qcNotes: Array<Note> = null;
-  allNotes: Array<Note> = null;
-  private qcNoteSubscription: Subscription;
-  private allNoteSubscription: Subscription;
+  traineeNotes: Array<Note> = null;
+  weekTopics: Array<Array<string>>;
 
-  private weekSubscription: Subscription;
-  weekTopics: Array<string>;
-
-  // These should be filled in by subjects.
-  private traineeSubscription: Subscription;
-  private batchSubscription: Subscription;
+  trainee: Trainee;
+  week = 1;
+  batch: Batch;
 
   constructor(private granularityService: GranularityService,
-              private evalService: EvaluationService,
+              private noteService: NoteService,
               private reportService: ReportingService) { }
 
   ngOnInit() {
-    this.traineeSubscription = this.granularityService.currentTrainee$.subscribe((trainee) => {
-        this.evalService.fetchAllQCTraineeOverallNotes(trainee.traineeId);
-        this.evalService.fetchAllTraineeNotes(trainee.traineeId);
+
+    this.granularitySubscription = Observable.combineLatest(
+      this.granularityService.currentBatch$, this.granularityService.currentTrainee$,
+      this.granularityService.currentWeek$).subscribe((batchTraineeWeek) => {
+
+        this.batch = batchTraineeWeek[0];
+        this.trainee = batchTraineeWeek[1];
+        this.week = batchTraineeWeek[2];
+
+        if (this.trainee.traineeId > 0) {
+          this.noteService.fetchByTrainee(this.trainee);
+          this.reportService.fetchTechnologiesUpToWeek(this.batch.batchId, this.batch.gradedWeeks);
+        }
+      });
+
+    this.noteSubscription = this.noteService.getTraineeList().subscribe((list) => {
+      this.traineeNotes = list.filter(note => note.type === 'TRAINEE');
+      this.qcNotes = list.filter(note => note.type === 'QC_TRAINEE');
     });
 
-    this.batchSubscription = this.granularityService.currentBatch$.subscribe((batch) => {
-      this.reportService.fetchTechnologiesUpToWeek(batch.batchId, batch.gradedWeeks);
-    });
-
-    this.qcNoteSubscription = this.evalService.allQCTraineeOverallNotes$.subscribe((result) => {
+    this.topicSubscription = this.reportService.technologiesUpToWeek$.subscribe((result) => {
       if (result) {
-        this.qcNotes = result.data;
+        this.weekTopics = result.data;
       }
     });
-
-    this.allNoteSubscription = this.evalService.allTraineeNotes$.subscribe((result) => {
-      if (result) {
-        this.allNotes = result.data;
-      }
-    });
-
-    this.weekSubscription = this.reportService.technologiesUpToWeek$.subscribe((result) => {
-      if (result) {
-        this.weekTopics = this.techArray(result.data);
-      }
-    });
-  }
-
-  techArray(tech: Array<Array<string>>): Array<string> {
-    const result = Array<string>();
-
-    for (const t of tech) {
-      result.push(this.techString(t));
-    }
-
-    return result;
-  }
-
-  techString(tech: Array<String>) {
-    let result = '';
-
-    for (let i = 0; i < tech.length; i++) {
-      result += tech[i];
-      if (i < tech.length - 1) {
-        result += ', ';
-      }
-    }
-
-    return result;
   }
 
   getNoteByWeek(notes: Array<Note>, week: Number): Note {
@@ -115,16 +93,14 @@ export class OverallFeedbackComponent implements OnInit, OnDestroy {
     return this.getNoteByWeek(this.qcNotes, week);
   }
 
-  allWeek(week: Number): Note {
-    return this.getNoteByWeek(this.allNotes, week);
+  traineeWeek(week: Number): Note {
+    return this.getNoteByWeek(this.traineeNotes, week);
   }
 
   ngOnDestroy() {
-    this.weekSubscription.unsubscribe();
-    this.qcNoteSubscription.unsubscribe();
-    this.allNoteSubscription.unsubscribe();
-    this.traineeSubscription.unsubscribe();
-    this.batchSubscription.unsubscribe();
+    this.granularitySubscription.unsubscribe();
+    this.noteSubscription.unsubscribe();
+    this.topicSubscription.unsubscribe();
   }
 
 }

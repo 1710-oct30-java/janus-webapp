@@ -78,3 +78,11 @@
 hr {
     margin: 0px;
 }
+
+.dropdown-item:hover {
+    background-color: #eee;
+}
+
+hr {
+    margin: 0px;
+}

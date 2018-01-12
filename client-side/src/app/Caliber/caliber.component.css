@@ -32,25 +32,26 @@ th {
 li {
 	font-family: 'Futura-Std-Heavy';
 }  */
-/*
+
 /************************
 	Revature Colors
 ************************/
-/*
+
 :root {
-	/*** Primary Colors  -
-	-orange: #F26925; -
-	-white: #FFFFF; -
-	-dark-grey: #474C55;
-	/*** Secondary Colors  -
-	-blue: #72A4C2; -
-	-yellow: #FCB414; -
-	-light-grey: #B9B9BA;
+	/** Primary Colors  **/
+	--orange: #F26925; 
+	--white: #FFFFF; 
+	--dark-grey: #474C55;
+	/*** Secondary Colors  */
+	--blue: #72A4C2; 
+	--yellow: #FCB414; 
+	--light-grey: #B9B9BA;
 }
 
 .warning {
 	color: red;
 }
+
 
 /**********************
 	Header
@@ -124,6 +125,7 @@ a {
 /************************
 	Manage Batch
 ************************/
+/*
 .modal-header {
 	background-color: #f1f2f4;
 	border-radius: 6px;
@@ -162,24 +164,26 @@ a {
 	padding-top: 2em;
 }
 
+
 .btn-primary, .fa .fa-file-code-o {
 	color: white !important;
 	border-color: white !important;
 	background-color: #F26925 !important;
 	background-image: none;
 }
+*/
 
 /************************
 ***Manage Batch Modal****
 *************************/
-.batchModal {
+/* .batchModal {
 	margin: 1.3em;
-}
+} */
 
 /************************
 	Manage Trainee Modal
 ************************/
-.modal-body {
+/* .modal-body {
     max-width: 100%;
     overflow-x: auto;
 }
@@ -195,7 +199,7 @@ a {
 	padding-right: 0px;
 	padding-top: 20px;
 }
-/* .scoll-tree {
+.scoll-tree {
     width:1000px;
 } */
 
