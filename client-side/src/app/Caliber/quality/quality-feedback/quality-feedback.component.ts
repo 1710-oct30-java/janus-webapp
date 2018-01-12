@@ -77,35 +77,7 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
     this.qcTraineeNotes = notes.filter(note => note.type === 'QC_TRAINEE');
     this.qcBatchNotes = notes.filter(note => note.type === 'QC_BATCH');
 
-    // if ( this.batch ) {
-    //   for (const trainee of this.batch.trainees) {
-    //     const traineeNote = this.getNoteOnTrainee(trainee);
-    //     if (traineeNote === null) {
-    //       this.qcTraineeNotes.push({
-    //           noteId: 0,
-    //           type: Note.TYPE_QCTRAINEE,
-    //           qcStatus: Note.STATUS_UNDEFINED,
-    //           qcFeedback: true,
-    //           content: '',
-    //           week: this.week,
-    //           batch: this.batch,
-    //           trainee: trainee,
-    //           maxVisibility: 'ROLE_PANEL',
-    //         });
-    //     }
-    //   }
-    // }
-
-    // this.addMissingNotes();
-
     this.buildStatusMap();
-
-    // console.log(this.qcTraineeNotes);
-    // console.log(this.statusMap);
-
-    // console.log(notes);
-    // console.log(this.qcBatchNotes);
-    console.log(this.qcTraineeNotes);
   }
 
   buildStatusMap(): void {
@@ -119,7 +91,6 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
 
   setQcStatuses(statuses: string[]) {
     this.qcStatuses = statuses;
-    // console.log(statuses);
   }
 
   fetchNotes() {
@@ -137,7 +108,7 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
   changeWeek(week: number) {
     this.week = week;
     this.fetchNotes();
-    this.createNewTraineeNotesForNewWeek();
+    // this.createNewTraineeNotesForNewWeek();
   }
 
   addWeekToBatch() {
@@ -146,28 +117,6 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
     this.batchService.update(this.batch);
   }
 
-  // addMissingNotes(): void {
-  //   console.log(this.batch);
-
-  //   for ( let i = 0; i < this.batch.trainees.length; i++ ) {
-  //     const trainee = this.batch.trainees[i];
-  //     const traineeNote = this.getNoteOnTrainee(trainee);
-  //     if (traineeNote === null) {
-  //       this.qcBatchNotes.push({
-  //         noteId: 0,
-  //         type: Note.TYPE_QCTRAINEE,
-  //         qcStatus: Note.STATUS_UNDEFINED,
-  //         qcFeedback: true,
-  //         content: '',
-  //         week: this.week,
-  //         batch: this.batch,
-  //         trainee: trainee,
-  //         maxVisibility: 'ROLE_PANEL',
-  //       });
-  //     }
-  //     console.log(i);
-  //   }
-  // }
 
   getNoteOnTrainee(trainee: Trainee) {
     let traineeNote = null;
@@ -187,7 +136,6 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
         traineeQcStatus = this.qcTraineeNotes[i].qcStatus;
       }
     }
-    // console.log(traineeQcStatus);
     return traineeQcStatus;
   }
 
@@ -202,9 +150,6 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
     const traineeNote = this.getNoteOnTrainee(trainee);
     traineeNote.content = noteContent;
     this.noteService.update(traineeNote);
-    // console.log(traineeNote);
-    // console.log(traineeNote.content);
-    // this.fetchNotes();
   }
 
   createNewTraineeNotesForNewWeek() {
@@ -228,11 +173,4 @@ export class QualityFeedbackComponent implements OnInit, OnDestroy, OnChanges {
     }
     console.log(this.qcTraineeNotes);
   }
-  // test() {
-  //   console.log(this.batch.batchId);
-  //   console.log(this.week);
-  //   console.log(this.qcBatchNote);
-  //   console.log(this.qcTraineeNotes[1].trainee.name);
-
-  // }
 }

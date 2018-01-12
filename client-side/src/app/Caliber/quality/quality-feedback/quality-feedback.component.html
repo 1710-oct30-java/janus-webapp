@@ -1,6 +1,6 @@
 <ul *ngIf="batch">
-  <li *ngFor="let week of getBatchWeeks()" (click)="changeWeek(week)">
-    <button>Week {{ week }}</button>
+  <li *ngFor="let week of getBatchWeeks()">
+    <button (click)="changeWeek(week)">Week {{ week }}</button>
   </li>
   <li>
     <button (click)="addWeekToBatch()">Add Week</button>
