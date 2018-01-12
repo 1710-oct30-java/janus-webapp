@@ -2,7 +2,6 @@
     background-color: rgb(255, 255, 255);
     border: none;
     border-radius: 4px;
-    margin-top: 10px;
     margin-right: 10px;
     color: #F26925;
     text-align: center;
@@ -10,62 +9,6 @@
     display: inline-block;
     font-size: 14px;
     font-weight: bold;
-}
-
-.paddingRight {
-    padding-right: 25px;
-}
-
-.search {
-    margin: 0px;
-    margin-left: 98px;
-    display: inline-block;
-    position: relative;
-}   
-
-.fa-search {
-    margin-left: 90px;
-}
-
-hr {
-    margin: 0px;
-}
-
-.search input {
-    width: 275px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    font-size: 14px;
-    padding: 5px 30px 5px 10px;
-    text-indent: 10px;
-    color: #4b4a4a
-}
-
-.downloadCharts { 
-    color: rgb(255, 56, 56);
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    font-size: 14px;
-    padding: 6px;
-    cursor: pointer;
-    background: #feffe8; /* Old browsers */
-    background: -moz-linear-gradient(top, #feffe8 0%, #dbdbdb 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #feffe8 0%,#dbdbdb 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #feffe8 0%,#dbdbdb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffe8', endColorstr='#dbdbdb',GradientType=0 ); /* IE6-9 */
-}
-
-.paddingRight {
-    padding-right: 25px;
-}
-
-.dropdown-item {
-    font-weight: bold;
-    font-size: 80%;
-}
-
-.dropdown-item:hover {
-    background-color: #eee;
 }
 
 .button {
@@ -83,42 +26,55 @@ hr {
     -webkit-transition-delay: 0.25s;
 }
 
-/* .button:focus {
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
+.search {
+    margin: 0px;
+    margin-left: 98px;
+    display: inline-block;
+    position: relative;
 }
 
-.bg-primary {
-    color: #fff;
-    background-color: #337ab7;
+.search input {
+    width: 275px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 5px 30px 5px 10px;
+    text-indent: 10px;
+    color: #4b4a4a
 }
 
-.button.bg-primary:hover,
-.button.bg-primary:focus {
-    background-color: #286090;
-}
-
-.bg-success {
-    background-color: #dff0d8;
-}
-
-.button.bg-success:hover,
-.button.bg-success:focus {
-    background-color: #c1e2b3;
-}
-
-.bg-info {
-    background-color: #d9edf7;
-}
-
-.button.bg-info:hover,
-.button.bg-info:focus {
-  background-color: #afd9ee;
-} */
 .fa-search {
     position: absolute;
     cursor: pointer;
     left: 250px;
     top: 7px;
     color: rgb(151, 151, 151) !important;
+    margin-left: 90px;
+}
+
+.downloadCharts { 
+    color: rgb(255, 56, 56);
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 6px;
+    cursor: pointer;
+    background: #feffe8; /* Old browsers */
+    background: -moz-linear-gradient(top, #feffe8 0%, #dbdbdb 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #feffe8 0%,#dbdbdb 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #feffe8 0%,#dbdbdb 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffe8', endColorstr='#dbdbdb',GradientType=0 ); /* IE6-9 */
+}
+
+.dropdown-item {
+    font-weight: bold;
+    font-size: 80%;
+}
+
+.dropdown-item:hover {
+    background-color: #eee;
+}
+
+hr {
+    margin: 0px;
 }
